@@ -83,6 +83,9 @@ const mapDispatchToProps = (dispatch, props) => ({
         if (props.redirectOnSuccess) {
           window.location.assign(status.url);
         }
+        if (props.onSuccess) {
+          props.onSuccess(status);
+        }
       }));
     }
   },

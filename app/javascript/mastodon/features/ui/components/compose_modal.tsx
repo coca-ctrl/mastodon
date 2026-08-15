@@ -40,7 +40,7 @@ export const ComposeModal: React.FC<{ onClose: () => void }> = ({
       wrapperClassName='compose-modal__content'
     >
       <div onFocus={handleFocus}>
-        <ComposeFormContainer autoFocus />
+        <ComposeFormContainer autoFocus onSuccess={onClose} />
       </div>
     </DialogModal>
   );
