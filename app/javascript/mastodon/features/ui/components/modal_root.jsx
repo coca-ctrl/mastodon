@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { PureComponent } from 'react';
+import { ComposeModal } from './compose_modal';
 
 import { Helmet } from '@unhead/react/helmet';
 
@@ -51,6 +52,8 @@ import { VisibilityModal } from './visibility_modal';
 import { PrivateQuoteNotify } from './confirmation_modals/private_quote_notify';
 
 export const MODAL_COMPONENTS = {
+  'COMPOSE': () => Promise.resolve({ default: ComposeModal }),
+  'MEDIA': () => Promise.resolve({ default: MediaModal }),
   'MEDIA': () => Promise.resolve({ default: MediaModal }),
   'VIDEO': () => Promise.resolve({ default: VideoModal }),
   'AUDIO': () => Promise.resolve({ default: AudioModal }),

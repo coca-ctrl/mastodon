@@ -122,12 +122,7 @@ export const ColumnsArea = forwardRef<
   if (singleColumn) {
     return (
       <div className='columns-area__panels'>
-        <div className='columns-area__panels__pane columns-area__panels__pane--compositional'>
-          <div className='columns-area__panels__pane__inner'>
-            {renderComposePanel && <ComposePanel />}
-            <RedirectToMobileComposeIfNeeded />
-          </div>
-        </div>
+        <CollapsibleNavigationPanel />
 
         <main className='columns-area__panels__main'>
           <div className='tabs-bar__wrapper'>
@@ -137,7 +132,12 @@ export const ColumnsArea = forwardRef<
           <div className='columns-area columns-area--mobile'>{children}</div>
         </main>
 
-        <CollapsibleNavigationPanel />
+        <div className='columns-area__panels__pane columns-area__panels__pane--compositional'>
+          <div className='columns-area__panels__pane__inner'>
+            {renderComposePanel && <ComposePanel />}
+            <RedirectToMobileComposeIfNeeded />
+          </div>
+        </div>
       </div>
     );
   }

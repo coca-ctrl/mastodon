@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { PureComponent } from 'react';
+import { InlineComposePanel } from '../ui/components/inline_compose_panel';
 
 import { defineMessages, FormattedMessage } from 'react-intl';
 
@@ -129,6 +130,7 @@ class HomeTimeline extends PureComponent {
     const pinned = !!columnId;
     const { signedIn } = this.props.identity;
     const banners = [
+      <InlineComposePanel key='inline-compose' />,
       <CriticalUpdateBanner key='critical-update-banner' />,
       <AnnualReportTimeline key='annual-report' />
     ];

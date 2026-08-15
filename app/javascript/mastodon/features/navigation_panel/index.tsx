@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 import { defineMessages, useIntl } from 'react-intl';
 
@@ -12,6 +12,8 @@ import { useDrag } from '@use-gesture/react';
 
 import { useAccount } from '@/mastodon/hooks/useAccount';
 import AddIcon from '@/material-icons/400-24px/add.svg?react';
+import { Icon } from 'mastodon/components/icon';
+import { openModal } from 'mastodon/actions/modal';
 import AlternateEmailIcon from '@/material-icons/400-24px/alternate_email.svg?react';
 import BookmarksActiveIcon from '@/material-icons/400-24px/bookmarks-fill.svg?react';
 import BookmarksIcon from '@/material-icons/400-24px/bookmarks.svg?react';
@@ -219,6 +221,11 @@ export const NavigationPanel: React.FC<{ multiColumn?: boolean }> = ({
   const location = useLocation();
   const showSearch = useBreakpoint('full') && !multiColumn;
   const account = useAccount(me);
+  const dispatch = useAppDispatch();
+
+  const handleOpenComposeModal = useCallback(() => {
+    dispatch(openModal({ modalType: 'COMPOSE', modalProps: {} }));
+  }, [dispatch]);
 
   let banner: React.ReactNode;
 
@@ -285,18 +292,6 @@ export const NavigationPanel: React.FC<{ multiColumn?: boolean }> = ({
           </>
         )}
 
-        {trendsEnabled && (
-          <li>
-            <ColumnLink
-              transparent
-              to='/explore'
-              icon='explore'
-              iconComponent={TrendingUpIcon}
-              text={intl.formatMessage(messages.explore)}
-            />
-          </li>
-        )}
-
         {(canViewFeed(signedIn, permissions, localLiveFeedAccess) ||
           canViewFeed(signedIn, permissions, remoteLiveFeedAccess)) && (
           <li>
@@ -338,8 +333,6 @@ export const NavigationPanel: React.FC<{ multiColumn?: boolean }> = ({
 
             <ListPanel />
 
-            <FollowedTagsPanel />
-
             <li>
               <ColumnLink
                 transparent
@@ -358,16 +351,6 @@ export const NavigationPanel: React.FC<{ multiColumn?: boolean }> = ({
                 iconComponent={BookmarksIcon}
                 activeIconComponent={BookmarksActiveIcon}
                 text={intl.formatMessage(messages.bookmarks)}
-              />
-            </li>
-            <li>
-              <ColumnLink
-                transparent
-                to={`/@${account?.acct}/collections`}
-                icon='collections'
-                iconComponent={CollectionsIcon}
-                activeIconComponent={CollectionsActiveIcon}
-                text={intl.formatMessage(messages.collections)}
               />
             </li>
             <li>
@@ -394,6 +377,17 @@ export const NavigationPanel: React.FC<{ multiColumn?: boolean }> = ({
 
             <li>
               <MoreLink />
+            </li>
+
+            <li>
+              <button
+                type='button'
+                className='column-link column-link--transparent navigation-panel__toot-button'
+                onClick={handleOpenComposeModal}
+              >
+                <Icon id='plus' icon={AddIcon} className='column-link__icon' />
+                <span>{intl.formatMessage(messages.compose)}</span>
+              </button>
             </li>
           </>
         )}
