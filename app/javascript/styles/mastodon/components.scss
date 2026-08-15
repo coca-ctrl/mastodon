@@ -11094,3 +11094,45 @@ noscript {
     gap: 4px;
   }
 }
+
+// --- DM 채팅 느낌 스타일 ---
+.status.status-direct {
+  border-radius: 18px;
+  max-width: 75%;
+  margin-block: 6px;
+  background: var(--color-bg-secondary, #313543);
+}
+
+.status.status-direct.status--own {
+  margin-inline-start: auto;
+  background: var(--color-bg-brand-base, #6364ff);
+  color: #fff;
+}
+
+.conversation {
+  border-radius: 12px;
+  margin-block: 4px;
+
+  &.unread {
+    background: rgba(99, 100, 255, 0.08);
+  }
+}
+
+// 개인 멘션(DM) 행 전체 배경 제거 - 말풍선 안에만 색을 주기 위함
+.status__wrapper-direct {
+  background: none;
+
+  &:focus {
+    background: none;
+  }
+}
+
+// DM 상세 대화(스레드) 페이지의 연결선 제거
+.status-direct .status__line {
+  display: none;
+}
+
+// DM 스레드에서 작은 게시물의 라벨은 숨기고, 크게 보이는 게시물의 라벨만 유지
+.status.status-direct .status__prepend {
+  display: none;
+}

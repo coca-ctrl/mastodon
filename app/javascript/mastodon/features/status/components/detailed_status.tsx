@@ -12,6 +12,7 @@ import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 
 import AlternateEmailIcon from '@/material-icons/400-24px/alternate_email.svg?react';
+import ChatBubbleIcon from '@/material-icons/400-24px/chat_bubble.svg?react';
 import { AnimatedNumber } from 'mastodon/components/animated_number';
 import { Avatar } from 'mastodon/components/avatar';
 import { ContentWarning } from 'mastodon/components/content_warning';
@@ -428,8 +429,8 @@ export const DetailedStatus: React.FC<{
           <div className='status__prepend'>
             <div className='status__prepend-icon-wrapper'>
               <Icon
-                id='at'
-                icon={AlternateEmailIcon}
+                id='comment'
+                icon={ChatBubbleIcon}
                 className='status__prepend-icon'
               />
             </div>

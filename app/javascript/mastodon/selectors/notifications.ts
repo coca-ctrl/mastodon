@@ -56,25 +56,36 @@ const selectPendingNotificationGroups = createSelector(
   filterNotificationsByAllowedTypes,
 );
 
+const isHiddenDirectMention = (
+  group: NotificationGroup | NotificationGap,
+  statuses: RootState['statuses'],
+) =>
+  group.type === 'mention' &&
+  group.statusId !== undefined &&
+  statuses.get(group.statusId)?.get('visibility') === 'direct';
+
 export const selectUnreadNotificationGroupsCount = createSelector(
   [
     (s: RootState) => s.notificationGroups.lastReadId,
     selectNotificationGroups,
     selectPendingNotificationGroups,
+    (s: RootState) => s.statuses,
   ],
-  (notificationMarker, groups, pendingGroups) => {
+  (notificationMarker, groups, pendingGroups, statuses) => {
     return (
       groups.filter(
         (group) =>
           group.type !== 'gap' &&
           group.page_max_id &&
-          compareId(group.page_max_id, notificationMarker) > 0,
+          compareId(group.page_max_id, notificationMarker) > 0 &&
+          !isHiddenDirectMention(group, statuses),
       ).length +
       pendingGroups.filter(
         (group) =>
           group.type !== 'gap' &&
           group.page_max_id &&
-          compareId(group.page_max_id, notificationMarker) > 0,
+          compareId(group.page_max_id, notificationMarker) > 0 &&
+          !isHiddenDirectMention(group, statuses),
       ).length
     );
   },

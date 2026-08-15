@@ -50,6 +50,8 @@ export const NotificationMention: React.FC<{
     ] as const;
   }, isEqual);
 
+  if (isDirect) return null;
+
   let labelRenderer = mentionLabelRenderer;
 
   if (isReply && isDirect) labelRenderer = privateReplyLabelRenderer;

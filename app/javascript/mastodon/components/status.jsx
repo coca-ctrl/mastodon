@@ -2,6 +2,8 @@ import PropTypes from 'prop-types';
 
 import { defineMessages, FormattedMessage } from 'react-intl';
 
+import ChatBubbleIcon from '@/material-icons/400-24px/chat_bubble.svg?react';
+
 import classNames from 'classnames';
 
 import ImmutablePropTypes from 'react-immutable-proptypes';
@@ -22,7 +24,7 @@ import Card from '../features/status/components/card';
 import Bundle from '../features/ui/components/bundle';
 import { MediaGallery, Video, Audio } from '../features/ui/util/async-components';
 import { SensitiveMediaContext } from '../features/ui/util/sensitive_media_context';
-import { displayMedia } from '../initial_state';
+import { displayMedia, me } from '../initial_state';
 
 import { injectIntl } from './intl';
 import { StatusHeader } from './status/header'
@@ -449,7 +451,7 @@ class Status extends ImmutablePureComponent {
     } else if (status.get('visibility') === 'direct') {
       prepend = (
         <div className='status__prepend'>
-          <div className='status__prepend__icon'><Icon id='at' icon={AlternateEmailIcon} /></div>
+          <div className='status__prepend__icon'><Icon id='comment' icon={ChatBubbleIcon} /></div>
           <FormattedMessage id='status.direct_indicator' defaultMessage='Private mention' tagName='span' />
         </div>
       );
@@ -603,6 +605,7 @@ class Status extends ImmutablePureComponent {
                 'status--first-in-thread': previousId && (!connectUp || connectToRoot), muted: this.props.muted,
                 'status--is-quote': isQuotedPost,
                 'status--has-quote': !!status.get('quote'),
+                'status--own': status.getIn(['account', 'id']) === me,
                 'status--highlighted-entry': this.props.shouldHighlightOnMount,
               })
             }

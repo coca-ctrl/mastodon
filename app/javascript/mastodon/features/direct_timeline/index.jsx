@@ -1,5 +1,9 @@
 import PropTypes from 'prop-types';
 import { useRef, useCallback, useEffect } from 'react';
+import { openModal } from 'mastodon/actions/modal';
+import { changeComposeVisibility } from 'mastodon/actions/compose_typed';
+
+import ChatBubbleIcon from '@/material-icons/400-24px/chat_bubble.svg?react';
 
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
@@ -54,17 +58,27 @@ const DirectTimeline = ({ columnId, multiColumn }) => {
     };
   }, [dispatch]);
 
+  const handleNewMessage = useCallback(() => {
+    dispatch(changeComposeVisibility('direct'));
+    dispatch(openModal({ modalType: 'COMPOSE', modalProps: {} }));
+  }, [dispatch]);
+
   return (
     <Column bindToDocument={!multiColumn} ref={columnRef} label={intl.formatMessage(messages.title)}>
       <ColumnHeader
-        icon='at'
-        iconComponent={AlternateEmailIcon}
+        icon='comment'
+        iconComponent={ChatBubbleIcon}
         title={intl.formatMessage(messages.title)}
         onPin={handlePin}
         onMove={handleMove}
         onClick={handleHeaderClick}
         pinned={pinned}
         multiColumn={multiColumn}
+        extraButton={
+          <button type='button' className='column-header__button' onClick={handleNewMessage}>
+            <FormattedMessage id='navigation_bar.compose' defaultMessage='새 메시지' />
+          </button>
+        }
       />
 
       <ConversationsList

@@ -89,9 +89,12 @@ const messages = defineMessages({
   blankPostError: { id: 'compose.error.blank_post', defaultMessage: 'Post can\'t be blank.' },
 });
 
-export const ensureComposeIsVisible = (getState) => {
-  if (!getState().getIn(['compose', 'mounted'])) {
-    browserHistory.push('/publish', { focusTarget: false });
+export const ensureComposeIsVisible = (dispatch, getState) => {
+  const pathname = browserHistory.location.pathname;
+  const hasInlineComposer = pathname === '/home' || pathname === '/timelines/home' || pathname === '/public/local';
+
+  if (!hasInlineComposer) {
+    dispatch({ type: 'MODAL_OPEN', payload: { modalType: 'COMPOSE', modalProps: {} } });
   }
 };
 
@@ -123,7 +126,7 @@ export function replyCompose(status) {
       status: status,
     });
 
-    ensureComposeIsVisible(getState);
+    ensureComposeIsVisible(dispatch, getState);
   };
 }
 
@@ -158,7 +161,7 @@ export const focusCompose = (defaultText = '', caretStart = false) => (dispatch,
     caretStart,
   });
 
-  ensureComposeIsVisible(getState);
+  ensureComposeIsVisible(dispatch, getState);
 };
 
 export function mentionCompose(account) {
@@ -168,7 +171,7 @@ export function mentionCompose(account) {
       account: account,
     });
 
-    ensureComposeIsVisible(getState);
+    ensureComposeIsVisible(dispatch, getState);
   };
 }
 
@@ -185,7 +188,7 @@ export function directCompose(account) {
       account: account,
     });
 
-    ensureComposeIsVisible(getState);
+    ensureComposeIsVisible(dispatch, getState);
   };
 }
 

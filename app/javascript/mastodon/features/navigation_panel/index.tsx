@@ -1,11 +1,14 @@
 import { useCallback, useEffect, useRef } from 'react';
 
+import { expandConversations } from 'mastodon/actions/conversations';
+import { connectDirectStream } from 'mastodon/actions/streaming';
+
 import { defineMessages, useIntl } from 'react-intl';
 
 import classNames from 'classnames';
 import { Link, useLocation } from 'react-router-dom';
 
-import type { Map as ImmutableMap } from 'immutable';
+import type { List as ImmutableList, Map as ImmutableMap } from 'immutable';
 
 import { animated, useSpring } from '@react-spring/web';
 import { useDrag } from '@use-gesture/react';
@@ -31,6 +34,8 @@ import PublicIcon from '@/material-icons/400-24px/public.svg?react';
 import SettingsIcon from '@/material-icons/400-24px/settings.svg?react';
 import StarActiveIcon from '@/material-icons/400-24px/star-fill.svg?react';
 import StarIcon from '@/material-icons/400-24px/star.svg?react';
+import ChatBubbleIcon from '@/material-icons/400-24px/chat_bubble.svg?react';
+import ChatBubbleFillIcon from '@/material-icons/400-24px/chat_bubble-fill.svg?react';
 import TrendingUpIcon from '@/material-icons/400-24px/trending_up.svg?react';
 import { fetchFollowRequests } from 'mastodon/actions/accounts';
 import { openNavigation, closeNavigation } from 'mastodon/actions/navigation';
@@ -190,6 +195,44 @@ const FollowRequestsLink: React.FC = () => {
         />
       }
       text={intl.formatMessage(messages.followRequests)}
+    />
+  );
+};
+
+const DirectMessagesLink: React.FC = () => {
+  const intl = useIntl();
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(expandConversations());
+    const disconnect = dispatch(connectDirectStream()) as unknown as () => void;
+    return () => {
+      disconnect();
+    };
+  }, [dispatch]);
+
+  const count = useAppSelector(
+    (state) =>
+      (
+        state.conversations.get('items') as
+          | ImmutableList<ImmutableMap<string, unknown>>
+          | undefined
+      )?.filter((item) => item.get('unread'))?.size ?? 0,
+  );
+
+  return (
+    <ColumnLink
+      transparent
+      to='/conversations'
+      icon={
+        <IconWithBadge
+          id='comment'
+          icon={ChatBubbleIcon}
+          count={count}
+          className='column-link__icon'
+        />
+      }
+      text={intl.formatMessage(messages.direct)}
     />
   );
 };
@@ -356,13 +399,7 @@ export const NavigationPanel: React.FC<{ multiColumn?: boolean }> = ({
               />
             </li>
             <li>
-              <ColumnLink
-                transparent
-                to='/conversations'
-                icon='at'
-                iconComponent={AlternateEmailIcon}
-                text={intl.formatMessage(messages.direct)}
-              />
+              <DirectMessagesLink />
             </li>
 
             <li role='separator' />
@@ -376,7 +413,7 @@ export const NavigationPanel: React.FC<{ multiColumn?: boolean }> = ({
                 text={intl.formatMessage(messages.myProfile)}
               />
             </li>
-            
+
             <li>
               <ColumnLink
                 transparent
