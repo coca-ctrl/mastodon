@@ -25,6 +25,7 @@ import InfoIcon from '@/material-icons/400-24px/info.svg?react';
 import NotificationsActiveIcon from '@/material-icons/400-24px/notifications-fill.svg?react';
 import NotificationsIcon from '@/material-icons/400-24px/notifications.svg?react';
 import PersonAddActiveIcon from '@/material-icons/400-24px/person_add-fill.svg?react';
+import PersonIcon from '@/material-icons/400-24px/person.svg?react';
 import PersonAddIcon from '@/material-icons/400-24px/person_add.svg?react';
 import PublicIcon from '@/material-icons/400-24px/public.svg?react';
 import SettingsIcon from '@/material-icons/400-24px/settings.svg?react';
@@ -100,6 +101,7 @@ const messages = defineMessages({
     id: 'navigation_bar.search_trends',
     defaultMessage: 'Search / Trending',
   },
+  myProfile: { id: 'navigation_bar.my_profile', defaultMessage: '내 프로필' },
   advancedInterface: {
     id: 'navigation_bar.advanced_interface',
     defaultMessage: 'Open in advanced web interface',
@@ -365,6 +367,16 @@ export const NavigationPanel: React.FC<{ multiColumn?: boolean }> = ({
 
             <li role='separator' />
 
+            <li>
+              <ColumnLink
+                transparent
+                to={`/@${account?.acct}`}
+                icon='user'
+                iconComponent={PersonIcon}
+                text={intl.formatMessage(messages.myProfile)}
+              />
+            </li>
+            
             <li>
               <ColumnLink
                 transparent
