@@ -2,7 +2,7 @@
 
 class ChatMessage < ApplicationRecord
   belongs_to :chat_conversation
-  belongs_to :sender, class_name: 'User'
+  belongs_to :sender, class_name: 'User', optional: true
   has_one :media_attachment, dependent: :nullify
   has_many :chat_message_edits, dependent: :destroy
 
@@ -13,6 +13,13 @@ class ChatMessage < ApplicationRecord
 
   def deleted?
     deleted_at.present?
+  end
+
+  def self.create_system_message!(conversation, text)
+    conversation.chat_messages.create!(
+        message_type: 'system',
+        content: text
+    )
   end
 
   # 수정 시 이전 내용을 이력에 남기고 갱신
@@ -35,6 +42,8 @@ class ChatMessage < ApplicationRecord
   private
 
   def content_or_media_present
+    return if message_type == 'system'
+
     errors.add(:base, '내용 또는 이미지가 필요합니다') if content.blank? && media_attachment.blank?
   end
 end

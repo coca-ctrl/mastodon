@@ -35,11 +35,11 @@ export function DirectTimeline() {
 }
 
 export function ChatList() {
-  return import('../../chat');
+  return import('../../chat/shell');
 }
 
 export function ChatConversation() {
-  return import('../../chat/conversation');
+  return import('../../chat/shell');
 }
 
 export function ListTimeline () {

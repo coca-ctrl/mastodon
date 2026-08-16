@@ -39,11 +39,16 @@ class Api::V1::Chat::MessagesController < Api::BaseController
   end
 
   def serialize_message(message)
+    sender_account = message.sender&.account
     {
       id: message.id,
       conversation_id: message.chat_conversation_id,
+      message_type: message.message_type,
       sender_id: message.sender_id,
-      sender_account_id: message.sender.account&.id&.to_s,
+      sender_account_id: sender_account&.id&.to_s,
+      sender_username: sender_account&.username,
+      sender_display_name: sender_account&.display_name.presence || sender_account&.username,
+      sender_avatar: sender_account&.avatar&.url,
       content: message.deleted? ? nil : message.content,
       media_url: message.deleted? ? nil : message.media_attachment&.file&.url,
       deleted: message.deleted?,

@@ -15,19 +15,24 @@ export interface ChatUser {
 export interface ChatMessage {
   id: number;
   conversation_id: number;
-  sender_id: number;
+  message_type: 'user' | 'system';
+  sender_id: number | null;
   sender_account_id: string | null;
+  sender_username: string | null;
+  sender_avatar: string | null;
   content: string | null;
   media_url: string | null;
   deleted: boolean;
   edited: boolean;
   created_at: string;
+  sender_display_name: string | null;
 }
 
 export interface ChatConversation {
   id: number;
   group: boolean;
   name: string | null;
+  owner_id: number | null;
   participants: ChatUser[];
   last_message: ChatMessage | null;
   unread_count: number;
@@ -103,3 +108,13 @@ export const sendMessageWithMedia = (
     `v1/chat/conversations/${conversationId}/messages`,
     { content, media_id: mediaId },
   );
+
+export const leaveConversation = (conversationId: number) =>
+  apiRequestPost<{ success: boolean }>(
+    `v1/chat/conversations/${conversationId}/leave`,
+  );
+
+export const updateConversationName = (conversationId: number, name: string) =>
+  apiRequestPut<ChatConversation>(`v1/chat/conversations/${conversationId}`, {
+    name,
+  });
