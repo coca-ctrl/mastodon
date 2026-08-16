@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import type { FC } from 'react';
 
 import { FormattedMessage } from 'react-intl';
@@ -86,8 +86,16 @@ const InnerTimeline: FC<{ accountId: string; multiColumn: boolean }> = ({
   });
 
   const timeline = useAppSelector((state) => selectTimelineByKey(state, key));
+
   const { blockedBy, hidden, suspended } = useAccountVisibility(accountId);
   const forceEmptyState = blockedBy || hidden || suspended;
+
+  const statuses = useAppSelector((state) => state.statuses);
+
+  const filteredStatusIds = useMemo(() => {
+    const ids = forceEmptyState ? emptyList : (timeline?.items ?? emptyList);
+    return ids.filter((id) => statuses.get(id)?.get('visibility') !== 'direct');
+  }, [forceEmptyState, timeline, statuses]);
 
   const dispatch = useAppDispatch();
   useEffect(() => {
@@ -121,7 +129,7 @@ const InnerTimeline: FC<{ accountId: string; multiColumn: boolean }> = ({
         scrollKey='account_timeline'
         // We want to have this component when timeline is undefined (loading),
         // because if we don't the prepended component will re-render with every filter change.
-        statusIds={forceEmptyState ? emptyList : (timeline?.items ?? emptyList)}
+        statusIds={filteredStatusIds}
         featuredStatusIds={pinnedStatusIds}
         isLoading={isLoading}
         hasMore={!forceEmptyState && !!timeline?.hasMore}
