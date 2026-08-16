@@ -88,6 +88,17 @@ Rails.application.routes.draw do
     devise_for :users, path: 'auth', format: false
   end
 
+  devise_scope :user do
+    post 'auth/prepare_account_add', to: 'auth/sessions#prepare_account_add'
+  end
+
+  namespace :accounts do
+    get 'switch', to: 'switch#index'
+    get 'switch/token', to: 'switch#token'
+    post 'switch/:session_id', to: 'switch#update', as: :switch_to
+    delete 'switch/:session_id', to: 'switch#destroy', as: :switch_remove
+  end
+
   with_options constraints: ->(req) { req.format.nil? || req.format.html? } do
     get '/users/:username', to: redirect_with_vary('/@%{username}')
     get '/users/:username/following', to: redirect_with_vary('/@%{username}/following')

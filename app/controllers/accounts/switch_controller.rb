@@ -3,9 +3,13 @@
 class Accounts::SwitchController < ApplicationController
   before_action :authenticate_user!
 
+  rescue_from ActionController::InvalidAuthenticityToken do
+    render json: { error: 'CSRF 토큰이 유효하지 않습니다.' }, status: :unprocessable_entity
+  end
+  
   def token
     render json: { token: form_authenticity_token }
-    end
+  end
 
   # 보관함 목록 확인용 (테스트/화면 표시에 사용)
   def index
@@ -13,7 +17,7 @@ class Accounts::SwitchController < ApplicationController
 
     accounts = stash.filter_map do |entry|
       user = User.find_by(id: entry['user_id'])
-      next unless user
+      next unless user && user.session_activations.active?(entry['session_id'])
 
       {
         session_id: entry['session_id'],
@@ -43,8 +47,8 @@ class Accounts::SwitchController < ApplicationController
     entry = stash.find { |e| e['session_id'] == session_id }
 
     unless entry
-        redirect_to root_path, alert: '전환할 수 없는 계정입니다.'
-        return
+      render json: { error: '전환할 수 없는 계정입니다.' }, status: :unprocessable_entity
+      return
     end
 
     target_user = User.find_by(id: entry['user_id'])
@@ -56,7 +60,7 @@ class Accounts::SwitchController < ApplicationController
         httponly: true,
         same_site: :lax,
       }
-      redirect_to root_path, alert: '만료된 세션입니다. 다시 로그인해주세요.'
+      render json: { error: '만료된 세션입니다. 다시 로그인해주세요.' }, status: :unprocessable_entity
       return
     end
 
@@ -64,28 +68,28 @@ class Accounts::SwitchController < ApplicationController
     new_stash = stash.reject { |e| e['session_id'] == session_id }
 
     if current_session_id.present? && current_user
-        new_stash.unshift('user_id' => current_user.id, 'session_id' => current_session_id)
+      new_stash.unshift('user_id' => current_user.id, 'session_id' => current_session_id)
     end
 
     cookies.signed['_switch_sessions'] = {
-        value: new_stash.first(5),
-        expires: 1.year.from_now,
-        httponly: true,
-        same_site: :lax,
+      value: new_stash.first(5),
+      expires: 1.year.from_now,
+      httponly: true,
+      same_site: :lax,
     }
 
     # 핵심: Rails 세션(Warden) 자체를 target_user로 교체
     bypass_sign_in(target_user, scope: :user)
 
     cookies.signed['_session_id'] = {
-        value: session_id,
-        expires: 1.year.from_now,
-        httponly: true,
-        same_site: :lax,
+      value: session_id,
+      expires: 1.year.from_now,
+      httponly: true,
+      same_site: :lax,
     }
 
-    redirect_to root_path
-    end
+    render json: { success: true, redirect_to: root_path }
+  end
 
   def destroy
     session_id = params[:session_id]
@@ -98,6 +102,6 @@ class Accounts::SwitchController < ApplicationController
       same_site: :lax,
     }
 
-    redirect_to root_path
+    render json: { success: true }
   end
 end

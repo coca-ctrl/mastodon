@@ -22,13 +22,61 @@ class Auth::SessionsController < Devise::SessionsController
     p.form_action(false)
   end
 
+  before_action :authenticate_user!, only: [:prepare_account_add]
+
+  def prepare_account_add
+    existing_session_id = cookies.signed['_session_id']
+
+    if existing_session_id.present?
+      cookies.signed['_pending_switch_session'] = {
+        value: existing_session_id,
+        expires: 10.minutes.from_now,
+        httponly: true,
+        same_site: :lax,
+      }
+    end
+
+    cookies.delete('_session_id')
+    sign_out(current_user)
+
+    render json: { redirect_to: new_user_session_path(add_account: 1) }
+  end
+
   def create
     super do |resource|
-      # We only need to call this if this hasn't already been
-      # called from one of the two-factor or sign-in token
-      # authentication methods
-
       on_authentication_success(resource, :password) unless @on_authentication_success_called
+
+      pending_session_id = cookies.signed['_pending_switch_session']
+
+      if pending_session_id.present?
+        pending_activation = SessionActivation.find_by(session_id: pending_session_id)
+
+        if pending_activation && pending_activation.user_id != resource.id
+          stash = cookies.signed['_switch_sessions'] || []
+          stash = stash.reject { |entry| entry['user_id'] == pending_activation.user_id }
+          stash.unshift('user_id' => pending_activation.user_id, 'session_id' => pending_session_id)
+          stash = stash.first(5)
+
+          cookies.signed['_switch_sessions'] = {
+            value: stash,
+            expires: 1.year.from_now,
+            httponly: true,
+            same_site: :lax,
+          }
+        end
+
+        cookies.delete('_pending_switch_session')
+      end
+
+      stash = cookies.signed['_switch_sessions']
+      if stash.present?
+        cookies.signed['_switch_sessions'] = {
+          value: stash.reject { |entry| entry['user_id'] == resource.id },
+          expires: 1.year.from_now,
+          httponly: true,
+          same_site: :lax,
+        }
+      end
     end
   end
 

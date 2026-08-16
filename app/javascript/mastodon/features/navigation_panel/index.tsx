@@ -64,6 +64,7 @@ import { DisabledAccountBanner } from './components/disabled_account_banner';
 import { FollowedTagsPanel } from './components/followed_tags_panel';
 import { ListPanel } from './components/list_panel';
 import { MoreLink } from './components/more_link';
+import { AccountSwitcher } from './components/account_switcher';
 import { SignInBanner } from './components/sign_in_banner';
 import { Trends } from './components/trends';
 
@@ -265,6 +266,7 @@ export const NavigationPanel: React.FC<{ multiColumn?: boolean }> = ({
   const { signedIn, permissions, disabledAccountId } = useIdentity();
   const location = useLocation();
   const showSearch = useBreakpoint('full') && !multiColumn;
+  const isNarrow = useBreakpoint('full');
   const account = useAccount(me);
   const dispatch = useAppDispatch();
 
@@ -374,8 +376,6 @@ export const NavigationPanel: React.FC<{ multiColumn?: boolean }> = ({
               <AnnualReportNavItem />
             </li>
 
-            <li role='separator' />
-
             <ListPanel />
 
             <li>
@@ -402,8 +402,6 @@ export const NavigationPanel: React.FC<{ multiColumn?: boolean }> = ({
               <DirectMessagesLink />
             </li>
 
-            <li role='separator' />
-
             <li>
               <ColumnLink
                 transparent
@@ -428,16 +426,18 @@ export const NavigationPanel: React.FC<{ multiColumn?: boolean }> = ({
               <MoreLink />
             </li>
 
-            <li>
-              <button
-                type='button'
-                className='column-link column-link--transparent navigation-panel__toot-button'
-                onClick={handleOpenComposeModal}
-              >
-                <Icon id='plus' icon={AddIcon} className='column-link__icon' />
-                <span>{intl.formatMessage(messages.compose)}</span>
-              </button>
-            </li>
+            {!isNarrow && (
+              <li>
+                <button
+                  type='button'
+                  className='button navigation-panel__toot-button'
+                  onClick={handleOpenComposeModal}
+                >
+                  <Icon id='plus' icon={AddIcon} className='column-link__icon' />
+                  <span>{intl.formatMessage(messages.compose)}</span>
+                </button>
+              </li>
+            )}
           </>
         )}
 
@@ -463,6 +463,8 @@ export const NavigationPanel: React.FC<{ multiColumn?: boolean }> = ({
       <div className='flex-spacer' />
 
       <Trends />
+
+      <AccountSwitcher currentAccount={account} />
     </nav>
   );
 };
