@@ -79,9 +79,14 @@ const ChatList: React.FC = () => {
                 <div className='chat-list__meta'>
                   <span className='chat-list__title'>{title}</span>
                   <span className='chat-list__preview'>
-                    {conversation.last_message?.deleted
-                      ? '(삭제된 메시지)'
-                      : (conversation.last_message?.content ?? '')}
+                    {(() => {
+                        const last = conversation.last_message;
+                        if (!last) return '';
+                        if (last.deleted) return '(삭제된 메시지)';
+                        if (last.media_url && last.content) return `(이미지) ${last.content}`;
+                        if (last.media_url) return '(이미지)';
+                        return last.content ?? '';
+                    })()}
                   </span>
                 </div>
                 {conversation.unread_count > 0 && (

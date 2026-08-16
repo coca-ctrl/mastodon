@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_16_040642) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_16_053819) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -801,6 +801,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_16_040642) do
   create_table "media_attachments", id: :bigint, default: -> { "timestamp_id('media_attachments'::text)" }, force: :cascade do |t|
     t.bigint "account_id"
     t.string "blurhash"
+    t.bigint "chat_message_id"
     t.datetime "created_at", precision: nil, null: false
     t.text "description"
     t.string "file_content_type"
@@ -823,6 +824,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_16_040642) do
     t.integer "type", default: 0, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.index ["account_id", "status_id"], name: "index_media_attachments_on_account_id_and_status_id", order: { status_id: :desc }
+    t.index ["chat_message_id"], name: "index_media_attachments_on_chat_message_id"
     t.index ["scheduled_status_id"], name: "index_media_attachments_on_scheduled_status_id", where: "(scheduled_status_id IS NOT NULL)"
     t.index ["shortcode"], name: "index_media_attachments_on_shortcode", unique: true, opclass: :text_pattern_ops, where: "(shortcode IS NOT NULL)"
     t.index ["status_id"], name: "index_media_attachments_on_status_id"
@@ -1582,6 +1584,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_16_040642) do
   add_foreign_key "login_activities", "users", on_delete: :cascade
   add_foreign_key "markers", "users", on_delete: :cascade
   add_foreign_key "media_attachments", "accounts", name: "fk_96dd81e81b", on_delete: :nullify
+  add_foreign_key "media_attachments", "chat_messages"
   add_foreign_key "media_attachments", "scheduled_statuses", on_delete: :nullify
   add_foreign_key "media_attachments", "statuses", on_delete: :nullify
   add_foreign_key "mentions", "accounts", name: "fk_970d43f9d1", on_delete: :cascade

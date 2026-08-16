@@ -45,6 +45,7 @@ class Api::V1::Chat::MessagesController < Api::BaseController
       sender_id: message.sender_id,
       sender_account_id: message.sender.account&.id&.to_s,
       content: message.deleted? ? nil : message.content,
+      media_url: message.deleted? ? nil : message.media_attachment&.file&.url,
       deleted: message.deleted?,
       edited: message.edited,
       created_at: message.created_at,

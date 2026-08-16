@@ -181,7 +181,7 @@ class MediaAttachment < ApplicationRecord
 
   belongs_to :account,          inverse_of: :media_attachments, optional: true
   belongs_to :status,           inverse_of: :media_attachments, optional: true
-  belongs_to :scheduled_status, inverse_of: :media_attachments, optional: true
+  belongs_to :chat_message,     inverse_of: :media_attachment, optional: true
 
   has_attached_file :file,
                     styles: ->(f) { file_styles f },

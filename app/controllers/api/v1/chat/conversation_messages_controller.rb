@@ -20,10 +20,22 @@ class Api::V1::Chat::ConversationMessagesController < Api::BaseController
 
   # POST /api/v1/chat/conversations/:conversation_id/messages
   def create
-    message = @conversation.chat_messages.create!(
+    media = nil
+
+    if params[:media_id].present?
+      media = current_account.media_attachments.where(status_id: nil, chat_message_id: nil).find_by(id: params[:media_id])
+    end
+
+    message = @conversation.chat_messages.new(
       sender: current_user,
-      content: params.require(:content)
+      content: params[:content].presence || ''
     )
+
+    if media
+      message.media_attachment = media
+    end
+
+    message.save!
 
     @conversation.touch
 
@@ -48,6 +60,7 @@ class Api::V1::Chat::ConversationMessagesController < Api::BaseController
       sender_id: message.sender_id,
       sender_account_id: message.sender.account&.id&.to_s,
       content: message.deleted? ? nil : message.content,
+      media_url: message.deleted? ? nil : message.media_attachment&.file&.url,
       deleted: message.deleted?,
       edited: message.edited,
       created_at: message.created_at,

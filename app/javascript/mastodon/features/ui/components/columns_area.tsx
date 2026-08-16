@@ -37,6 +37,7 @@ import { BundleColumnError } from './bundle_column_error';
 import { ColumnLoading } from './column_loading';
 import { ComposePanel, RedirectToMobileComposeIfNeeded } from './compose_panel';
 import DrawerLoading from './drawer_loading';
+import { useLocation } from 'react-router-dom';
 
 const componentMap = {
   COMPOSE: Compose,
@@ -91,7 +92,10 @@ export const ColumnsArea = forwardRef<
     children: React.ReactElement | React.ReactElement[];
   }
 >(({ children, minimalShell, singleColumn }, ref) => {
-  const renderComposePanel = !useBreakpoint('full');
+  const location = useLocation();
+  const isChatScreen = location.pathname.startsWith('/chat');
+  const isWideScreen = !useBreakpoint('full');
+  const renderComposePanel = isWideScreen && !isChatScreen;
   const columns = useAppSelector((state) =>
     (state.settings as Record<{ columns: List<Record<Column>> }>).get(
       'columns',

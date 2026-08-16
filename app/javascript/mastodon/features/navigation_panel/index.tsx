@@ -292,7 +292,10 @@ export const NavigationPanel: React.FC<{ multiColumn?: boolean }> = ({
 
   return (
     <nav
-      className='navigation-panel'
+      className={classNames('navigation-panel', {
+        'navigation-panel--icons-only':
+          location.pathname.startsWith('/chat') && !useBreakpoint('full'),
+      })}
       aria-label={intl.formatMessage(messages.main)}
     >
       <div className='navigation-panel__logo'>

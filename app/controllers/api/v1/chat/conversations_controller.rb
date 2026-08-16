@@ -4,7 +4,7 @@ class Api::V1::Chat::ConversationsController < Api::BaseController
   before_action -> { doorkeeper_authorize! :read }, only: [:index, :read]
   before_action -> { doorkeeper_authorize! :write }, only: [:create]
   before_action :require_user!
-  before_action :set_conversation, only: [:read]
+  before_action :set_conversation, only: [:read, :show]
 
   # GET /api/v1/chat/conversations
   def index
@@ -73,6 +73,16 @@ class Api::V1::Chat::ConversationsController < Api::BaseController
     render json: { success: true }
   end
 
+  # GET /api/v1/chat/conversations/:id
+  def show
+    unless @conversation.chat_conversation_participants.exists?(user_id: current_user.id)
+      render json: { error: '참여자가 아닙니다.' }, status: :forbidden
+      return
+    end
+
+    render json: serialize_conversation(@conversation)
+  end
+
   private
 
   def set_conversation
@@ -117,6 +127,7 @@ class Api::V1::Chat::ConversationsController < Api::BaseController
       sender_id: message.sender_id,
       sender_account_id: message.sender.account&.id&.to_s,
       content: message.deleted? ? nil : message.content,
+      media_url: message.deleted? ? nil : message.media_attachment&.file&.url,
       deleted: message.deleted?,
       edited: message.edited,
       created_at: message.created_at,

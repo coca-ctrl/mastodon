@@ -3,9 +3,11 @@
 class ChatMessage < ApplicationRecord
   belongs_to :chat_conversation
   belongs_to :sender, class_name: 'User'
+  has_one :media_attachment, dependent: :nullify
   has_many :chat_message_edits, dependent: :destroy
 
-  validates :content, presence: true, length: { maximum: 5000 }
+  validates :content, length: { maximum: 5000 }
+  validate :content_or_media_present
 
   scope :visible, -> { where(deleted_at: nil) }
 
@@ -28,5 +30,11 @@ class ChatMessage < ApplicationRecord
 
   def soft_delete!
     update!(deleted_at: Time.current)
+  end
+
+  private
+
+  def content_or_media_present
+    errors.add(:base, '내용 또는 이미지가 필요합니다') if content.blank? && media_attachment.blank?
   end
 end

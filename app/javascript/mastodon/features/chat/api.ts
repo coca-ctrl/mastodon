@@ -18,6 +18,7 @@ export interface ChatMessage {
   sender_id: number;
   sender_account_id: string | null;
   content: string | null;
+  media_url: string | null;
   deleted: boolean;
   edited: boolean;
   created_at: string;
@@ -78,3 +79,27 @@ export const searchAccounts = (q: string) =>
     q,
     limit: 5,
   });
+
+export const fetchConversation = (conversationId: number) =>
+  apiRequestGet<ChatConversation>(`v1/chat/conversations/${conversationId}`);
+
+export interface UploadedMedia {
+  id: string;
+  url: string;
+}
+
+export const uploadChatMedia = (file: File) => {
+  const formData = new FormData();
+  formData.append('file', file);
+  return apiRequestPost<UploadedMedia>('v1/media', formData);
+};
+
+export const sendMessageWithMedia = (
+  conversationId: number,
+  content: string,
+  mediaId?: string,
+) =>
+  apiRequestPost<ChatMessage>(
+    `v1/chat/conversations/${conversationId}/messages`,
+    { content, media_id: mediaId },
+  );

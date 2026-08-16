@@ -343,7 +343,7 @@ namespace :api, format: false do
     end
 
     namespace :chat do
-      resources :conversations, only: [:index, :create] do
+      resources :conversations, only: [:index, :show, :create] do
         member do
           post :read
         end
