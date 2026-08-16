@@ -11330,12 +11330,21 @@ noscript {
 }
 
 .navigation-panel__toot-button {
-    width: 100%;
-    margin: 20px 0;
-    padding: 10px 17px;
-    display: flex;
-    justify-content: flex-start;
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 18px;
+  width: 100%;
+  margin: 20px 0;
+  padding: 10px 17px;
+  display: flex;
+  justify-content: flex-start;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 18px;
+
+  &:hover {
+    background: var(--color-bg-brand-base-hover);
+  }
+}
+
+.navigation-panel__toot-button .icon {
+  width: 24px;
+  height: 24px;
 }
