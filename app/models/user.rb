@@ -123,6 +123,9 @@ class User < ApplicationRecord
   normalizes :chosen_languages, with: ->(chosen_languages) { chosen_languages.compact_blank.presence }
 
   has_many :session_activations, dependent: :destroy
+  has_many :chat_conversation_participants, dependent: :destroy
+  has_many :chat_conversations, through: :chat_conversation_participants
+  has_many :sent_chat_messages, class_name: 'ChatMessage', foreign_key: :sender_id, dependent: :destroy, inverse_of: :sender
 
   delegate :can?, to: :role
 

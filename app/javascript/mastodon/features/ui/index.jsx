@@ -52,6 +52,8 @@ import {
   Reblogs,
   Favourites,
   DirectTimeline,
+  ChatList,
+  ChatConversation,
   HashtagTimeline,
   Notifications,
   NotificationRequests,
@@ -208,6 +210,8 @@ class SwitchingColumnsArea extends PureComponent {
             <WrappedRoute path='/public/local' exact component={Firehose} componentParams={{ feedType: 'community' }} content={children} />
             <Redirect from='/public/remote' to='public/local' exact />
 	    <WrappedRoute path={['/conversations', '/timelines/direct']} component={DirectTimeline} content={children} />
+      <WrappedRoute path='/chat' exact component={ChatList} content={children} />
+      <WrappedRoute path='/chat/:id' component={ChatConversation} content={children} />      
             <WrappedRoute path='/tags/:id' component={HashtagTimeline} content={children} />
             <WrappedRoute path='/links/:url' component={LinkTimeline} content={children} />
             <WrappedRoute path='/lists/new' component={ListEdit} content={children} />

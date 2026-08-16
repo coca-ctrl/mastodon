@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_11_150940) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_16_040642) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -357,6 +357,48 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_11_150940) do
     t.datetime "updated_at", null: false
     t.index ["canonical_email_hash"], name: "index_canonical_email_blocks_on_canonical_email_hash", unique: true
     t.index ["reference_account_id"], name: "index_canonical_email_blocks_on_reference_account_id"
+  end
+
+  create_table "chat_conversation_participants", force: :cascade do |t|
+    t.bigint "chat_conversation_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "joined_at", null: false
+    t.datetime "last_read_at"
+    t.datetime "left_at"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["chat_conversation_id", "user_id"], name: "index_chat_participants_on_conversation_and_user", unique: true
+    t.index ["chat_conversation_id"], name: "index_chat_conversation_participants_on_chat_conversation_id"
+    t.index ["user_id"], name: "index_chat_conversation_participants_on_user_id"
+  end
+
+  create_table "chat_conversations", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.boolean "group", default: false, null: false
+    t.string "name"
+    t.bigint "owner_id"
+    t.datetime "updated_at", null: false
+    t.index ["owner_id"], name: "index_chat_conversations_on_owner_id"
+  end
+
+  create_table "chat_message_edits", force: :cascade do |t|
+    t.bigint "chat_message_id", null: false
+    t.datetime "edited_at", null: false
+    t.text "previous_content", null: false
+    t.index ["chat_message_id"], name: "index_chat_message_edits_on_chat_message_id"
+  end
+
+  create_table "chat_messages", force: :cascade do |t|
+    t.bigint "chat_conversation_id", null: false
+    t.text "content", null: false
+    t.datetime "created_at", null: false
+    t.datetime "deleted_at"
+    t.boolean "edited", default: false, null: false
+    t.bigint "sender_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["chat_conversation_id", "created_at"], name: "index_chat_messages_on_chat_conversation_id_and_created_at"
+    t.index ["chat_conversation_id"], name: "index_chat_messages_on_chat_conversation_id"
+    t.index ["sender_id"], name: "index_chat_messages_on_sender_id"
   end
 
   create_table "collection_items", id: :bigint, default: -> { "timestamp_id('collection_items'::text)" }, force: :cascade do |t|
@@ -1490,6 +1532,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_11_150940) do
   add_foreign_key "bulk_import_rows", "bulk_imports", on_delete: :cascade
   add_foreign_key "bulk_imports", "accounts", on_delete: :cascade
   add_foreign_key "canonical_email_blocks", "accounts", column: "reference_account_id", on_delete: :cascade
+  add_foreign_key "chat_conversation_participants", "chat_conversations"
+  add_foreign_key "chat_conversation_participants", "users"
+  add_foreign_key "chat_conversations", "users", column: "owner_id"
+  add_foreign_key "chat_message_edits", "chat_messages"
+  add_foreign_key "chat_messages", "chat_conversations"
+  add_foreign_key "chat_messages", "users", column: "sender_id"
   add_foreign_key "collection_items", "accounts"
   add_foreign_key "collection_items", "collections", on_delete: :cascade
   add_foreign_key "collection_reports", "collections", on_delete: :cascade

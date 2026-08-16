@@ -34,6 +34,14 @@ export function DirectTimeline() {
   return import('../../direct_timeline');
 }
 
+export function ChatList() {
+  return import('../../chat');
+}
+
+export function ChatConversation() {
+  return import('../../chat/conversation');
+}
+
 export function ListTimeline () {
   return import('../../list_timeline');
 }
