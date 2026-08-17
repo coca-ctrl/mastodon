@@ -30,22 +30,28 @@ export const ChatListPane: React.FC<{ activeId?: number }> = ({
   const [loading, setLoading] = useState(true);
   const [showNew, setShowNew] = useState(false);
 
-  const load = useCallback(() => {
-    setLoading(true);
+  const load = useCallback((isBackground = false) => {
+    if (!isBackground) setLoading(true);
     fetchConversations()
       .then((data) => {
         setConversations(data);
       })
       .catch(() => {
-        setConversations([]);
+        if (!isBackground) setConversations([]);
       })
       .finally(() => {
-        setLoading(false);
+        if (!isBackground) setLoading(false);
       });
   }, []);
 
   useEffect(() => {
     load();
+    const interval = setInterval(() => {
+      load(true);
+    }, 15000);
+    return () => {
+      clearInterval(interval);
+    };
   }, [load]);
 
   return (

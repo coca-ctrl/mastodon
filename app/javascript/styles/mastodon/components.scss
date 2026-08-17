@@ -11098,7 +11098,6 @@ noscript {
 // --- DM 채팅 느낌 스타일 ---
 .status.status-direct {
   border-radius: 18px;
-  max-width: 75%;
   margin-block: 6px;
   background: var(--color-bg-secondary, #313543);
 }
@@ -11534,7 +11533,6 @@ noscript {
 }
 
 .chat-message__bubble {
-  max-width: 75%;
   padding: 8px 12px;
   border-radius: 16px 16px 16px 4px;
   background: var(--color-bg-brand-softest);
@@ -11702,9 +11700,15 @@ noscript {
     cursor: pointer;
     white-space: nowrap;
     flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     &:hover {
       background: var(--color-bg-brand-base-hover);
+      color: var(--color-text-on-brand-base);
     }
   }
 }
@@ -11772,20 +11776,26 @@ noscript {
     position: absolute;
     top: 4px;
     right: 4px;
-    background: rgba(0, 0, 0, 0.6);
-    color: #fff;
+    background: transparent;
+    color: var(--color-text-secondary);
     border: none;
-    border-radius: 12px;
     font-size: 11px;
     padding: 2px 8px;
     display: flex;
     align-items: center;
     gap: 2px;
     cursor: pointer;
+    width: 32px;
+    height: 32px;
+
+    &:hover {
+      background: var(--color-bg-brand-softest);
+      color: var(--color-text-secondary);
+    }
 
     svg {
-      width: 12px;
-      height: 12px;
+      width: 20px;
+      height: 20px;
     }
   }
 }
@@ -12179,8 +12189,8 @@ body.chat-conversation-active {
   }
 
   svg {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
   }
 }
 
@@ -12199,4 +12209,132 @@ body.chat-conversation-active {
   align-items: center;
   justify-content: center;
   padding: 0 4px;
+}
+
+.chat-conversation__send-button {
+  width: 40px;
+  height: 40px;
+  padding: 0 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.chat-conversation__menu {
+  position: relative;
+  margin-left: auto;
+}
+
+.chat-conversation__menu-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: none;
+  border: none;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+
+  &:hover {
+    background: var(--color-bg-brand-softest);
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.chat-conversation__menu-dropdown {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 4px);
+  width: 180px;
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border-primary);
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+
+  button {
+    background: none;
+    border: none;
+    text-align: left;
+    padding: 10px 14px;
+    font-size: 14px;
+    color: var(--color-text-primary);
+    cursor: pointer;
+
+    &:hover {
+      background: var(--color-bg-brand-softest);
+    }
+  }
+}
+
+.chat-conversation__menu-dropdown-danger {
+  color: #e0245e !important;
+}
+
+.emoji-icon-tabler .icon-undefined path {
+  fill: none !important;
+}
+
+.chat-date-divider {
+  display: flex;
+  justify-content: center;
+  margin: 12px 0 4px;
+
+  span {
+    font-size: 11px;
+    color: var(--color-text-muted, var(--color-text-secondary));
+    padding: 3px 12px;
+    border-radius: 10px;
+  }
+}
+
+.chat-conversation__menu-participants {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--color-border-primary);
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.chat-message__row {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  padding: 0 8px;
+
+  .chat-message--own & {
+    justify-content: flex-end;
+  }
+}
+
+.chat-message__unread-count {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--color-bg-brand-base);
+  flex-shrink: 0;
+  margin-bottom: 2px;
+}
+
+.chat-conversation__loading-more {
+  text-align: center;
+  font-size: 12px;
+  color: var(--color-text-muted, var(--color-text-secondary));
+  padding: 8px 0;
 }

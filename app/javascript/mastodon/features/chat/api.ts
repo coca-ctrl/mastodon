@@ -28,12 +28,18 @@ export interface ChatMessage {
   sender_display_name: string | null;
 }
 
+export interface ParticipantReadState {
+  account_id: string | null;
+  last_read_at: string | null;
+}
+
 export interface ChatConversation {
   id: number;
   group: boolean;
   name: string | null;
-  owner_id: number | null;
+  owner_id: string | null;
   participants: ChatUser[];
+  participant_read_states: ParticipantReadState[];
   last_message: ChatMessage | null;
   unread_count: number;
   updated_at: string;
@@ -52,7 +58,10 @@ export const createConversation = (accountIds: string[], group = false, name?: s
 export const markConversationRead = (conversationId: number) =>
   apiRequestPost<{ success: boolean }>(
     `v1/chat/conversations/${conversationId}/read`,
-  );
+  ).then((result) => {
+    window.dispatchEvent(new Event('chat-unread-refresh'));
+    return result;
+  });
 
 export const fetchMessages = (conversationId: number, maxId?: number) =>
   apiRequestGet<ChatMessage[]>(
@@ -118,3 +127,6 @@ export const updateConversationName = (conversationId: number, name: string) =>
   apiRequestPut<ChatConversation>(`v1/chat/conversations/${conversationId}`, {
     name,
   });
+
+export const fetchUnreadChatCount = () =>
+  apiRequestGet<{ count: number }>('v1/chat/conversations/unread_count');

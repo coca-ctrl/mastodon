@@ -348,9 +348,11 @@ namespace :api, format: false do
           post :read
           post :leave
         end
+        collection do
+          get :unread_count
+        end
         resources :messages, only: [:index, :create], controller: 'conversation_messages'
       end
-      resources :messages, only: [:update, :destroy], controller: 'messages'
     end
   end
 

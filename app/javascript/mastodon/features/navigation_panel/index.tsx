@@ -1,8 +1,5 @@
 import { useCallback, useEffect, useRef } from 'react';
 
-import { expandConversations } from 'mastodon/actions/conversations';
-import { connectDirectStream } from 'mastodon/actions/streaming';
-
 import { defineMessages, useIntl } from 'react-intl';
 
 import classNames from 'classnames';
@@ -17,6 +14,8 @@ import { useAccount } from '@/mastodon/hooks/useAccount';
 import AddIcon from '@/material-icons/400-24px/add.svg?react';
 import { Icon } from 'mastodon/components/icon';
 import { openModal } from 'mastodon/actions/modal';
+import ChatMessageIcon from '@/tabler-icons/message-chatbot.svg?react';
+import ChatMessageActiveIcon from '@/tabler-icons/message-chatbot-filled.svg?react';
 import AlternateEmailIcon from '@/material-icons/400-24px/alternate_email.svg?react';
 import BookmarksActiveIcon from '@/material-icons/400-24px/bookmarks-fill.svg?react';
 import BookmarksIcon from '@/material-icons/400-24px/bookmarks.svg?react';
@@ -34,8 +33,6 @@ import PublicIcon from '@/material-icons/400-24px/public.svg?react';
 import SettingsIcon from '@/material-icons/400-24px/settings.svg?react';
 import StarActiveIcon from '@/material-icons/400-24px/star-fill.svg?react';
 import StarIcon from '@/material-icons/400-24px/star.svg?react';
-import ChatBubbleIcon from '@/material-icons/400-24px/chat_bubble.svg?react';
-import ChatBubbleFillIcon from '@/material-icons/400-24px/chat_bubble-fill.svg?react';
 import TrendingUpIcon from '@/material-icons/400-24px/trending_up.svg?react';
 import { fetchFollowRequests } from 'mastodon/actions/accounts';
 import { openNavigation, closeNavigation } from 'mastodon/actions/navigation';
@@ -67,6 +64,9 @@ import { MoreLink } from './components/more_link';
 import { AccountSwitcher } from './components/account_switcher';
 import { SignInBanner } from './components/sign_in_banner';
 import { Trends } from './components/trends';
+import { useState } from 'react';
+import { playChatNotificationSound } from '../chat/play_notification_sound';
+import { fetchUnreadChatCount } from '../chat/api';
 
 const messages = defineMessages({
   home: { id: 'tabs_bar.home', defaultMessage: 'Home' },
@@ -86,7 +86,7 @@ const messages = defineMessages({
     description:
       'Label for the main navigation; should not contain the word "navigation".',
   },
-  direct: { id: 'navigation_bar.direct', defaultMessage: 'Private mentions' },
+  chat: { id: 'navigation_bar.chat', defaultMessage: '채팅' },
   favourites: { id: 'navigation_bar.favourites', defaultMessage: 'Favorites' },
   bookmarks: { id: 'navigation_bar.bookmarks', defaultMessage: 'Bookmarks' },
   collections: {
@@ -200,40 +200,60 @@ const FollowRequestsLink: React.FC = () => {
   );
 };
 
-const DirectMessagesLink: React.FC = () => {
+const ChatLink: React.FC = () => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
+  const [count, setCount] = useState(0);
+  const prevCountRef = useRef(0);
 
   useEffect(() => {
-    dispatch(expandConversations());
-    const disconnect = dispatch(connectDirectStream()) as unknown as () => void;
-    return () => {
-      disconnect();
-    };
-  }, [dispatch]);
+    let cancelled = false;
 
-  const count = useAppSelector(
-    (state) =>
-      (
-        state.conversations.get('items') as
-          | ImmutableList<ImmutableMap<string, unknown>>
-          | undefined
-      )?.filter((item) => item.get('unread'))?.size ?? 0,
-  );
+    const load = () => {
+      fetchUnreadChatCount()
+        .then((data) => {
+          if (cancelled) return;
+          if (data.count > prevCountRef.current) {
+            playChatNotificationSound();
+          }
+          prevCountRef.current = data.count;
+          setCount(data.count);
+        })
+        .catch(() => undefined);
+    };
+
+    load();
+    const interval = setInterval(load, 10000);
+    window.addEventListener('chat-unread-refresh', load);
+
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
+      window.removeEventListener('chat-unread-refresh', load);
+    };
+  }, []);
 
   return (
     <ColumnLink
       transparent
-      to='/conversations'
+      to='/chat'
+      isActive={(match, location) => location.pathname.startsWith('/chat')}
       icon={
         <IconWithBadge
-          id='comment'
-          icon={ChatBubbleIcon}
+          id='chat'
+          icon={ChatMessageIcon}
+          count={count}
+          className='column-link__icon icon--no-fill'
+        />
+      }
+      activeIcon={
+        <IconWithBadge
+          id='chat'
+          icon={ChatMessageActiveIcon}
           count={count}
           className='column-link__icon'
         />
       }
-      text={intl.formatMessage(messages.direct)}
+      text={intl.formatMessage(messages.chat)}
     />
   );
 };
@@ -399,7 +419,7 @@ export const NavigationPanel: React.FC<{ multiColumn?: boolean }> = ({
               />
             </li>
             <li>
-              <DirectMessagesLink />
+              <ChatLink />
             </li>
 
             <li>

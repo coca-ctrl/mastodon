@@ -17,6 +17,26 @@ class Api::V1::Chat::ConversationsController < Api::BaseController
     render json: conversations.map { |c| serialize_conversation(c) }
   end
 
+  # GET /api/v1/chat/conversations/unread_count
+  def unread_count
+    count = current_user.chat_conversation_participants
+                         .where(left_at: nil)
+                         .joins(:chat_conversation)
+                         .where(
+                           'chat_conversation_participants.last_read_at IS NULL OR EXISTS (
+                             SELECT 1 FROM chat_messages
+                             WHERE chat_messages.chat_conversation_id = chat_conversation_participants.chat_conversation_id
+                             AND chat_messages.created_at > chat_conversation_participants.last_read_at
+                             AND chat_messages.message_type = ?
+                             AND (chat_messages.sender_id IS NULL OR chat_messages.sender_id != ?)
+                           )',
+                           'user', current_user.id
+                         )
+                         .count
+
+    render json: { count: count }
+  end
+
   # POST /api/v1/chat/conversations
   # params: { account_ids: [1,2], group: true/false, name: "옵션" }
   def create
@@ -77,7 +97,9 @@ class Api::V1::Chat::ConversationsController < Api::BaseController
       return
     end
 
-    participant.update!(last_read_at: Time.current)
+    now = Time.current
+    participant.update!(last_read_at: now)
+    ChatReadBroadcastWorker.perform_async(@conversation.id, current_user.id, now.as_json)
     render json: { success: true }
   end
 
@@ -147,12 +169,22 @@ class Api::V1::Chat::ConversationsController < Api::BaseController
                       .sort_by { |u| last_activity[u.id] || Time.at(0) }
                       .reverse
 
+  participant_read_states = conversation.chat_conversation_participants
+                                          .where(left_at: nil)
+                                          .map do |p|
+    {
+      account_id: p.user.account&.id&.to_s,
+      last_read_at: p.last_read_at,
+    }
+  end
+
   {
     id: conversation.id,
     group: conversation.group,
     name: conversation.name,
     owner_id: conversation.owner&.account&.id&.to_s,
     participants: active_users.map { |u| serialize_user(u) },
+    participant_read_states: participant_read_states,
     last_message: last_message && serialize_message(last_message),
     unread_count: participant&.unread_count || 0,
     updated_at: conversation.updated_at,

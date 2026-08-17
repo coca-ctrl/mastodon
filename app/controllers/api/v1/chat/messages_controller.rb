@@ -18,6 +18,7 @@ class Api::V1::Chat::MessagesController < Api::BaseController
     end
 
     @message.edit_content!(params.require(:content))
+    ChatMessageBroadcastWorker.perform_async(@message.chat_conversation_id, @message.id, 'chat.message.update')
     render json: serialize_message(@message)
   end
 
@@ -29,6 +30,7 @@ class Api::V1::Chat::MessagesController < Api::BaseController
     end
 
     @message.soft_delete!
+    ChatMessageBroadcastWorker.perform_async(@message.chat_conversation_id, @message.id, 'chat.message.update')
     render json: { success: true }
   end
 

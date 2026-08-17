@@ -106,6 +106,7 @@ function getMeta<K extends keyof InitialStateMeta>(
 }
 
 export const activityApiEnabled = getMeta('activity_api_enabled');
+export const streamingApiBaseUrl = getMeta('streaming_api_base_url');
 export const autoPlayGif = getMeta('auto_play_gif');
 export const boostModal = getMeta('boost_modal');
 export const quickBoosting = getMeta('quick_boosting');

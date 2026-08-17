@@ -448,6 +448,8 @@ const startServer = async () => {
       return 'direct';
     case '/api/v1/streaming/list':
       return 'list';
+    case '/api/v1/streaming/chat':
+      return 'chat';
     default:
       return undefined;
     }
@@ -611,6 +613,21 @@ const startServer = async () => {
 
     if (result.rows.length === 0) {
       throw new AuthenticationError('List not found');
+    }
+  };
+
+  const authorizeChatAccess = async (conversationId, req) => {
+    const { accountId } = req;
+    const result = await pgPool.query(
+      `SELECT ccp.id FROM chat_conversation_participants ccp
+      JOIN users u ON u.id = ccp.user_id
+      WHERE ccp.chat_conversation_id = $1 AND u.account_id = $2 AND ccp.left_at IS NULL
+      LIMIT 1`,
+      [conversationId, accountId]
+    );
+
+    if (result.rows.length === 0) {
+      throw new AuthenticationError('Chat conversation not found');
     }
   };
 
@@ -1048,6 +1065,7 @@ const startServer = async () => {
    * @property {string} [tag]
    * @property {string} [list]
    * @property {string} [only_media]
+   * @property {string} [conversation_id]
    */
 
   /**
@@ -1161,6 +1179,22 @@ const startServer = async () => {
       });
 
       break;
+    case 'chat':
+      if (!params.conversation_id) {
+        reject(new RequestError('Missing conversation_id parameter'));
+        return;
+      }
+      authorizeChatAccess(params.conversation_id, req).then(() => {
+        resolve({
+          channelIds: [`chat:${params.conversation_id}`],
+          options: { needsFiltering: false },
+        });
+      }).catch(() => {
+        reject(new AuthenticationError('Not authorized to stream this chat'));
+      });
+
+      break;
+
     default:
       reject(new RequestError('Unknown stream type'));
     }
@@ -1172,7 +1206,9 @@ const startServer = async () => {
    * @returns {string[]}
    */
   const streamNameFromChannelName = (channelName, params) => {
-    if (channelName === 'list' && params.list) {
+    if (channelName === 'chat' && params.conversation_id) {
+      return [channelName, params.conversation_id];
+    } else if (channelName === 'list' && params.list) {
       return [channelName, params.list];
     } else if (['hashtag', 'hashtag:local'].includes(channelName) && params.tag) {
       return [channelName, params.tag];

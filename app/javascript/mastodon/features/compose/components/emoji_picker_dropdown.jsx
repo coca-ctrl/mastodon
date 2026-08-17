@@ -8,7 +8,7 @@ import classNames from 'classnames';
 import { supportsPassiveEvents } from 'detect-passive-events';
 import Overlay from 'react-overlays/Overlay';
 
-import MoodIcon from '@/material-icons/400-20px/mood.svg?react';
+import MoodIcon from '@/tabler-icons/mood-smile.svg?react';
 import { IconButton } from 'mastodon/components/icon_button';
 import { injectIntl } from '@/mastodon/components/intl';
 
@@ -378,6 +378,7 @@ class EmojiPickerDropdown extends PureComponent {
           disabled={disabled}
           id="emoji"
           inverted
+          className="emoji-icon-tabler"
         />
 
         <Overlay show={active} placement={placement} flip target={this.findTarget} popperConfig={{ strategy: 'fixed', onFirstUpdate: this.handleOverlayEnter }}>
