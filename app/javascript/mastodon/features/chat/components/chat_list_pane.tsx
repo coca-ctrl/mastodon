@@ -48,7 +48,7 @@ export const ChatListPane: React.FC<{ activeId?: number }> = ({
     load();
     const interval = setInterval(() => {
       load(true);
-    }, 15000);
+    }, 5000);
     return () => {
       clearInterval(interval);
     };
