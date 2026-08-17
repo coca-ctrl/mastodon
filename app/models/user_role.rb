@@ -41,6 +41,7 @@ class UserRole < ApplicationRecord
     view_feeds: (1 << 20),
     invite_bypass_approval: (1 << 21),
     manage_email_subscriptions: (1 << 22),
+    manage_npcs: (1 << 23),
   }.freeze
 
   EVERYONE_ROLE_ID = -99
@@ -93,7 +94,9 @@ class UserRole < ApplicationRecord
       devops: %i(
         view_devops
       ).freeze,
-
+      custom_features: %i(
+        manage_npcs
+      ).freeze,
       special: %i(
         administrator
       ).freeze,

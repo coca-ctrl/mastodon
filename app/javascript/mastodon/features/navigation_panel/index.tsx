@@ -67,6 +67,8 @@ import { Trends } from './components/trends';
 import { useState } from 'react';
 import { playChatNotificationSound } from '../chat/play_notification_sound';
 import { fetchUnreadChatCount } from '../chat/api';
+import { canManageNpcs } from 'mastodon/permissions';
+import NpcIcon from '@/tabler-icons/user-screen.svg?react';
 
 const messages = defineMessages({
   home: { id: 'tabs_bar.home', defaultMessage: 'Home' },
@@ -441,6 +443,18 @@ export const NavigationPanel: React.FC<{ multiColumn?: boolean }> = ({
                 text={intl.formatMessage(messages.preferences)}
               />
             </li>
+
+            {canManageNpcs(permissions) && (
+              <li>
+                <ColumnLink
+                  transparent
+                  to='/npcs'
+                  icon='tabler-user-screen'
+                  iconComponent={NpcIcon}
+                  text='NPC 관리'
+                />
+              </li>
+            )}
 
             <li>
               <MoreLink />

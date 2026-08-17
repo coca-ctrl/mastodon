@@ -28,8 +28,24 @@ module FormattingHelper
 
   def status_content_format(status)
     quoted_status = status.quote&.quoted_status if status.local?
+    formatted = html_aware_format(status.text, status.local?, preloaded_accounts: [status.account] + (status.respond_to?(:active_mentions) ? status.active_mentions.map(&:account) : []), quoted_status: quoted_status)
+    npc_content_prefix(status) + formatted
+  end
 
-    html_aware_format(status.text, status.local?, preloaded_accounts: [status.account] + (status.respond_to?(:active_mentions) ? status.active_mentions.map(&:account) : []), quoted_status: quoted_status)
+  def npc_content_prefix(status)
+    return ''.html_safe unless status.npc_id
+
+    npc = status.npc
+    return ''.html_safe unless npc
+
+    image = npc.image_for(status.npc_emotion.presence || 'default')
+    return ''.html_safe unless image
+
+    image_url = image.image.url(:original)
+
+    <<~HTML.squish.html_safe # rubocop:disable Rails/OutputSafety
+      <img src="#{ERB::Util.html_escape(image_url)}" alt="#{ERB::Util.html_escape(npc.name)}" /><p><b>#{ERB::Util.html_escape(npc.name)}</b></p>
+    HTML
   end
 
   def rss_status_content_format(status)

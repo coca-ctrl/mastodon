@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_16_140107) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_17_125606) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -291,6 +291,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_16_140107) do
     t.index ["account_warning_id"], name: "index_appeals_on_account_warning_id", unique: true
     t.index ["approved_by_account_id"], name: "index_appeals_on_approved_by_account_id", where: "(approved_by_account_id IS NOT NULL)"
     t.index ["rejected_by_account_id"], name: "index_appeals_on_rejected_by_account_id", where: "(rejected_by_account_id IS NOT NULL)"
+  end
+
+  create_table "backgrounds", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.datetime "created_at", null: false
+    t.string "image_content_type"
+    t.string "image_file_name"
+    t.bigint "image_file_size"
+    t.datetime "image_updated_at"
+    t.string "name", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_backgrounds_on_account_id"
   end
 
   create_table "backups", force: :cascade do |t|
@@ -903,6 +915,27 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_16_140107) do
     t.index ["from_account_id"], name: "index_notifications_on_from_account_id"
   end
 
+  create_table "npc_images", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "emotion", default: "default", null: false
+    t.string "image_content_type"
+    t.string "image_file_name"
+    t.bigint "image_file_size"
+    t.datetime "image_updated_at"
+    t.bigint "npc_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["npc_id", "emotion"], name: "index_npc_images_on_npc_id_and_emotion", unique: true
+    t.index ["npc_id"], name: "index_npc_images_on_npc_id"
+  end
+
+  create_table "npcs", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_npcs_on_account_id"
+  end
+
   create_table "oauth_access_grants", force: :cascade do |t|
     t.bigint "application_id", null: false
     t.string "code_challenge"
@@ -988,6 +1021,19 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_16_140107) do
     t.bigint "votes_count", default: 0, null: false
     t.index ["account_id"], name: "index_polls_on_account_id"
     t.index ["status_id"], name: "index_polls_on_status_id"
+  end
+
+  create_table "presets", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.bigint "background_id"
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.string "npc_emotion", null: false
+    t.bigint "npc_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_presets_on_account_id"
+    t.index ["background_id"], name: "index_presets_on_background_id"
+    t.index ["npc_id"], name: "index_presets_on_npc_id"
   end
 
   create_table "preview_card_providers", force: :cascade do |t|
@@ -1260,6 +1306,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_16_140107) do
   create_table "statuses", id: :bigint, default: -> { "timestamp_id('statuses'::text)" }, force: :cascade do |t|
     t.bigint "account_id", null: false
     t.bigint "application_id"
+    t.bigint "background_id"
     t.bigint "conversation_id"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "deleted_at", precision: nil
@@ -1269,6 +1316,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_16_140107) do
     t.bigint "in_reply_to_id"
     t.string "language"
     t.boolean "local"
+    t.string "npc_emotion"
+    t.bigint "npc_id"
     t.bigint "ordered_media_attachment_ids", array: true
     t.bigint "poll_id"
     t.integer "quote_approval_policy", default: 0, null: false
@@ -1284,12 +1333,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_16_140107) do
     t.integer "visibility", default: 0, null: false
     t.index ["account_id", "id", "visibility", "updated_at"], name: "index_statuses_20190820", order: { id: :desc }, where: "(deleted_at IS NULL)"
     t.index ["account_id"], name: "index_statuses_on_account_id"
+    t.index ["background_id"], name: "index_statuses_on_background_id"
     t.index ["conversation_id"], name: "index_statuses_on_conversation_id"
     t.index ["deleted_at"], name: "index_statuses_on_deleted_at", where: "(deleted_at IS NOT NULL)"
     t.index ["id", "account_id"], name: "index_statuses_local_20190824", order: { id: :desc }, where: "((local OR (uri IS NULL)) AND (deleted_at IS NULL) AND (visibility = 0) AND (reblog_of_id IS NULL) AND ((NOT reply) OR (in_reply_to_account_id = account_id)))"
     t.index ["id", "language", "account_id"], name: "index_statuses_public_20250129", order: { id: :desc }, where: "((deleted_at IS NULL) AND (visibility = 0) AND (reblog_of_id IS NULL) AND ((NOT reply) OR (in_reply_to_account_id = account_id)))"
     t.index ["in_reply_to_account_id"], name: "index_statuses_on_in_reply_to_account_id", where: "(in_reply_to_account_id IS NOT NULL)"
     t.index ["in_reply_to_id"], name: "index_statuses_on_in_reply_to_id", where: "(in_reply_to_id IS NOT NULL)"
+    t.index ["npc_id"], name: "index_statuses_on_npc_id"
     t.index ["reblog_of_id", "account_id"], name: "index_statuses_on_reblog_of_id_and_account_id"
     t.index ["uri"], name: "index_statuses_on_uri", unique: true, opclass: :text_pattern_ops, where: "(uri IS NOT NULL)"
   end
@@ -1527,6 +1578,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_16_140107) do
   add_foreign_key "appeals", "accounts", column: "approved_by_account_id", on_delete: :nullify
   add_foreign_key "appeals", "accounts", column: "rejected_by_account_id", on_delete: :nullify
   add_foreign_key "appeals", "accounts", on_delete: :cascade
+  add_foreign_key "backgrounds", "accounts"
   add_foreign_key "backups", "users", on_delete: :nullify
   add_foreign_key "blocks", "accounts", column: "target_account_id", name: "fk_9571bfabc1", on_delete: :cascade
   add_foreign_key "blocks", "accounts", name: "fk_4269e03e65", on_delete: :cascade
@@ -1600,6 +1652,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_16_140107) do
   add_foreign_key "notification_requests", "statuses", column: "last_status_id", on_delete: :nullify
   add_foreign_key "notifications", "accounts", column: "from_account_id", name: "fk_fbd6b0bf9e", on_delete: :cascade
   add_foreign_key "notifications", "accounts", name: "fk_c141c8ee55", on_delete: :cascade
+  add_foreign_key "npc_images", "npcs"
+  add_foreign_key "npcs", "accounts"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id", name: "fk_34d54b0a33", on_delete: :cascade
   add_foreign_key "oauth_access_grants", "users", column: "resource_owner_id", name: "fk_63b044929b", on_delete: :cascade
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id", name: "fk_f5fc4c1ee3", on_delete: :cascade
@@ -1609,6 +1663,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_16_140107) do
   add_foreign_key "poll_votes", "polls", on_delete: :cascade
   add_foreign_key "polls", "accounts", on_delete: :cascade
   add_foreign_key "polls", "statuses", on_delete: :cascade
+  add_foreign_key "presets", "accounts"
+  add_foreign_key "presets", "backgrounds"
+  add_foreign_key "presets", "npcs"
   add_foreign_key "preview_card_trends", "preview_cards", on_delete: :cascade
   add_foreign_key "preview_cards", "accounts", column: "author_account_id", on_delete: :nullify
   add_foreign_key "preview_cards", "accounts", column: "unverified_author_account_id", on_delete: :nullify

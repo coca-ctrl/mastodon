@@ -354,6 +354,13 @@ namespace :api, format: false do
         resources :messages, only: [:index, :create], controller: 'conversation_messages'
       end
     end
+    
+    resources :npcs, only: [:index, :show, :create, :update, :destroy] do
+      resources :npc_images, only: [:create, :update, :destroy], controller: 'npcs/images'
+    end
+
+    resources :backgrounds, only: [:index, :show, :create, :update, :destroy]
+    resources :presets, only: [:index, :show, :create, :update, :destroy]
   end
 
   namespace :v2 do

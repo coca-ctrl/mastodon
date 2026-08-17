@@ -824,6 +824,7 @@ ko:
         other: "%{count}명의 사용자"
       categories:
         administration: 관리
+        custom_features: 커스텀 기능
         devops: 데브옵스
         email: 이메일
         invites: 초대
@@ -856,6 +857,8 @@ ko:
         manage_email_subscriptions_description: 이 권한을 가진 계정들이 본인들의 계정에 이메일 뉴스레터를 활성화할 수 있도록 허용합니다
         manage_federation: 연합 관리
         manage_federation_description: 사용자가 다른 도메인과의 연합을 차단하거나 허용할 수 있도록 하고, 전달 가능 여부를 조정할 수 있도록 허용
+        manage_npcs: NPC 관리
+        manage_npcs_description: 사용자가 NPC를 등록하고 게시물에 사용할 수 있도록 허용
         manage_invites: 초대 관리
         manage_invites_description: 사용자가 초대 링크를 보고 비활성화 할 수 있도록 허용
         manage_reports: 신고 관리

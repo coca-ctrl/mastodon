@@ -39,6 +39,8 @@ import {
   COMPOSE_SUGGESTION_IGNORE,
   COMPOSE_SUGGESTION_TAGS_UPDATE,
   COMPOSE_TAG_HISTORY_UPDATE,
+  COMPOSE_NPC_CHANGE,
+  COMPOSE_PRESET_CHANGE,
   COMPOSE_SENSITIVITY_CHANGE,
   COMPOSE_SPOILERNESS_CHANGE,
   COMPOSE_SPOILER_TEXT_CHANGE,
@@ -84,6 +86,10 @@ const initialState = ImmutableMap({
   media_attachments: ImmutableList(),
   pending_media_attachments: 0,
   poll: null,
+  npc_id: null,
+  npc_emotion: null,
+  preset_id: null,
+  background_id: null,
   suggestion_token: null,
   suggestions: ImmutableList(),
   default_privacy: 'public',
@@ -391,6 +397,21 @@ export const composeReducer = (state = initialState, action) => {
           state.get('media_attachments').size > 0)
         )
       );
+  case COMPOSE_NPC_CHANGE:
+  return state.withMutations(map => {
+    map.set('npc_id', action.npc_id);
+    map.set('npc_emotion', action.npc_emotion);
+    map.set('background_id', action.background_id);
+    map.set('preset_id', null);
+  });
+  case COMPOSE_PRESET_CHANGE:
+    return state.withMutations(map => {
+      map.set('preset_id', action.preset_id);
+      map.set('npc_id', null);
+      map.set('npc_emotion', null);
+      map.set('background_id', null);
+    });
+
   case COMPOSE_SENSITIVITY_CHANGE:
     return state.withMutations(map => {
       if (!state.get('spoiler')) {

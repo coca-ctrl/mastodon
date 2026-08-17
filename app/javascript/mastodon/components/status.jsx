@@ -36,6 +36,7 @@ import { StatusThreadLabel } from './status_thread_label';
 import { CollectionPreviewCard } from '../features/collections/components/collection_preview_card';
 import { compareUrls } from '../utils/compare_urls';
 import { FOCUS_TARGET } from './navigation_focus_target';
+import { NpcStatusCard } from './npc_status_card';
 
 const domParser = new DOMParser();
 
@@ -580,16 +581,20 @@ class Status extends ImmutablePureComponent {
 
     const {statusContentProps, hashtagBar} = getHashtagBarForStatus(status);
 
-    const header = this.props.headerRenderFn
-      ? this.props.headerRenderFn({ status, account, avatarSize, messages, onHeaderClick: this.handleHeaderClick, featured })
-      : (
-        <StatusHeader
-          status={status}
-          account={account}
-          avatarSize={avatarSize}
-          onHeaderClick={this.handleHeaderClick}
-        />
-      );
+    const npc = status.get('npc');
+
+    const header = npc
+      ? null
+      : this.props.headerRenderFn
+        ? this.props.headerRenderFn({ status, account, avatarSize, messages, onHeaderClick: this.handleHeaderClick, featured })
+        : (
+          <StatusHeader
+            status={status}
+            account={account}
+            avatarSize={avatarSize}
+            onHeaderClick={this.handleHeaderClick}
+          />
+        );
 
     return (
       <Hotkeys handlers={handlers} focusable={!unfocusable}>
@@ -614,12 +619,17 @@ class Status extends ImmutablePureComponent {
             {(connectReply || connectUp || connectToRoot) && <div className={classNames('status__line', { 'status__line--full': connectReply, 'status__line--first': !status.get('in_reply_to_id') && !connectToRoot })} />}
 
             {header}
-
             {matchedFilters && <FilterWarning title={matchedFilters.join(', ')} expanded={this.state.showDespiteFilter} onClick={this.handleFilterToggle} />}
-
             {(!matchedFilters || this.state.showDespiteFilter) && <ContentWarning status={status} expanded={expanded} onClick={this.handleExpandedToggle} />}
-
-            {expanded && (
+            {expanded && npc && (
+              <NpcStatusCard
+                npc={npc.toJS ? npc.toJS() : npc}
+                backgroundUrl={status.get('background_url')}
+                createdAt={status.get('created_at')}
+                onClick={this.handleClick}
+              />
+            )}
+            {expanded && !npc && (
               <>
                 <StatusContent
                   status={status}
@@ -629,14 +639,11 @@ class Status extends ImmutablePureComponent {
                   onCollapsedToggle={this.handleCollapsedToggle}
                   {...statusContentProps}
                 />
-
                 {media}
                 {hashtagBar}
-
                 {children}
               </>
             )}
-
             {(showActions && !isQuotedPost) &&
               <StatusActionBar scrollKey={scrollKey} status={status} account={account}  {...other} />
             }

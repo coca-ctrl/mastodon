@@ -26,6 +26,8 @@
   /mutes
   /notifications_v2/(*any)
   /notifications/(*any)
+  /npcs
+  /npcs/(*any)
   /pinned
   /profile/(*any)
   /public

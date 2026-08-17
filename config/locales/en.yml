@@ -850,6 +850,7 @@ en:
         other: "%{count} users"
       categories:
         administration: Administration
+        custom_features: Custom Features
         devops: DevOps
         email: Email
         invites: Invites
@@ -884,6 +885,8 @@ en:
         manage_email_subscriptions_description: Allow users with this permission to enable the email newsletter feature for their account
         manage_federation: Manage Federation
         manage_federation_description: Allows users to block or allow federation with other domains, and control deliverability
+        manage_npcs: Manage NPCs
+        manage_npcs_description: Allows users to register NPCs and use them in posts
         manage_invites: Manage Invites
         manage_invites_description: Allows users to browse and deactivate invite links
         manage_reports: Manage Reports

@@ -54,6 +54,7 @@ import {
   DirectTimeline,
   ChatList,
   ChatConversation,
+  NpcManager,
   HashtagTimeline,
   Notifications,
   NotificationRequests,
@@ -212,6 +213,7 @@ class SwitchingColumnsArea extends PureComponent {
 	    <WrappedRoute path={['/conversations', '/timelines/direct']} component={DirectTimeline} content={children} />
       <WrappedRoute path='/chat' exact component={ChatList} content={children} />
       <WrappedRoute path='/chat/:id' component={ChatConversation} content={children} />      
+            <WrappedRoute path='/npcs' component={NpcManager} content={children} />
             <WrappedRoute path='/tags/:id' component={HashtagTimeline} content={children} />
             <WrappedRoute path='/links/:url' component={LinkTimeline} content={children} />
             <WrappedRoute path='/lists/new' component={ListEdit} content={children} />

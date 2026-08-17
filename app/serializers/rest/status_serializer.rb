@@ -19,7 +19,8 @@ class REST::StatusSerializer < ActiveModel::Serializer
 
   attribute :content, unless: :source_requested?
   attribute :text, if: :source_requested?
-
+  attribute :npc, if: :npc_present?
+  attribute :background_url, if: :npc_present?
   belongs_to :reblog, serializer: REST::StatusSerializer
   belongs_to :application, if: :show_application?
   belongs_to :account, serializer: REST::AccountSerializer
@@ -90,6 +91,28 @@ class REST::StatusSerializer < ActiveModel::Serializer
 
   def url
     ActivityPub::TagManager.instance.url_for(object)
+  end
+  
+  def npc_present?
+    object.npc_id.present?
+  end
+
+  def npc
+    return nil unless object.npc
+
+    image = object.npc.image_for(object.npc_emotion.presence || 'default')
+
+    {
+      id: object.npc.id,
+      name: object.npc.name,
+      emotion: object.npc_emotion,
+      image_url: image&.image&.url(:original),
+      body: html_aware_format(object.text, object.local?, preloaded_accounts: [object.account]),
+    }
+  end
+
+  def background_url
+    object.background&.image&.url(:original)
   end
 
   def reblogs_count

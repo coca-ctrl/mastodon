@@ -278,3 +278,7 @@ export function ListEdit () {
 export function ListMembers () {
   return import('../../lists/members');
 }
+
+export function NpcManager() {
+  return import('../../npcs');
+}

@@ -56,6 +56,8 @@ export const COMPOSE_MOUNT   = 'COMPOSE_MOUNT';
 export const COMPOSE_UNMOUNT = 'COMPOSE_UNMOUNT';
 
 export const COMPOSE_SENSITIVITY_CHANGE  = 'COMPOSE_SENSITIVITY_CHANGE';
+export const COMPOSE_NPC_CHANGE = 'COMPOSE_NPC_CHANGE';
+export const COMPOSE_PRESET_CHANGE = 'COMPOSE_PRESET_CHANGE';
 export const COMPOSE_SPOILERNESS_CHANGE  = 'COMPOSE_SPOILERNESS_CHANGE';
 export const COMPOSE_SPOILER_TEXT_CHANGE = 'COMPOSE_SPOILER_TEXT_CHANGE';
 export const COMPOSE_COMPOSING_CHANGE    = 'COMPOSE_COMPOSING_CHANGE';
@@ -250,6 +252,10 @@ export function submitCompose(successCallback) {
         language: getState().getIn(['compose', 'language']),
         quoted_status_id: getState().getIn(['compose', 'quoted_status_id']),
         quote_approval_policy: visibility === 'private' || visibility === 'direct' ? 'nobody' : getState().getIn(['compose', 'quote_policy']),
+        npc_id: getState().getIn(['compose', 'npc_id'], null),
+        npc_emotion: getState().getIn(['compose', 'npc_emotion'], null),
+        preset_id: getState().getIn(['compose', 'preset_id'], null),
+        background_id: getState().getIn(['compose', 'background_id'], null),
       },
       headers: {
         'Idempotency-Key': getState().getIn(['compose', 'idempotencyKey']),
@@ -737,6 +743,22 @@ export function mountCompose() {
 export function unmountCompose() {
   return {
     type: COMPOSE_UNMOUNT,
+  };
+}
+
+export function changeComposeNpc(npcId, npcEmotion, backgroundId) {
+  return {
+    type: COMPOSE_NPC_CHANGE,
+    npc_id: npcId,
+    npc_emotion: npcEmotion,
+    background_id: backgroundId,
+  };
+}
+
+export function changeComposePreset(presetId) {
+  return {
+    type: COMPOSE_PRESET_CHANGE,
+    preset_id: presetId,
   };
 }
 

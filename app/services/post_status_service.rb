@@ -45,6 +45,17 @@ class PostStatusService < BaseService
     @text        = @options[:text] || ''
     @in_reply_to = @options[:thread]
     @quoted_status = @options[:quoted_status]
+    if @options[:preset_id].present?
+      preset = @account.presets.find_by(id: @options[:preset_id])
+      if preset
+        @npc = preset.npc
+        @options[:npc_emotion] = preset.npc_emotion
+        @background = preset.background
+      end
+    else
+      @npc = @options[:npc_id].present? ? @account.npcs.find_by(id: @options[:npc_id]) : nil
+      @background = @options[:background_id].present? ? @account.backgrounds.find_by(id: @options[:background_id]) : nil
+    end
 
     with_idempotency do
       validate_media!
@@ -269,6 +280,9 @@ class PostStatusService < BaseService
       application: @options[:application],
       rate_limit: @options[:with_rate_limit],
       quote_approval_policy: @options[:quote_approval_policy],
+      npc_id: @npc&.id,
+      npc_emotion: @npc ? (@options[:npc_emotion].presence || 'default') : nil,
+      background_id: @background&.id,
     }.compact
   end
 

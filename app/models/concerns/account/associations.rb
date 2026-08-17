@@ -27,6 +27,9 @@ module Account::Associations
         has_many :instance_moderation_notes
         has_many :media_attachments
         has_many :mentions
+        has_many :npcs
+        has_many :backgrounds
+        has_many :presets
         has_many :migrations, class_name: 'AccountMigration'
         has_many :notification_permissions
         has_many :notification_requests
