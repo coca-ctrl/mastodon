@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
-import MoreHorizIcon from '@/material-icons/400-24px/more_horiz.svg?react';
+import MoreHorizIcon from '@/tabler-icons/dots.svg?react';
 import { openModal } from 'mastodon/actions/modal';
 import { Dropdown } from 'mastodon/components/dropdown_menu';
 import { Icon } from 'mastodon/components/icon';
@@ -114,7 +114,7 @@ export const MoreLink: React.FC = () => {
   return (
     <Dropdown items={menu} placement='bottom-start'>
       <button className='column-link column-link--transparent' type='button'>
-        <Icon id='' icon={MoreHorizIcon} className='column-link__icon' />
+        <Icon id='dots' icon={MoreHorizIcon} className='column-link__icon' />
         <span>
           <FormattedMessage id='navigation_bar.more' defaultMessage='More' />
         </span>

@@ -48,7 +48,8 @@ class Api::V1::StatusesController < Api::BaseController
       npc_id: status_params[:npc_id],
       npc_emotion: status_params[:npc_emotion],
       preset_id: status_params[:preset_id],
-      background_id: status_params[:background_id]
+      background_id: status_params[:background_id],
+      story_action: status_params[:story_action]
     )
 
     render json: @status, serializer: serializer_for_status
@@ -149,6 +150,7 @@ class Api::V1::StatusesController < Api::BaseController
       :npc_emotion,
       :preset_id,
       :background_id,
+      :story_action,
       allowed_mentions: [],
       media_ids: [],
       media_attributes: [

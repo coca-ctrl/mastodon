@@ -45,6 +45,7 @@ class PostStatusService < BaseService
     @text        = @options[:text] || ''
     @in_reply_to = @options[:thread]
     @quoted_status = @options[:quoted_status]
+    @story_action = @options[:story_action] # 'start' 또는 'end'
     if @options[:preset_id].present?
       preset = @account.presets.find_by(id: @options[:preset_id])
       if preset
@@ -71,16 +72,41 @@ class PostStatusService < BaseService
     unless scheduled?
       postprocess_status!
       bump_potential_friendship!
+      apply_story_action!
     end
+    @status
 
     @status
   rescue Antispam::SilentlyDrop => e
     e.status
   end
 
+  def apply_story_action!
+    return if @story_action.blank?
+
+    case @story_action
+    when 'start'
+      media = @status.media_attachments.first
+      return unless media
+
+      session = StorySession.create!(
+        start_status: @status,
+        created_by_account: @account,
+        title: @text.to_s.split("\n").first.to_s.truncate(30),
+        started_at: @status.created_at
+      )
+      session.thumbnail = media.file.path(:original) ? File.open(media.file.path(:original)) : nil
+      session.save!
+    when 'end'
+      session = StorySession.currently_open
+      session&.close!(@status)
+    end
+  end
+
   private
 
-  def preprocess_attributes!
+    def preprocess_attributes!
+    validate_story_action!
     @sensitive    = (@options[:sensitive].nil? ? @account.user&.setting_default_sensitive : @options[:sensitive]) || @options[:spoiler_text].present?
     @text         = @options.delete(:spoiler_text) if @text.blank? && @options[:spoiler_text].present? && @quoted_status.blank?
     @visibility   = @options[:visibility] || @account.user&.setting_default_privacy
@@ -90,6 +116,18 @@ class PostStatusService < BaseService
     @scheduled_at = nil if scheduled_in_the_past?
   rescue ArgumentError
     raise ActiveRecord::RecordInvalid
+  end
+
+  def validate_story_action!
+    return if @story_action.blank?
+
+    case @story_action
+    when 'start'
+      raise Mastodon::ValidationError, '이미 진행 중인 스토리가 있습니다.' if StorySession.currently_open
+      raise Mastodon::ValidationError, '시작 게시물에는 썸네일용 이미지가 필요합니다.' if @options[:media_ids].blank?
+    when 'end'
+      raise Mastodon::ValidationError, '진행 중인 스토리가 없습니다.' unless StorySession.currently_open
+    end
   end
 
   def process_status!

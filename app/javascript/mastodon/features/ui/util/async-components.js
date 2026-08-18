@@ -282,3 +282,10 @@ export function ListMembers () {
 export function NpcManager() {
   return import('../../npcs');
 }
+
+export function StoryList() {
+  return import('../../story');
+}
+export function StorySessionReader() {
+  return import('../../story/session');
+}

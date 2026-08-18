@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 
 import { useIntl, defineMessages } from 'react-intl';
 
-import ListAltActiveIcon from '@/material-icons/400-24px/list_alt-fill.svg?react';
-import ListAltIcon from '@/material-icons/400-24px/list_alt.svg?react';
+import ListAltActiveIcon from '@/tabler-icons/list-details-filled.svg?react';
+import ListAltIcon from '@/tabler-icons/list-details.svg?react';
 import { fetchLists } from 'mastodon/actions/lists';
 import { ColumnLink } from 'mastodon/features/ui/components/column_link';
 import { getOrderedLists } from 'mastodon/selectors/lists';

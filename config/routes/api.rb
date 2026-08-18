@@ -361,6 +361,7 @@ namespace :api, format: false do
 
     resources :backgrounds, only: [:index, :show, :create, :update, :destroy]
     resources :presets, only: [:index, :show, :create, :update, :destroy]
+    resources :story_sessions, only: [:index, :show]
   end
 
   namespace :v2 do

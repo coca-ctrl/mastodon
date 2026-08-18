@@ -11,28 +11,29 @@ import { animated, useSpring } from '@react-spring/web';
 import { useDrag } from '@use-gesture/react';
 
 import { useAccount } from '@/mastodon/hooks/useAccount';
-import AddIcon from '@/material-icons/400-24px/add.svg?react';
+import AddIcon from '@/tabler-icons/pencil-plus.svg?react';
 import { Icon } from 'mastodon/components/icon';
 import { openModal } from 'mastodon/actions/modal';
 import ChatMessageIcon from '@/tabler-icons/message-chatbot.svg?react';
 import ChatMessageActiveIcon from '@/tabler-icons/message-chatbot-filled.svg?react';
-import AlternateEmailIcon from '@/material-icons/400-24px/alternate_email.svg?react';
-import BookmarksActiveIcon from '@/material-icons/400-24px/bookmarks-fill.svg?react';
-import BookmarksIcon from '@/material-icons/400-24px/bookmarks.svg?react';
-import CollectionsActiveIcon from '@/material-icons/400-24px/category-fill.svg?react';
-import CollectionsIcon from '@/material-icons/400-24px/category.svg?react';
-import HomeActiveIcon from '@/material-icons/400-24px/home-fill.svg?react';
-import HomeIcon from '@/material-icons/400-24px/home.svg?react';
-import InfoIcon from '@/material-icons/400-24px/info.svg?react';
-import NotificationsActiveIcon from '@/material-icons/400-24px/notifications-fill.svg?react';
-import NotificationsIcon from '@/material-icons/400-24px/notifications.svg?react';
-import PersonAddActiveIcon from '@/material-icons/400-24px/person_add-fill.svg?react';
-import PersonIcon from '@/material-icons/400-24px/person.svg?react';
-import PersonAddIcon from '@/material-icons/400-24px/person_add.svg?react';
-import PublicIcon from '@/material-icons/400-24px/public.svg?react';
-import SettingsIcon from '@/material-icons/400-24px/settings.svg?react';
-import StarActiveIcon from '@/material-icons/400-24px/star-fill.svg?react';
-import StarIcon from '@/material-icons/400-24px/star.svg?react';
+import AlternateEmailIcon from '@/tabler-icons/at.svg?react';
+import BookmarksActiveIcon from '@/tabler-icons/bookmark-filled.svg?react';
+import BookmarksIcon from '@/tabler-icons/bookmark.svg?react';
+import CollectionsActiveIcon from '@/tabler-icons/list-details-filled.svg?react';
+import CollectionsIcon from '@/tabler-icons/list-details.svg?react';
+import HomeIcon from '@/tabler-icons/home.svg?react';
+import HomeActiveIcon from '@/tabler-icons/home-filled.svg?react';
+import InfoIcon from '@/tabler-icons/info-circle.svg?react';
+import NotificationsActiveIcon from '@/tabler-icons/bell-filled.svg?react';
+import NotificationsIcon from '@/tabler-icons/bell.svg?react';
+import PersonAddActiveIcon from '@/tabler-icons/user-plus.svg?react';
+import PersonIcon from '@/tabler-icons/user.svg?react';
+import PersonAddIcon from '@/tabler-icons/user-plus.svg?react';
+import PublicIcon from '@/tabler-icons/flare.svg?react';
+import PublicActiveIcon from '@/tabler-icons/flare-filled.svg?react';
+import SettingsIcon from '@/tabler-icons/settings.svg?react';
+import StarActiveIcon from '@/tabler-icons/heart-filled.svg?react';
+import StarIcon from '@/tabler-icons/heart.svg?react';
 import TrendingUpIcon from '@/material-icons/400-24px/trending_up.svg?react';
 import { fetchFollowRequests } from 'mastodon/actions/accounts';
 import { openNavigation, closeNavigation } from 'mastodon/actions/navigation';
@@ -69,6 +70,8 @@ import { playChatNotificationSound } from '../chat/play_notification_sound';
 import { fetchUnreadChatCount } from '../chat/api';
 import { canManageNpcs } from 'mastodon/permissions';
 import NpcIcon from '@/tabler-icons/user-screen.svg?react';
+import StoryIcon from '@/tabler-icons/book.svg?react';
+import StoryActiveIcon from '@/tabler-icons/book-filled.svg?react';
 
 const messages = defineMessages({
   home: { id: 'tabs_bar.home', defaultMessage: 'Home' },
@@ -371,8 +374,9 @@ export const NavigationPanel: React.FC<{ multiColumn?: boolean }> = ({
                   ? '/public/local'
                   : '/public/remote'
               }
-              icon='globe'
+              icon='flare'
               iconComponent={PublicIcon}
+              activeIconComponent={PublicActiveIcon}
               isActive={isFirehoseActive}
               text={intl.formatMessage(
                 canViewFeed(signedIn, permissions, localLiveFeedAccess) &&
@@ -398,7 +402,9 @@ export const NavigationPanel: React.FC<{ multiColumn?: boolean }> = ({
               <AnnualReportNavItem />
             </li>
 
-            <ListPanel />
+            <li>
+              <ChatLink />
+            </li>
 
             <li>
               <ColumnLink
@@ -420,9 +426,31 @@ export const NavigationPanel: React.FC<{ multiColumn?: boolean }> = ({
                 text={intl.formatMessage(messages.bookmarks)}
               />
             </li>
+
             <li>
-              <ChatLink />
+              <ColumnLink
+                transparent
+                to='/story'
+                isActive={(match, location) => location.pathname.startsWith('/story')}
+                icon={
+                  <Icon
+                    id='story'
+                    icon={StoryIcon}
+                    className='column-link__icon icon--no-fill'
+                  />
+                }
+                activeIcon={
+                  <Icon
+                    id='story'
+                    icon={StoryActiveIcon}
+                    className='column-link__icon'
+                  />
+                }
+                text='스토리'
+              />
             </li>
+            
+            <ListPanel />
 
             <li>
               <ColumnLink

@@ -29,6 +29,8 @@
   /npcs
   /npcs/(*any)
   /pinned
+  /story
+  /story/(*any)
   /profile/(*any)
   /public
   /public/local

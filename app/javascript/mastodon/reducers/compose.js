@@ -41,6 +41,7 @@ import {
   COMPOSE_TAG_HISTORY_UPDATE,
   COMPOSE_NPC_CHANGE,
   COMPOSE_PRESET_CHANGE,
+  COMPOSE_STORY_ACTION_CHANGE,
   COMPOSE_SENSITIVITY_CHANGE,
   COMPOSE_SPOILERNESS_CHANGE,
   COMPOSE_SPOILER_TEXT_CHANGE,
@@ -90,6 +91,7 @@ const initialState = ImmutableMap({
   npc_emotion: null,
   preset_id: null,
   background_id: null,
+  story_action: null,
   suggestion_token: null,
   suggestions: ImmutableList(),
   default_privacy: 'public',
@@ -141,6 +143,11 @@ function clearAll(state) {
     map.set('quoted_status_id', null);
     map.set('quote_policy', state.get('default_quote_policy'));
     map.set('isDragDisabled', false);
+    map.set('npc_id', null);
+    map.set('npc_emotion', null);
+    map.set('preset_id', null);
+    map.set('background_id', null);
+    map.set('story_action', null);
   });
 }
 
@@ -411,6 +418,8 @@ export const composeReducer = (state = initialState, action) => {
       map.set('npc_emotion', null);
       map.set('background_id', null);
     });
+  case COMPOSE_STORY_ACTION_CHANGE:
+    return state.set('story_action', action.story_action);
 
   case COMPOSE_SENSITIVITY_CHANGE:
     return state.withMutations(map => {

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_17_125606) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_18_030747) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -1351,6 +1351,24 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_17_125606) do
     t.index ["status_id"], name: "index_statuses_tags_on_status_id"
   end
 
+  create_table "story_sessions", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "created_by_account_id", null: false
+    t.bigint "end_status_id"
+    t.datetime "ended_at"
+    t.bigint "start_status_id", null: false
+    t.datetime "started_at", null: false
+    t.string "thumbnail_content_type"
+    t.string "thumbnail_file_name"
+    t.bigint "thumbnail_file_size"
+    t.datetime "thumbnail_updated_at"
+    t.string "title"
+    t.datetime "updated_at", null: false
+    t.index ["created_by_account_id"], name: "index_story_sessions_on_created_by_account_id"
+    t.index ["end_status_id"], name: "index_story_sessions_on_end_status_id"
+    t.index ["start_status_id"], name: "index_story_sessions_on_start_status_id"
+  end
+
   create_table "tag_follows", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.datetime "created_at", null: false
@@ -1700,6 +1718,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_17_125606) do
   add_foreign_key "statuses", "statuses", column: "reblog_of_id", on_delete: :cascade
   add_foreign_key "statuses_tags", "statuses", on_delete: :cascade
   add_foreign_key "statuses_tags", "tags", name: "fk_3081861e21", on_delete: :cascade
+  add_foreign_key "story_sessions", "accounts", column: "created_by_account_id"
+  add_foreign_key "story_sessions", "statuses", column: "end_status_id"
+  add_foreign_key "story_sessions", "statuses", column: "start_status_id"
   add_foreign_key "tag_follows", "accounts", on_delete: :cascade
   add_foreign_key "tag_follows", "tags", on_delete: :cascade
   add_foreign_key "tag_trends", "tags", on_delete: :cascade

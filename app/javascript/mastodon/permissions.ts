@@ -7,6 +7,7 @@ export const PERMISSION_MANAGE_FEDERATION = 0x0000000000000020;
 export const PERMISSION_MANAGE_REPORTS = 0x0000000000000010;
 export const PERMISSION_VIEW_DASHBOARD = 0x0000000000000008;
 export const PERMISSION_MANAGE_NPCS = 0x0000000000800000;
+export const PERMISSION_ADMINISTRATOR = 0x0000000000000001;
 
 // These helpers don't quite align with the names/categories in UserRole,
 // but are likely "good enough" for the use cases at present.
@@ -27,6 +28,11 @@ export function canManageReports(permissions: number) {
 export function canManageNpcs(permissions: number) {
   return (
     (permissions & PERMISSION_MANAGE_NPCS) === PERMISSION_MANAGE_NPCS
+  );
+}
+export function isAdministrator(permissions: number) {
+  return (
+    (permissions & PERMISSION_ADMINISTRATOR) === PERMISSION_ADMINISTRATOR
   );
 }
 

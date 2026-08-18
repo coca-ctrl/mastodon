@@ -58,6 +58,7 @@ export const COMPOSE_UNMOUNT = 'COMPOSE_UNMOUNT';
 export const COMPOSE_SENSITIVITY_CHANGE  = 'COMPOSE_SENSITIVITY_CHANGE';
 export const COMPOSE_NPC_CHANGE = 'COMPOSE_NPC_CHANGE';
 export const COMPOSE_PRESET_CHANGE = 'COMPOSE_PRESET_CHANGE';
+export const COMPOSE_STORY_ACTION_CHANGE = 'COMPOSE_STORY_ACTION_CHANGE';
 export const COMPOSE_SPOILERNESS_CHANGE  = 'COMPOSE_SPOILERNESS_CHANGE';
 export const COMPOSE_SPOILER_TEXT_CHANGE = 'COMPOSE_SPOILER_TEXT_CHANGE';
 export const COMPOSE_COMPOSING_CHANGE    = 'COMPOSE_COMPOSING_CHANGE';
@@ -256,6 +257,7 @@ export function submitCompose(successCallback) {
         npc_emotion: getState().getIn(['compose', 'npc_emotion'], null),
         preset_id: getState().getIn(['compose', 'preset_id'], null),
         background_id: getState().getIn(['compose', 'background_id'], null),
+        story_action: getState().getIn(['compose', 'story_action'], null),
       },
       headers: {
         'Idempotency-Key': getState().getIn(['compose', 'idempotencyKey']),
@@ -759,6 +761,13 @@ export function changeComposePreset(presetId) {
   return {
     type: COMPOSE_PRESET_CHANGE,
     preset_id: presetId,
+  };
+}
+
+export function changeComposeStoryAction(action) {
+  return {
+    type: COMPOSE_STORY_ACTION_CHANGE,
+    story_action: action,
   };
 }
 
