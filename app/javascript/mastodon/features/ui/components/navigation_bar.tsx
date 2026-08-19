@@ -5,13 +5,13 @@ import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 import { NavLink, useRouteMatch } from 'react-router-dom';
 
-import AddIcon from '@/material-icons/400-24px/add.svg?react';
-import HomeActiveIcon from '@/material-icons/400-24px/home-fill.svg?react';
-import HomeIcon from '@/material-icons/400-24px/home.svg?react';
-import MenuIcon from '@/material-icons/400-24px/menu.svg?react';
-import NotificationsActiveIcon from '@/material-icons/400-24px/notifications-fill.svg?react';
-import NotificationsIcon from '@/material-icons/400-24px/notifications.svg?react';
-import SearchIcon from '@/material-icons/400-24px/search.svg?react';
+import AddIcon from '@/tabler-icons/pencil-plus.svg?react';
+import HomeActiveIcon from '@/tabler-icons/home-filled.svg?react';
+import HomeIcon from '@/tabler-icons/home.svg?react';
+import MenuIcon from '@/tabler-icons/menu.svg?react';
+import NotificationsActiveIcon from '@/tabler-icons/bell-filled.svg?react';
+import NotificationsIcon from '@/tabler-icons/bell.svg?react';
+import SearchIcon from '@/tabler-icons/search.svg?react';
 import { openModal } from 'mastodon/actions/modal';
 import { toggleNavigation } from 'mastodon/actions/navigation';
 import { fetchServer } from 'mastodon/actions/server';
@@ -182,18 +182,18 @@ export const NavigationBar: React.FC = () => {
             <IconLabelButton
               title={intl.formatMessage(messages.home)}
               to='/home'
-              icon={<Icon id='' icon={HomeIcon} />}
-              activeIcon={<Icon id='' icon={HomeActiveIcon} />}
+              icon={<Icon id='home' icon={HomeIcon} />}
+              activeIcon={<Icon id='home' icon={HomeActiveIcon} />}
             />
             <IconLabelButton
               title={intl.formatMessage(messages.search)}
               to='/explore'
-              icon={<Icon id='' icon={SearchIcon} />}
+              icon={<Icon id='search' icon={SearchIcon} />}
             />
             <IconLabelButton
               title={intl.formatMessage(messages.publish)}
               to={{ pathname: '/publish', state: { focusTarget: false } }}
-              icon={<Icon id='' icon={AddIcon} />}
+              icon={<Icon id='plus' icon={AddIcon} />}
             />
             <NotificationsButton />
           </>
@@ -205,7 +205,7 @@ export const NavigationBar: React.FC = () => {
           aria-label={intl.formatMessage(messages.menu)}
           type='button'
         >
-          <Icon id='' icon={MenuIcon} />
+          <Icon id='menu' icon={MenuIcon} />
         </button>
       </div>
     </div>

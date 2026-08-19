@@ -8,9 +8,9 @@ import { Helmet } from '@unhead/react/helmet';
 
 import { NotSignedInIndicator } from '@/mastodon/components/not_signed_in_indicator';
 import { useIdentity } from '@/mastodon/identity_context';
-import AddIcon from '@/material-icons/400-24px/add.svg?react';
-import ListAltIcon from '@/material-icons/400-24px/list_alt.svg?react';
-import MoreHorizIcon from '@/material-icons/400-24px/more_horiz.svg?react';
+import AddIcon from '@/tabler-icons/plus.svg?react';
+import ListAltIcon from '@/tabler-icons/list-details.svg?react';
+import MoreHorizIcon from '@/tabler-icons/dots.svg?react';
 import SquigglyArrow from '@/svg-icons/squiggly_arrow.svg?react';
 import { fetchLists } from 'mastodon/actions/lists';
 import { openModal } from 'mastodon/actions/modal';

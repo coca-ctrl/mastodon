@@ -5,6 +5,7 @@ import { fetchConversations } from '../api';
 import { NewConversation } from '../new_conversation';
 import type { ChatConversation } from '../api';
 import { GroupAvatar } from './group_avatar';
+import { me } from 'mastodon/initial_state';
 
 const formatRelativeTime = (dateString: string): string => {
   const diffMs = Date.now() - new Date(dateString).getTime();
@@ -83,7 +84,7 @@ export const ChatListPane: React.FC<{ activeId?: number }> = ({
 
       {!loading &&
         conversations.map((conversation) => {
-          const other = conversation.participants[0];
+          const other = conversation.participants.find((p) => p.account_id !== me);
           const title = conversation.group
             ? (conversation.name ?? '그룹 채팅')
             : (other?.display_name ?? '알 수 없음');

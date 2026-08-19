@@ -90,9 +90,7 @@
       var(--color-black),
       var(--shadow-strength-primary)
     )};
-  --dropdown-shadow:
-    0 20px 25px -5px var(--color-shadow-primary),
-    0 8px 10px -6px var(--color-shadow-primary);
+  --dropdown-shadow: 0 4px 12px #00000059;
   --overlay-icon-shadow: drop-shadow(0 0 8px var(--color-shadow-primary));
 
   /* GRAPHS/CHARTS TOKENS (LEGACY) */

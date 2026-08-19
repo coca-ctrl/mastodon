@@ -6,7 +6,7 @@ import { useParams, Link } from 'react-router-dom';
 
 import { Helmet } from '@unhead/react/helmet';
 
-import ListAltIcon from '@/material-icons/400-24px/list_alt.svg?react';
+import ListAltIcon from '@/tabler-icons/list-details.svg?react';
 import SquigglyArrow from '@/svg-icons/squiggly_arrow.svg?react';
 import { fetchRelationships } from 'mastodon/actions/accounts';
 import { showAlertForError } from 'mastodon/actions/alerts';

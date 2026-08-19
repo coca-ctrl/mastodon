@@ -10,8 +10,8 @@ import { Helmet } from '@unhead/react/helmet';
 
 import { NotSignedInIndicator } from '@/mastodon/components/not_signed_in_indicator';
 import { useIdentity } from '@/mastodon/identity_context';
-import ChevronRightIcon from '@/material-icons/400-24px/chevron_right.svg?react';
-import ListAltIcon from '@/material-icons/400-24px/list_alt.svg?react';
+import ChevronRightIcon from '@/tabler-icons/chevron-right.svg?react';
+import ListAltIcon from '@/tabler-icons/list-details.svg?react';
 import { fetchList } from 'mastodon/actions/lists';
 import { createList, updateList } from 'mastodon/actions/lists_typed';
 import { apiGetListAccounts } from 'mastodon/api/lists';

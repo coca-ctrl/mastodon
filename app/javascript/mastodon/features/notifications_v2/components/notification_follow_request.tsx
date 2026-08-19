@@ -2,9 +2,9 @@ import { useCallback } from 'react';
 
 import { FormattedMessage, useIntl, defineMessages } from 'react-intl';
 
-import CheckIcon from '@/material-icons/400-24px/check.svg?react';
-import CloseIcon from '@/material-icons/400-24px/close.svg?react';
-import PersonAddIcon from '@/material-icons/400-24px/person_add-fill.svg?react';
+import CheckIcon from '@/tabler-icons/check.svg?react';
+import CloseIcon from '@/tabler-icons/x.svg?react';
+import PersonAddIcon from '@/tabler-icons/user-plus.svg?react';
 import {
   authorizeFollowRequest,
   rejectFollowRequest,

@@ -2,15 +2,15 @@ import PropTypes from 'prop-types';
 
 import { defineMessages, FormattedMessage } from 'react-intl';
 
-import ChatBubbleIcon from '@/material-icons/400-24px/chat_bubble.svg?react';
+import ChatBubbleIcon from '@/tabler-icons/message-circle.svg?react';
 
 import classNames from 'classnames';
 
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 
-import AlternateEmailIcon from '@/material-icons/400-24px/alternate_email.svg?react';
-import RepeatIcon from '@/material-icons/400-24px/repeat.svg?react';
+import AlternateEmailIcon from '@/tabler-icons/at.svg?react';
+import RepeatIcon from '@/tabler-icons/repeat.svg?react';
 import { Hotkeys } from 'mastodon/components/hotkeys';
 import { ContentWarning } from 'mastodon/components/content_warning';
 import { FilterWarning } from 'mastodon/components/filter_warning';

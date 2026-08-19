@@ -2,7 +2,7 @@ import { FormattedMessage } from 'react-intl';
 
 import { Link } from 'react-router-dom';
 
-import RepeatIcon from '@/material-icons/400-24px/repeat.svg?react';
+import RepeatIcon from '@/tabler-icons/repeat.svg?react';
 import type { NotificationGroupReblog } from 'mastodon/models/notification_group';
 import { useAppSelector } from 'mastodon/store';
 

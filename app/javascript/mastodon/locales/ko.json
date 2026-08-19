@@ -65,7 +65,7 @@
   "account.following": "팔로잉",
   "account.following_counter": "{count, plural, other {팔로잉 {counter}명}}",
   "account.follows.empty": "이 사용자는 아직 아무도 팔로우하고 있지 않습니다.",
-  "account.follows_you": "나를 팔로우",
+  "account.follows_you": "나를 팔로우합니다",
   "account.go_to_profile": "프로필로 이동",
   "account.hide_reblogs": "@{name}의 부스트를 숨기기",
   "account.in_memoriam": "고인의 계정입니다.",

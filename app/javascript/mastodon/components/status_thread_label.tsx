@@ -1,6 +1,6 @@
 import { FormattedMessage } from 'react-intl';
 
-import ReplyIcon from '@/material-icons/400-24px/reply.svg?react';
+import ReplyIcon from '@/tabler-icons/message-circle.svg?react';
 import { Icon } from 'mastodon/components/icon';
 import { useAppSelector } from 'mastodon/store';
 

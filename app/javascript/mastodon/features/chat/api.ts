@@ -7,6 +7,7 @@ import {
 
 export interface ChatUser {
   id: number;
+  account_id: string;
   username: string;
   display_name: string;
   avatar: string;
@@ -75,11 +76,14 @@ export const sendMessage = (conversationId: number, content: string) =>
     { content },
   );
 
+export const deleteMessage = (messageId: number) =>
+  apiRequestDelete<{ success: boolean }>(`v1/chat/messages/${messageId}`);
+
 export const editMessage = (messageId: number, content: string) =>
   apiRequestPut<ChatMessage>(`v1/chat/messages/${messageId}`, { content });
 
-export const deleteMessage = (messageId: number) =>
-  apiRequestDelete<{ success: boolean }>(`v1/chat/messages/${messageId}`);
+export const deleteConversation = (conversationId: number) =>
+  apiRequestDelete<{ success: boolean }>(`v1/chat/conversations/${conversationId}`);
 
 export interface SearchAccount {
   id: string;

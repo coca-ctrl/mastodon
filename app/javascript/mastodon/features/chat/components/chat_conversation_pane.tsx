@@ -27,6 +27,7 @@ import type { ChatConversation, ChatMessage, ParticipantReadState } from '../api
 import { useChatSocket } from '../use_chat_socket';
 import { getDraft, setDraft, clearDraft } from '../draft_store';
 import { playChatNotificationSound } from '../play_notification_sound';
+import { deleteConversation } from '../api';
 
 export const ChatConversationPane: React.FC<{
   conversationId: number;
@@ -56,6 +57,10 @@ export const ChatConversationPane: React.FC<{
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const isInitialLoadRef = useRef(true);
+  const messagesRef = useRef<ChatMessage[]>([]);
+    useEffect(() => {
+      messagesRef.current = messages;
+    }, [messages]);
 
   const load = useCallback(() => {
     if (!conversationId) return;
@@ -140,7 +145,13 @@ export const ChatConversationPane: React.FC<{
 
   useEffect(() => {
     load();
-  }, [load]);
+
+    return () => {
+      if (conversationId && messagesRef.current.length === 0) {
+        deleteConversation(conversationId).catch(() => undefined);
+      }
+    };
+  }, [load, conversationId]);
 
   useEffect(() => {
     const el = messagesContainerRef.current;
@@ -410,7 +421,7 @@ const handleScroll = useCallback(() => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [showMenu]);
 
-  const other = conversation?.participants.find((p) => String(p.id) !== me);
+  const other = conversation?.participants.find((p) => p.account_id !== me);
   const headerTitle = conversation?.group
     ? (conversation.name ?? '그룹 채팅')
     : (other?.display_name ?? '');

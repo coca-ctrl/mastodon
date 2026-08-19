@@ -7,7 +7,7 @@ import { Helmet } from '@unhead/react/helmet';
 import CollectionsIcon from '@/material-icons/400-24px/category.svg?react';
 import FindInPageIcon from '@/material-icons/400-24px/find_in_page.svg?react';
 import PeopleIcon from '@/material-icons/400-24px/group.svg?react';
-import SearchIcon from '@/material-icons/400-24px/search.svg?react';
+import SearchIcon from '@/tabler-icons/search.svg?react';
 import TagIcon from '@/material-icons/400-24px/tag.svg?react';
 import { submitSearch, expandSearch } from 'mastodon/actions/search';
 import type { ApiSearchType } from 'mastodon/api_types/search';

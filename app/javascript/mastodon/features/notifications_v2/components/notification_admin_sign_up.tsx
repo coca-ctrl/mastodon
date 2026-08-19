@@ -1,6 +1,6 @@
 import { FormattedMessage } from 'react-intl';
 
-import PersonAddIcon from '@/material-icons/400-24px/person_add-fill.svg?react';
+import PersonAddIcon from '@/tabler-icons/user-plus.svg?react';
 import type { NotificationGroupAdminSignUp } from 'mastodon/models/notification_group';
 
 import type { LabelRenderer } from './notification_group_with_status';

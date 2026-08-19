@@ -503,16 +503,6 @@ export const NavigationPanel: React.FC<{ multiColumn?: boolean }> = ({
           </>
         )}
 
-        <li className='navigation-panel__legal'>
-          <ColumnLink
-            transparent
-            to='/about'
-            icon='ellipsis-h'
-            iconComponent={InfoIcon}
-            text={intl.formatMessage(messages.about)}
-          />
-        </li>
-
         {!signedIn && (
           <li className='navigation-panel__sign-in-banner'>
             <hr />

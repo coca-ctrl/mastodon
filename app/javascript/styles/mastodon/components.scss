@@ -2832,7 +2832,7 @@ a.account__display-name {
   backdrop-filter: $backdrop-blur-filter;
   border: 1px solid var(--color-border-primary);
   padding: 4px;
-  border-radius: 4px;
+  border-radius: 16px;
   box-shadow: var(--dropdown-shadow);
   z-index: 9999;
 
@@ -2947,7 +2947,7 @@ a.account__display-name {
     text-decoration: none;
     color: inherit;
     text-align: inherit;
-    border-radius: 4px;
+    border-radius: 8px;
 
     &:focus,
     &:hover,
@@ -3458,9 +3458,14 @@ a.account__display-name {
   pointer-events: auto;
   background: rgb(from var(--color-bg-overlay) r g b / 50%);
   z-index: 3;
-
   .columns-area__panels__pane__inner {
     box-shadow: var(--dropdown-shadow);
+  }
+}
+
+@media screen and (max-width: 759px) {
+  .columns-area__panels__pane--overlay {
+    z-index: 10;
   }
 }
 
@@ -3946,7 +3951,6 @@ a.account__display-name {
   cursor: pointer;
   flex: 0 0 auto;
   font-size: 16px;
-  line-height: inherit;
   text-align: unset;
   padding: 13px;
   margin: 0;
@@ -12986,7 +12990,21 @@ svg.icon-globe[fill="none"] path,
 svg.icon-done-all[fill="none"] path,
 svg.icon-bullhorn[fill="none"] path,
 svg.icon-pencil[fill="none"] path,
-svg.icon-trash[fill="none"] path {
+svg.icon-trash[fill="none"] path,
+svg.icon-person-add[fill="none"] path,
+svg.icon-bar-chart-4-bars[fill="none"] path,
+svg.icon-retweet[fill="none"] path,
+svg.icon-comment[fill="none"] path,
+svg.icon-search[fill="none"] path,
+svg.icon-menu[fill="none"] path,
+svg.icon-share[fill="none"] path,
+svg.icon-link[fill="none"] path,
+svg.icon-user-minus[fill="none"] path,
+svg.icon-ban[fill="none"] path,
+svg.icon-flag-exclamation[fill="none"] path,
+svg.icon-ellipsis-v[fill="none"] path,
+svg.icon-bell-o[fill="none"] path,
+svg.icon-message-chatbot[fill="none"] path {
   fill: none !important;
 }
 
@@ -13007,7 +13025,13 @@ svg.icon-cancel-fill[fill="currentColor"] path:first-child,
 svg.icon-quote[fill="currentColor"] path:first-child,
 svg.icon-bookmark[fill="currentColor"] path:first-child,
 svg.icon-star[fill="currentColor"] path:first-child,
-svg.icon-bookmarks[fill="currentColor"] path:first-child {
+svg.icon-bookmarks[fill="currentColor"] path:first-child,
+svg.icon-notifications-active[fill="currentColor"] path:first-child,
+svg.icon-flag[fill="currentColor"] path:first-child,
+svg.icon-celebration[fill="currentColor"] path:first-child,
+svg.icon-reply[fill="currentColor"] path:first-chil,
+svg.icon-times-circle[fill="currentColor"] path:first-child,
+svg.icon-bell[fill="currentColor"] path:first-child {
   fill: none !important;
 }
 

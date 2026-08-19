@@ -3,7 +3,7 @@ import { FormattedMessage, useIntl, defineMessages } from 'react-intl';
 import classNames from 'classnames';
 
 import { DisplayName } from '@/mastodon/components/display_name';
-import FlagIcon from '@/material-icons/400-24px/flag-fill.svg?react';
+import FlagIcon from '@/tabler-icons/flag-filled.svg?react';
 import { Icon } from 'mastodon/components/icon';
 import { RelativeTimestamp } from 'mastodon/components/relative_timestamp';
 import type { NotificationGroupAdminReport } from 'mastodon/models/notification_group';

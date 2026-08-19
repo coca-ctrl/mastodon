@@ -7,9 +7,12 @@ import { followAccount } from '@/mastodon/actions/accounts';
 import { useAccount } from '@/mastodon/hooks/useAccount';
 import { getAccountHidden } from '@/mastodon/selectors/accounts';
 import { useAppDispatch, useAppSelector } from '@/mastodon/store';
-import NotificationsIcon from '@/material-icons/400-24px/notifications.svg?react';
-import NotificationsActiveIcon from '@/material-icons/400-24px/notifications_active-fill.svg?react';
-import ShareIcon from '@/material-icons/400-24px/share.svg?react';
+import NotificationsIcon from '@/tabler-icons/bell.svg?react';
+import NotificationsActiveIcon from '@/tabler-icons/bell-ringing-filled.svg?react';
+import ShareIcon from '@/tabler-icons/share.svg?react';
+import { browserHistory } from 'mastodon/components/router';
+import { createConversation } from 'mastodon/features/chat/api';
+import MessageChatIcon from '@/tabler-icons/message-chatbot.svg?react';
 
 import { CopyIconButton } from '../copy_button';
 import { FollowButton } from '../follow_button';
@@ -57,11 +60,12 @@ export const AccountButtons: FC<AccountButtonsProps> = ({
   );
 };
 
-const AccountButtonsOther: FC<
+const AccountButtonsOther: FC <
   Pick<AccountButtonsProps, 'accountId' | 'noShare'>
 > = ({ accountId, noShare }) => {
   const intl = useIntl();
   const account = useAccount(accountId);
+  const me = useAppSelector((state) => state.meta.get('me') as string);
   const relationship = useAppSelector((state) =>
     state.relationships.get(accountId),
   );
@@ -73,13 +77,21 @@ const AccountButtonsOther: FC<
     }
   }, [dispatch, account, relationship]);
   const accountUrl = account?.url;
-  const handleShare = useCallback(() => {
+    const handleShare = useCallback(() => {
     if (accountUrl) {
       void navigator.share({
         url: accountUrl,
       });
     }
   }, [accountUrl]);
+  const handleStartChat = useCallback(() => {
+    if (!account) return;
+    createConversation([account.id])
+      .then((conversation) => {
+        browserHistory.push(`/chat/${conversation.id}`);
+      })
+      .catch(() => undefined);
+  }, [account]);
 
   if (!account) {
     return null;
@@ -111,6 +123,14 @@ const AccountButtonsOther: FC<
             { name: account.username },
           )}
           onClick={handleNotifyToggle}
+        />
+      )}
+      {account.id !== me && (
+        <IconButton
+          icon='message-chatbot'
+          iconComponent={MessageChatIcon}
+          title='새 채팅 시작'
+          onClick={handleStartChat}
         />
       )}
       {!noShare &&

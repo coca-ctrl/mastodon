@@ -8,7 +8,7 @@ import { Helmet } from '@unhead/react/helmet';
 import { NavLink } from 'react-router-dom';
 
 import { useIdentity } from '@/mastodon/identity_context';
-import PublicIcon from '@/material-icons/400-24px/public.svg?react';
+import PublicIcon from '@/tabler-icons/flare.svg?react';
 import { addColumn } from 'mastodon/actions/columns';
 import { changeSetting } from 'mastodon/actions/settings';
 import { connectPublicStream, connectCommunityStream } from 'mastodon/actions/streaming';

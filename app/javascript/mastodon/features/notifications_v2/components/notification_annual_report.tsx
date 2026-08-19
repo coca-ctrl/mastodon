@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 
 import classNames from 'classnames';
 
-import CelebrationIcon from '@/material-icons/400-24px/celebration.svg?react';
+import CelebrationIcon from '@/tabler-icons/confetti-filled.svg?react';
 import { openModal } from 'mastodon/actions/modal';
 import { Icon } from 'mastodon/components/icon';
 import type { NotificationGroupAnnualReport } from 'mastodon/models/notification_group';

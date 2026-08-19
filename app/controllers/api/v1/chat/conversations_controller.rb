@@ -4,7 +4,7 @@ class Api::V1::Chat::ConversationsController < Api::BaseController
   before_action -> { doorkeeper_authorize! :read }, only: [:index, :read]
   before_action -> { doorkeeper_authorize! :write }, only: [:create]
   before_action :require_user!
-  before_action :set_conversation, only: [:read, :show, :leave, :update]
+  before_action :set_conversation, only: [:read, :show, :leave, :update, :destroy]
 
   # GET /api/v1/chat/conversations
   def index
@@ -127,15 +127,28 @@ class Api::V1::Chat::ConversationsController < Api::BaseController
     render json: serialize_conversation(@conversation)
   end
 
-  # PATCH/PUT /api/v1/chat/conversations/:id
   def update
     unless @conversation.owner_id == current_user.id
       render json: { error: '방장만 이름을 변경할 수 있습니다.' }, status: :forbidden
       return
     end
-
     @conversation.update!(name: params[:name])
     render json: serialize_conversation(@conversation)
+  end
+
+  def destroy
+    unless @conversation.chat_conversation_participants.exists?(user_id: current_user.id, left_at: nil)
+      render json: { error: '참여자가 아닙니다.' }, status: :forbidden
+      return
+    end
+
+    if @conversation.chat_messages.visible.exists?
+      render json: { error: '메시지가 있는 대화방은 삭제할 수 없습니다.' }, status: :unprocessable_entity
+      return
+    end
+
+    @conversation.destroy!
+    render json: { success: true }
   end
 
   private
@@ -145,11 +158,15 @@ class Api::V1::Chat::ConversationsController < Api::BaseController
   end
 
   def find_existing_direct_conversation(other_user_id)
-    current_user.chat_conversations
-                 .where(group: false)
-                 .joins(:chat_conversation_participants)
-                 .where(chat_conversation_participants: { user_id: other_user_id, left_at: nil })
-                 .first
+    my_conversation_ids = ChatConversationParticipant
+                           .where(user_id: current_user.id, left_at: nil)
+                           .pluck(:chat_conversation_id)
+
+    ChatConversation
+      .where(id: my_conversation_ids, group: false)
+      .joins(:chat_conversation_participants)
+      .where(chat_conversation_participants: { user_id: other_user_id, left_at: nil })
+      .first
   end
 
   def serialize_conversation(conversation)
@@ -194,6 +211,7 @@ end
   def serialize_user(user)
     {
       id: user.id,
+      account_id: user.account&.id&.to_s,
       username: user.account&.username,
       display_name: user.account&.display_name.presence || user.account&.username,
       avatar: user.account&.avatar&.url,

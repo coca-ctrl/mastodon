@@ -102,9 +102,9 @@ export const AutomatedBadge: FC<PresetBadgeProps> = (props) => (
 
 export const FollowsYouBadge: FC<PresetBadgeProps> = (props) => (
   <Badge
-    icon={<FollowerIcon />}
+    icon={null}
     label={
-      <FormattedMessage id='account.follows_you' defaultMessage='Follows you' />
+      <FormattedMessage id='account.follows_you' defaultMessage='나를 팔로우합니다' />
     }
     {...props}
   />

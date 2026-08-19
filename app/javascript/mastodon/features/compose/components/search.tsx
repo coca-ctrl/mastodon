@@ -20,9 +20,9 @@ import { useHistory } from 'react-router-dom';
 import { isFulfilled } from '@reduxjs/toolkit';
 
 import { getCollectionPath } from '@/mastodon/features/collections/utils';
-import CancelIcon from '@/material-icons/400-24px/cancel-fill.svg?react';
-import CloseIcon from '@/material-icons/400-24px/close.svg?react';
-import SearchIcon from '@/material-icons/400-24px/search.svg?react';
+import CancelIcon from '@/tabler-icons/circle-x-filled.svg?react';
+import CloseIcon from '@/tabler-icons/x.svg?react';
+import SearchIcon from '@/tabler-icons/search.svg?react';
 import {
   clickSearchResult,
   forgetSearchResult,

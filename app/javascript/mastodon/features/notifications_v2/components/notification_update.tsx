@@ -1,6 +1,6 @@
 import { FormattedMessage } from 'react-intl';
 
-import EditIcon from '@/material-icons/400-24px/edit.svg?react';
+import EditIcon from '@/tabler-icons/pencil.svg?react';
 import type { NotificationGroupUpdate } from 'mastodon/models/notification_group';
 
 import type { LabelRenderer } from './notification_group_with_status';

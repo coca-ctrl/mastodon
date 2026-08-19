@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 
 import { Link } from 'react-router-dom';
 
-import PersonAddIcon from '@/material-icons/400-24px/person_add-fill.svg?react';
+import PersonAddIcon from '@/tabler-icons/user-plus.svg?react';
 import { FollowersCounter } from 'mastodon/components/counters';
 import { FollowButton } from 'mastodon/components/follow_button';
 import { ShortNumber } from 'mastodon/components/short_number';

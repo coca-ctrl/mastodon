@@ -13,7 +13,7 @@ import {
 import { removeAccountFromFollowers } from '@/mastodon/actions/accounts_typed';
 import { showAlert } from '@/mastodon/actions/alerts';
 import { initBlockModal } from '@/mastodon/actions/blocks';
-import { directCompose, mentionCompose } from '@/mastodon/actions/compose';
+import { mentionCompose } from '@/mastodon/actions/compose';
 import {
   initDomainBlockModal,
   unblockDomain,
@@ -36,12 +36,12 @@ import {
 } from '@/mastodon/permissions';
 import type { AppDispatch } from '@/mastodon/store';
 import { useAppDispatch, useAppSelector } from '@/mastodon/store';
-import BlockIcon from '@/material-icons/400-24px/block.svg?react';
-import LinkIcon from '@/material-icons/400-24px/link_2.svg?react';
-import MoreHorizIcon from '@/material-icons/400-24px/more_horiz.svg?react';
-import PersonRemoveIcon from '@/material-icons/400-24px/person_remove.svg?react';
-import ReportIcon from '@/material-icons/400-24px/report.svg?react';
-import ShareIcon from '@/material-icons/400-24px/share.svg?react';
+import BlockIcon from '@/tabler-icons/ban.svg?react';
+import LinkIcon from '@/tabler-icons/link.svg?react';
+import MoreHorizIcon from '@/tabler-icons/dots.svg?react';
+import PersonRemoveIcon from '@/tabler-icons/user-minus.svg?react';
+import ReportIcon from '@/tabler-icons/flag-exclamation.svg?react';
+import ShareIcon from '@/tabler-icons/share.svg?react';
 
 import { Dropdown } from '../dropdown_menu';
 
@@ -255,6 +255,7 @@ function getMenuItems({
           });
         },
         icon: ShareIcon,
+        iconId: 'share',
       });
     }
     items.push({
@@ -264,6 +265,7 @@ function getMenuItems({
         dispatch(showAlert({ message: redesignMessages.copied }));
       },
       icon: LinkIcon,
+      iconId: 'link',
     });
   }
 
@@ -285,13 +287,6 @@ function getMenuItems({
         text: intl.formatMessage(redesignMessages.mention),
         action: () => {
           dispatch(mentionCompose(account));
-        },
-      },
-
-      {
-        text: intl.formatMessage(redesignMessages.direct),
-        action: () => {
-          dispatch(directCompose(account));
         },
       },
       null,
@@ -453,6 +448,7 @@ function getMenuItems({
       },
       dangerous: true,
       icon: PersonRemoveIcon,
+      iconId: 'user-minus',
     });
   }
 
@@ -471,6 +467,7 @@ function getMenuItems({
     },
     dangerous: true,
     icon: BlockIcon,
+    iconId: 'ban',
   });
 
   if (!account.suspended) {
@@ -481,6 +478,7 @@ function getMenuItems({
       },
       dangerous: true,
       icon: ReportIcon,
+      iconId: 'flag-exclamation',
     });
   }
 
