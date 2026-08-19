@@ -12665,7 +12665,7 @@ body.chat-conversation-active {
   color: var(--color-text-muted, var(--color-text-secondary));
 }
 
-.status__content img {
+.status__content img:not(.emojione) {
   width: 100%;
   height: 500px;
   object-fit: cover;
@@ -12955,7 +12955,38 @@ svg.icon-user-plus[fill="none"] path,
 svg.icon-cog[fill="none"] path,
 svg.icon-ellipsis-h[fill="none"] path,
 svg.icon-dots[fill="none"] path,
-svg.icon-plus[fill="none"] path {
+svg.icon-plus[fill="none"] path,
+svg.icon-tasks[fill="none"] path,
+svg.icon-paperclip[fill="none"] path,
+svg.icon-sound[fill="none"] path,
+svg.icon-close[fill="none"] path,
+svg.icon-edit[fill="none"] path,
+svg.icon-warning[fill="none"] path,
+svg.icon-moon[fill="none"] path,
+svg.icon-lock2[fill="none"] path,
+svg.icon-repeat[fill="none"] path,
+svg.icon-repeat-off[fill="none"] path,
+svg.icon-star[fill="none"] path,
+svg.icon-bookmark[fill="none"] path,
+svg.icon-reply[fill="none"] path,
+svg.icon-reply-all[fill="none"] path,
+svg.icon-x[fill="none"] path,
+svg.icon-times[fill="none"] path,
+svg.icon-chevron-left[fill="none"] path,
+svg.icon-chevron-right[fill="none"] path,
+svg.icon-plus[fill="none"] path,
+svg.icon-sliders[fill="none"] path,
+svg.icon-at[fill="none"] path,
+svg.icon-message-circle[fill="none"] path,
+svg.icon-chevron-left[fill="none"] path,
+svg.icon-eye[fill="none"] path,
+svg.icon-eye-slash[fill="none"] path,
+svg.icon-users[fill="none"] path,
+svg.icon-globe[fill="none"] path,
+svg.icon-done-all[fill="none"] path,
+svg.icon-bullhorn[fill="none"] path,
+svg.icon-pencil[fill="none"] path,
+svg.icon-trash[fill="none"] path {
   fill: none !important;
 }
 
@@ -12971,6 +13002,63 @@ svg.icon-user-plus[fill="currentColor"] path:first-child,
 svg.icon-cog[fill="currentColor"] path:first-child,
 svg.icon-ellipsis-h[fill="currentColor"] path:first-child,
 svg.icon-dots[fill="currentColor"] path:first-child,
-svg.icon-plus[fill="currentColor"] path:first-child {
+svg.icon-plus[fill="currentColor"] path:first-child,
+svg.icon-cancel-fill[fill="currentColor"] path:first-child,
+svg.icon-quote[fill="currentColor"] path:first-child,
+svg.icon-bookmark[fill="currentColor"] path:first-child,
+svg.icon-star[fill="currentColor"] path:first-child,
+svg.icon-bookmarks[fill="currentColor"] path:first-child {
+  fill: none !important;
+}
+
+.visibility-mini-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.visibility-mini-dropdown__menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-bottom: 4px;
+  width: 200px;
+  background: var(--color-bg-primary);
+  backdrop-filter: $backdrop-blur-filter;
+  border: 1px solid var(--color-border-primary);
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+  z-index: 999;
+  padding: 6px;
+}
+
+.visibility-mini-dropdown__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  font-size: 13px;
+  cursor: pointer;
+  border-radius: 8px;
+
+  &:hover {
+    background: var(--color-bg-brand-softest);
+  }
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.visibility-mini-dropdown__item--active {
+  background: var(--color-bg-brand-base);
+  color: var(--color-text-on-brand-base);
+}
+
+svg.icon-repeat-active path {
+  fill: none !important;
+}
+
+svg.icon-repeat-private path {
   fill: none !important;
 }

@@ -7,7 +7,7 @@ import classNames from 'classnames';
 import Overlay from 'react-overlays/Overlay';
 
 import { useDismissible } from '@/mastodon/hooks/useDismissible';
-import MoreHorizIcon from '@/material-icons/400-24px/more_horiz.svg?react';
+import MoreHorizIcon from '@/tabler-icons/dots.svg?react';
 
 import { Button } from '../button';
 import { Icon } from '../icon';

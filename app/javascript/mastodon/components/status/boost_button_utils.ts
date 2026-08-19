@@ -3,13 +3,10 @@ import type { MessageDescriptor } from 'react-intl';
 
 import type { Status, StatusVisibility } from '@/mastodon/models/status';
 import { createAppSelector } from '@/mastodon/store';
-import FormatQuote from '@/material-icons/400-24px/format_quote-fill.svg?react';
-import FormatQuoteOff from '@/material-icons/400-24px/format_quote_off-fill.svg?react';
-import RepeatIcon from '@/material-icons/400-24px/repeat.svg?react';
-import RepeatActiveIcon from '@/svg-icons/repeat_active.svg?react';
-import RepeatDisabledIcon from '@/svg-icons/repeat_disabled.svg?react';
-import RepeatPrivateIcon from '@/svg-icons/repeat_private.svg?react';
-import RepeatPrivateActiveIcon from '@/svg-icons/repeat_private_active.svg?react';
+import FormatQuote from '@/tabler-icons/quote-filled.svg?react';
+import FormatQuoteOff from '@/tabler-icons/quote-off.svg?react';
+import RepeatIcon from '@/tabler-icons/repeat.svg?react';
+import RepeatOffIcon from '@/tabler-icons/repeat-off.svg?react';
 
 import type { IconProp } from '../icon';
 
@@ -102,6 +99,7 @@ export interface MenuItemState {
   title: MessageDescriptor;
   meta?: MessageDescriptor;
   iconComponent: IconProp;
+  iconId?: string;
   disabled?: boolean;
 }
 
@@ -113,20 +111,23 @@ export function boostItemState({
   if (isReblogged) {
     return {
       title: messages.reblog_cancel,
-      iconComponent: isPublic ? RepeatActiveIcon : RepeatPrivateActiveIcon,
+      iconComponent: RepeatIcon,
+      iconId: 'repeat-active',
     };
   }
   const iconText: MenuItemState = {
     title: messages.reblog,
     iconComponent: RepeatIcon,
+    iconId: 'repeat',
   };
 
   if (isPrivateReblog) {
     iconText.meta = messages.reblog_private;
-    iconText.iconComponent = RepeatPrivateIcon;
+    iconText.iconId = 'repeat-private';
   } else if (!isPublic) {
     iconText.meta = messages.reblog_cannot;
-    iconText.iconComponent = RepeatDisabledIcon;
+    iconText.iconComponent = RepeatOffIcon;
+    iconText.iconId = 'repeat-off';
     iconText.disabled = true;
   }
   return iconText;

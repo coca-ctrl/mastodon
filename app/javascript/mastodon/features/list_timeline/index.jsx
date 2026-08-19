@@ -9,9 +9,9 @@ import { Link, withRouter } from 'react-router-dom';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 
-import DeleteIcon from '@/material-icons/400-24px/delete.svg?react';
-import EditIcon from '@/material-icons/400-24px/edit.svg?react';
-import ListAltIcon from '@/material-icons/400-24px/list_alt.svg?react';
+import DeleteIcon from '@/tabler-icons/trash.svg?react';
+import EditIcon from '@/tabler-icons/pencil.svg?react';
+import ListAltIcon from '@/tabler-icons/list-details.svg?react';
 import { addColumn, removeColumn, moveColumn } from 'mastodon/actions/columns';
 import { fetchList } from 'mastodon/actions/lists';
 import { openModal } from 'mastodon/actions/modal';

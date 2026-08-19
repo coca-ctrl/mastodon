@@ -7,7 +7,7 @@ import { Helmet } from '@unhead/react/helmet';
 
 import { connect } from 'react-redux';
 
-import PeopleIcon from '@/material-icons/400-24px/group.svg?react';
+import PeopleIcon from '@/tabler-icons/users.svg?react';
 import { injectIntl } from '@/mastodon/components/intl';
 import { DismissableBanner } from 'mastodon/components/dismissable_banner';
 import { identityContextPropShape, withIdentity } from 'mastodon/identity_context';

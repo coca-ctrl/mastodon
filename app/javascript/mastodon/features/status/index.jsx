@@ -11,8 +11,8 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import { connect } from 'react-redux';
 
-import VisibilityIcon from '@/material-icons/400-24px/visibility.svg?react';
-import VisibilityOffIcon from '@/material-icons/400-24px/visibility_off.svg?react';
+import VisibilityIcon from '@/tabler-icons/eye.svg?react';
+import VisibilityOffIcon from '@/tabler-icons/eye-off.svg?react';
 import { Hotkeys }  from 'mastodon/components/hotkeys';
 import { Icon }  from 'mastodon/components/icon';
 import { injectIntl } from '@/mastodon/components/intl';

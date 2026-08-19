@@ -9,8 +9,8 @@ import { Helmet } from '@unhead/react/helmet';
 
 import { connect } from 'react-redux';
 
-import CampaignIcon from '@/material-icons/400-24px/campaign.svg?react';
-import HomeIcon from '@/material-icons/400-24px/home-fill.svg?react';
+import CampaignIcon from '@/tabler-icons/speakerphone.svg?react';
+import HomeIcon from '@/tabler-icons/home-filled.svg?react';
 import { injectIntl } from '@/mastodon/components/intl';
 import { SymbolLogo } from 'mastodon/components/logo';
 import { fetchAnnouncements, toggleShowAnnouncements } from 'mastodon/actions/announcements';

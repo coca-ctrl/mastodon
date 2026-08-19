@@ -4,7 +4,7 @@ import { defineMessage, FormattedMessage, useIntl } from 'react-intl';
 
 import type { Map as ImmutableMap } from 'immutable';
 
-import CancelFillIcon from '@/material-icons/400-24px/cancel-fill.svg?react';
+import CancelFillIcon from '@/tabler-icons/circle-x-filled.svg?react';
 import { fetchRelationships } from 'mastodon/actions/accounts';
 import { revealAccount } from 'mastodon/actions/accounts_typed';
 import { fetchStatus } from 'mastodon/actions/statuses';

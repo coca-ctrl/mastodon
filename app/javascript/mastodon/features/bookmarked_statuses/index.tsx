@@ -4,7 +4,7 @@ import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
 import { Helmet } from '@unhead/react/helmet';
 
-import BookmarksIcon from '@/material-icons/400-24px/bookmarks-fill.svg?react';
+import BookmarksIcon from '@/tabler-icons/bookmark-filled.svg?react';
 import {
   fetchBookmarkedStatuses,
   expandBookmarkedStatuses,

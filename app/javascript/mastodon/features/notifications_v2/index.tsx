@@ -6,8 +6,8 @@ import { Helmet } from '@unhead/react/helmet';
 import { isEqual } from 'lodash';
 import { useDebouncedCallback } from 'use-debounce';
 
-import DoneAllIcon from '@/material-icons/400-24px/done_all.svg?react';
-import NotificationsIcon from '@/material-icons/400-24px/notifications-fill.svg?react';
+import DoneAllIcon from '@/tabler-icons/check.svg?react';
+import NotificationsIcon from '@/tabler-icons/bell-filled.svg?react';
 import {
   fetchNotificationsGap,
   updateScrollPosition,

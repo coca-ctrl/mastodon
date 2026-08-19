@@ -4,13 +4,13 @@ import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import classNames from 'classnames';
 
-import AddIcon from '@/material-icons/400-24px/add.svg?react';
-import ArrowBackIcon from '@/material-icons/400-24px/arrow_back.svg?react';
-import ChevronLeftIcon from '@/material-icons/400-24px/chevron_left.svg?react';
-import ChevronRightIcon from '@/material-icons/400-24px/chevron_right.svg?react';
-import CloseIcon from '@/material-icons/400-24px/close.svg?react';
-import UnfoldLessIcon from '@/material-icons/400-24px/unfold_less.svg?react';
-import UnfoldMoreIcon from '@/material-icons/400-24px/unfold_more.svg?react';
+import AddIcon from '@/tabler-icons/pencil-plus.svg?react';
+import ArrowBackIcon from '@/tabler-icons/arrow-left.svg?react';
+import ChevronLeftIcon from '@/tabler-icons/chevron-left.svg?react';
+import ChevronRightIcon from '@/tabler-icons/chevron-right.svg?react';
+import CloseIcon from '@/tabler-icons/x.svg?react';
+import UnfoldLessIcon from '@/tabler-icons/dots.svg?react';
+import UnfoldMoreIcon from '@/tabler-icons/dots.svg?react';
 import type { IconProp } from 'mastodon/components/icon';
 import { Icon } from 'mastodon/components/icon';
 import { ButtonInTabsBar } from 'mastodon/features/ui/util/columns_context';

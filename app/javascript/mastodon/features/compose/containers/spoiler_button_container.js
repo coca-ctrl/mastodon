@@ -2,7 +2,7 @@ import { defineMessages } from 'react-intl';
 
 import { connect } from 'react-redux';
 
-import WarningIcon from '@/material-icons/400-20px/warning.svg?react';
+import WarningIcon from '@/tabler-icons/alert-triangle.svg?react';
 import { injectIntl } from '@/mastodon/components/intl';
 import { IconButton } from 'mastodon/components/icon_button';
 
@@ -14,6 +14,7 @@ const messages = defineMessages({
 });
 
 const mapStateToProps = (state, { intl }) => ({
+  icon: 'warning',
   iconComponent: WarningIcon,
   title: intl.formatMessage(state.getIn(['compose', 'spoiler']) ? messages.marked : messages.unmarked),
   active: state.getIn(['compose', 'spoiler']),

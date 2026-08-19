@@ -139,6 +139,7 @@ const BoostOrQuoteMenu: FC<ReblogButtonProps> = ({ status, counters }) => {
           ? intl.formatMessage(boostItem.meta)
           : undefined,
         icon: boostItem.iconComponent,
+        iconId: boostItem.iconId,
         highlighted: wasBoosted,
         disabled: boostItem.disabled,
         action: (event) => {
@@ -151,6 +152,7 @@ const BoostOrQuoteMenu: FC<ReblogButtonProps> = ({ status, counters }) => {
           ? intl.formatMessage(quoteItem.meta)
           : undefined,
         icon: quoteItem.iconComponent,
+        iconId: 'quote',
         disabled: quoteItem.disabled,
         action: () => {
           dispatch(quoteComposeById(statusId));
@@ -160,6 +162,7 @@ const BoostOrQuoteMenu: FC<ReblogButtonProps> = ({ status, counters }) => {
   }, [dispatch, intl, statusId, statusState, wasBoosted]);
 
   const boostIcon = items[0].icon;
+  const boostIconId = boostItemState(statusState).iconId ?? 'retweet';
 
   const handleDropdownOpen = useCallback(
     (event: MouseEvent | KeyboardEvent) => {
@@ -197,7 +200,7 @@ const BoostOrQuoteMenu: FC<ReblogButtonProps> = ({ status, counters }) => {
         title={intl.formatMessage(
           isMenuDisabled ? messages.all_disabled : messages.reblog_or_quote,
         )}
-        icon='retweet'
+        icon={boostIconId}
         className='status__action-bar__button'
         iconComponent={boostIcon}
         counter={

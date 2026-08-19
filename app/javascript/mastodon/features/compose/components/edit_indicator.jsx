@@ -6,9 +6,9 @@ import { Link } from 'react-router-dom';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import BarChart4BarsIcon from '@/material-icons/400-24px/bar_chart_4_bars.svg?react';
-import CloseIcon from '@/material-icons/400-24px/close.svg?react';
-import PhotoLibraryIcon from '@/material-icons/400-24px/photo_library.svg?react';
+import BarChart4BarsIcon from '@/tabler-icons/chart-bar.svg?react';
+import PhotoLibraryIcon from '@/tabler-icons/photo.svg?react';
+import CloseIcon from '@/tabler-icons/x.svg?react';
 import { cancelReplyCompose } from 'mastodon/actions/compose';
 import { Icon } from 'mastodon/components/icon';
 import { IconButton } from 'mastodon/components/icon_button';
@@ -55,8 +55,8 @@ export const EditIndicator = () => {
 
       {(status.get('poll') || status.get('media_attachments').size > 0) && (
         <div className='edit-indicator__attachments'>
-          {status.get('poll') && <><Icon icon={BarChart4BarsIcon} /><FormattedMessage id='reply_indicator.poll' defaultMessage='Poll' /></>}
-          {status.get('media_attachments').size > 0 && <><Icon icon={PhotoLibraryIcon} /><FormattedMessage id='reply_indicator.attachments' defaultMessage='{count, plural, one {# attachment} other {# attachments}}' values={{ count: status.get('media_attachments').size }} /></>}
+          {status.get('poll') && <><Icon id='chart-bar' icon={BarChart4BarsIcon} className='icon--no-fill' /><FormattedMessage id='reply_indicator.poll' defaultMessage='Poll' /></>}
+          {status.get('media_attachments').size > 0 && <><Icon id='photo' icon={PhotoLibraryIcon} className='icon--no-fill' /><FormattedMessage id='reply_indicator.attachments' defaultMessage='{count, plural, one {# attachment} other {# attachments}}' values={{ count: status.get('media_attachments').size }} /></>}
         </div>
       )}
     </div>

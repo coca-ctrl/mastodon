@@ -108,6 +108,7 @@ class PostStatusService < BaseService
     DICE_PATTERN = /\[(\d{1,3})[dD](\d{1,4})\]/
     RPS_PATTERN = /\[가위바위보\]/
     RPS_HANDS = %w(가위 바위 보).freeze
+    RPS_EMOJI = { '가위' => '✌️', '바위' => '✊', '보' => '🖐️' }.freeze
 
     def apply_dice_and_rps(text)
       text = replace_dice(text)
@@ -140,7 +141,7 @@ class PostStatusService < BaseService
       opponent_hand = RPS_HANDS.sample
       result = rps_result(my_hand, opponent_hand, my_name, opponent_name)
 
-      text.sub(RPS_PATTERN, "[가위바위보: #{my_name}=#{my_hand}, #{opponent_name}=#{opponent_hand} → #{result}]")
+          text.sub(RPS_PATTERN, "[가위바위보: #{my_name}=#{RPS_EMOJI[my_hand]}, #{opponent_name}=#{RPS_EMOJI[opponent_hand]} → #{result}]")
     end
 
     def rps_result(mine, opponent, my_name, opponent_name)

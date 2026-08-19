@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 
 import { useSelector } from 'react-redux';
 
-import BarChart4BarsIcon from '@/material-icons/400-24px/bar_chart_4_bars.svg?react';
-import PhotoLibraryIcon from '@/material-icons/400-24px/photo_library.svg?react';
+import BarChart4BarsIcon from '@/tabler-icons/chart-bar.svg?react';
+import PhotoLibraryIcon from '@/tabler-icons/photo.svg?react';
 import { Avatar } from 'mastodon/components/avatar';
 import { DisplayName } from 'mastodon/components/display_name';
 import { Icon } from 'mastodon/components/icon';
