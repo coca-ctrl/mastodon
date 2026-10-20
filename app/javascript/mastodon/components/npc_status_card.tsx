@@ -9,14 +9,12 @@ interface NpcInfo {
 interface Props {
   npc: NpcInfo;
   backgroundUrl?: string | null;
-  createdAt: string;
   onClick?: () => void;
 }
 
 export const NpcStatusCard: React.FC<Props> = ({
   npc,
   backgroundUrl,
-  createdAt,
   onClick,
 }) => {
   return (
@@ -39,12 +37,6 @@ export const NpcStatusCard: React.FC<Props> = ({
             dangerouslySetInnerHTML={{ __html: npc.body }}
           />
         </div>
-      </div>
-
-      <div className='npc-status-card__actions'>
-        <time className='npc-status-card__time'>
-          {new Date(createdAt).toLocaleString('ko-KR')}
-        </time>
       </div>
     </div>
   );

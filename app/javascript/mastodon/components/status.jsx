@@ -37,6 +37,8 @@ import { CollectionPreviewCard } from '../features/collections/components/collec
 import { compareUrls } from '../utils/compare_urls';
 import { FOCUS_TARGET } from './navigation_focus_target';
 import { NpcStatusCard } from './npc_status_card';
+import { CardStatusFooter } from './status/card_footer';
+import { cardStyleToCss } from 'mastodon/features/card_style/style';
 
 const domParser = new DOMParser();
 
@@ -583,7 +585,10 @@ class Status extends ImmutablePureComponent {
 
     const npc = status.get('npc');
 
-    const header = npc
+    const cardStyleData = !npc && !isQuotedPost ? status.get('card_style') : null;
+    const cardStyle = cardStyleData ? (cardStyleData.toJS ? cardStyleData.toJS() : cardStyleData) : null;
+
+    const header = (npc || cardStyle)
       ? null
       : this.props.headerRenderFn
         ? this.props.headerRenderFn({ status, account, avatarSize, messages, onHeaderClick: this.handleHeaderClick, featured })
@@ -618,7 +623,7 @@ class Status extends ImmutablePureComponent {
           >
             {(connectReply || connectUp || connectToRoot) && <div className={classNames('status__line', { 'status__line--full': connectReply, 'status__line--first': !status.get('in_reply_to_id') && !connectToRoot })} />}
             <div className='status__row'>
-              {!npc && (
+              {!npc && !cardStyle && (
                 <StatusAvatarColumn
                   statusAccount={status.get('account')}
                   friendAccount={account}
@@ -627,17 +632,41 @@ class Status extends ImmutablePureComponent {
               )}
               <div className='status__row-main'>
             {header}
-            {matchedFilters && <FilterWarning title={matchedFilters.join(', ')} expanded={this.state.showDespiteFilter} onClick={this.handleFilterToggle} />}
-            {(!matchedFilters || this.state.showDespiteFilter) && <ContentWarning status={status} expanded={expanded} onClick={this.handleExpandedToggle} />}
+            {!cardStyle && matchedFilters && <FilterWarning title={matchedFilters.join(', ')} expanded={this.state.showDespiteFilter} onClick={this.handleFilterToggle} />}
+            {!cardStyle && (!matchedFilters || this.state.showDespiteFilter) && <ContentWarning status={status} expanded={expanded} onClick={this.handleExpandedToggle} />}
             {expanded && npc && (
-              <NpcStatusCard
-                npc={npc.toJS ? npc.toJS() : npc}
-                backgroundUrl={status.get('background_url')}
-                createdAt={status.get('created_at')}
-                onClick={this.handleClick}
-              />
+              <>
+                <NpcStatusCard
+                  npc={npc.toJS ? npc.toJS() : npc}
+                  backgroundUrl={status.get('background_url')}
+                  onClick={this.handleClick}
+                />
+                <CardStatusFooter status={status} />
+              </>
             )}
-            {expanded && !npc && (
+            {cardStyle && (
+              <div className='status-card-style' style={cardStyleToCss(cardStyle)}>
+                {matchedFilters && <FilterWarning title={matchedFilters.join(', ')} expanded={this.state.showDespiteFilter} onClick={this.handleFilterToggle} />}
+                {(!matchedFilters || this.state.showDespiteFilter) && <ContentWarning status={status} expanded={expanded} onClick={this.handleExpandedToggle} />}
+                {expanded && (
+                  <>
+                    <StatusContent
+                      status={status}
+                      onClick={this.handleClick}
+                      onTranslate={this.handleTranslate}
+                      collapsible
+                      onCollapsedToggle={this.handleCollapsedToggle}
+                      {...statusContentProps}
+                    />
+                    {media}
+                    {hashtagBar}
+                    {children}
+                  </>
+                )}
+                </div>
+              )}
+            {cardStyle && <CardStatusFooter status={status} />}
+            {expanded && !npc && !cardStyle && (
               <>
                 <StatusContent
                   status={status}
