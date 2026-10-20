@@ -353,7 +353,7 @@ namespace :api, format: false do
         end
         resources :messages, only: [:index, :create], controller: 'conversation_messages'
       end
-      
+
       get 'admin/conversations', to: 'admin_conversations#index'
       get 'admin/conversations/:id/messages', to: 'admin_conversations#messages'
     end
@@ -365,6 +365,8 @@ namespace :api, format: false do
     resources :backgrounds, only: [:index, :show, :create, :update, :destroy]
     resources :presets, only: [:index, :show, :create, :update, :destroy]
     resources :story_sessions, only: [:index, :show]
+    get 'settlement/post_counts', to: 'settlement#post_counts'
+    get 'settlement/accounts', to: 'settlement#accounts'
   end
 
   namespace :v2 do
