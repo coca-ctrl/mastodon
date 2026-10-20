@@ -44,6 +44,24 @@ export interface CardStyle {
   padding: number;
 }
 
+const FONT_STYLESHEET_ID = 'card-fonts-stylesheet';
+
+// 카드가 처음 그려질 때 서체 스타일시트를 한 번만 불러온다
+const ensureCardFonts = () => {
+  if (
+    typeof document === 'undefined' ||
+    document.getElementById(FONT_STYLESHEET_ID)
+  ) {
+    return;
+  }
+
+  const link = document.createElement('link');
+  link.id = FONT_STYLESHEET_ID;
+  link.rel = 'stylesheet';
+  link.href = '/card-fonts/card-fonts.css?v=1';
+  document.head.appendChild(link);
+};
+
 const cssUrl = (url: string) =>
   `url("${url.replace(/["\\\n\r]/g, (char) => encodeURIComponent(char))}")`;
 
@@ -59,6 +77,7 @@ const gradientCss = (gradient: CardGradient) => {
 
 // 서버에서 검증된 스타일 값을 화면용 CSS로 바꾼다. 편집기 미리보기와 타임라인 카드가 함께 쓴다.
 export const cardStyleToCss = (style: CardStyle): CSSProperties => {
+  ensureCardFonts();
   const { background, border, text } = style;
 
   const css: CSSProperties = {

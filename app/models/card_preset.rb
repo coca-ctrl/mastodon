@@ -8,8 +8,8 @@ class CardPreset < ApplicationRecord
 
   FONTS = {
     'pretendard' => { label: 'Pretendard', family: "'Pretendard', sans-serif", weights: [400, 500, 700] },
-    'noto_sans_kr' => { label: 'Noto Sans KR', family: "'Noto Sans KR', sans-serif", weights: [400, 500, 700] },
-    'noto_serif_kr' => { label: 'Noto Serif KR', family: "'Noto Serif KR', serif", weights: [400, 600, 700] },
+    'noto_sans_kr' => { label: 'Noto Sans KR', family: "'Noto Sans KR', sans-serif", weights: [100, 200, 300, 400, 500, 600, 700, 800, 900] },
+    'noto_serif_kr' => { label: 'Noto Serif KR', family: "'Noto Serif KR', serif", weights: [200, 300, 400, 500, 600, 700, 800, 900] },
     'kmu_sunggok_serif' => { label: '국민대 성곡서체', family: "'KookminUniversitySunggokSerif', serif", weights: [400] },
     'nalssaendori' => { label: '날쌘돌이', family: "'Nalssaendori', sans-serif", weights: [300, 500, 600] },
     'incheon_education' => { label: '인천교육 자람', family: "'IncheonEducation', sans-serif", weights: [400] },
