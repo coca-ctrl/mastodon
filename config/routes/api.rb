@@ -363,6 +363,11 @@ namespace :api, format: false do
     end
 
     resources :backgrounds, only: [:index, :show, :create, :update, :destroy]
+    resources :card_presets, only: [:index, :show, :create, :update, :destroy] do
+      collection do
+        get :options
+      end
+    end
     resources :presets, only: [:index, :show, :create, :update, :destroy]
     resources :story_sessions, only: [:index, :show]
     get 'settlement/post_counts', to: 'settlement#post_counts'
