@@ -56,6 +56,7 @@ import {
   ChatConversation,
   NpcManager,
   StoryList,
+  ChatAdmin,
   StorySessionReader,
   HashtagTimeline,
   Notifications,
@@ -218,6 +219,7 @@ class SwitchingColumnsArea extends PureComponent {
             <WrappedRoute path='/npcs' component={NpcManager} content={children} />
             <WrappedRoute path='/story' exact component={StoryList} content={children} />
             <WrappedRoute path='/story/:id' component={StorySessionReader} content={children} />
+            <WrappedRoute path='/chat-admin' exact component={ChatAdmin} content={children} />
             <WrappedRoute path='/tags/:id' component={HashtagTimeline} content={children} />
             <WrappedRoute path='/links/:url' component={LinkTimeline} content={children} />
             <WrappedRoute path='/lists/new' component={ListEdit} content={children} />

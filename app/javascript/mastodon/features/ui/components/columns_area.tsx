@@ -93,7 +93,7 @@ export const ColumnsArea = forwardRef<
   }
 >(({ children, minimalShell, singleColumn }, ref) => {
   const location = useLocation();
-  const isChatScreen = location.pathname.startsWith('/chat');
+  const isChatScreen = (location.pathname === '/chat' || location.pathname.startsWith('/chat/'));
   const isWideScreen = !useBreakpoint('full');
   const renderComposePanel = isWideScreen && !isChatScreen;
   const columns = useAppSelector((state) =>

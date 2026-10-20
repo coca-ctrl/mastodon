@@ -31,6 +31,7 @@
   /pinned
   /story
   /story/(*any)
+  /chat-admin
   /profile/(*any)
   /public
   /public/local

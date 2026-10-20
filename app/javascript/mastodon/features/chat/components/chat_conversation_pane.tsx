@@ -9,6 +9,7 @@ import SendIcon from '@/tabler-icons/message-forward.svg?react';
 import EditDoneIcon from '@/tabler-icons/message-cog.svg?react';
 import ArrowDownwardIcon from '@/tabler-icons/arrow-down.svg?react';
 import DotsIcon from '@/tabler-icons/dots.svg?react';
+import { ChatNotice } from './chat_notice';
 import EmojiPickerDropdown from 'mastodon/features/compose/containers/emoji_picker_dropdown_container';
 import {
   fetchConversation,
@@ -518,6 +519,7 @@ const handleScroll = useCallback(() => {
         </div>
       )}
     </div>
+      <ChatNotice />
 
       <div
         className='chat-conversation__messages'

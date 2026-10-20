@@ -286,6 +286,11 @@ export function NpcManager() {
 export function StoryList() {
   return import('../../story');
 }
+
 export function StorySessionReader() {
   return import('../../story/session');
+}
+
+export function ChatAdmin() {
+  return import('../../chat_admin');
 }

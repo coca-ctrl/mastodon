@@ -353,6 +353,9 @@ namespace :api, format: false do
         end
         resources :messages, only: [:index, :create], controller: 'conversation_messages'
       end
+      
+      get 'admin/conversations', to: 'admin_conversations#index'
+      get 'admin/conversations/:id/messages', to: 'admin_conversations#messages'
     end
     
     resources :npcs, only: [:index, :show, :create, :update, :destroy] do

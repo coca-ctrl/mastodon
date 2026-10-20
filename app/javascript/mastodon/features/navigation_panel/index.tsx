@@ -68,7 +68,8 @@ import { Trends } from './components/trends';
 import { useState } from 'react';
 import { playChatNotificationSound } from '../chat/play_notification_sound';
 import { fetchUnreadChatCount } from '../chat/api';
-import { canManageNpcs } from 'mastodon/permissions';
+import { canManageNpcs, isAdministrator } from 'mastodon/permissions';
+import ChatAdminIcon from '@/tabler-icons/chat-admin.svg?react';
 import NpcIcon from '@/tabler-icons/user-screen.svg?react';
 import StoryIcon from '@/tabler-icons/book.svg?react';
 import StoryActiveIcon from '@/tabler-icons/book-filled.svg?react';
@@ -241,7 +242,7 @@ const ChatLink: React.FC = () => {
     <ColumnLink
       transparent
       to='/chat'
-      isActive={(match, location) => location.pathname.startsWith('/chat')}
+      isActive={(match, location) => location.pathname === '/chat' || location.pathname.startsWith('/chat/')}
       icon={
         <IconWithBadge
           id='chat'
@@ -449,6 +450,30 @@ export const NavigationPanel: React.FC<{ multiColumn?: boolean }> = ({
                 text='스토리'
               />
             </li>
+
+                        {isAdministrator(permissions) && (
+              <li>
+                <ColumnLink
+                  transparent
+                  to='/chat-admin'
+                  icon={
+                    <Icon
+                      id='chat-admin'
+                      icon={ChatAdminIcon}
+                      className='column-link__icon icon--no-fill'
+                    />
+                  }
+                  activeIcon={
+                    <Icon
+                      id='chat-admin'
+                      icon={ChatAdminIcon}
+                      className='column-link__icon icon--no-fill'
+                    />
+                  }
+                  text='채팅 열람'
+                />
+              </li>
+            )}
             
             <ListPanel />
 
