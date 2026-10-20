@@ -5,6 +5,7 @@ import { fetchNpcs } from 'mastodon/features/npcs/api';
 import type { Npc } from 'mastodon/features/npcs/api';
 import { fetchPresets } from 'mastodon/features/npcs/preset_api';
 import type { Preset } from 'mastodon/features/npcs/preset_api';
+import { useAppSelector } from 'mastodon/store';
 
 export const NpcSelector: React.FC = () => {
   const dispatch = useDispatch();
@@ -14,6 +15,15 @@ export const NpcSelector: React.FC = () => {
   const [showCustom, setShowCustom] = useState(false);
   const [selectedLabel, setSelectedLabel] = useState<string | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
+  const hasNpcSelection = useAppSelector(
+    (state) => !!state.compose.get('npc_id') || !!state.compose.get('preset_id'),
+  );
+
+  useEffect(() => {
+    if (!hasNpcSelection) {
+      setSelectedLabel(null);
+    }
+  }, [hasNpcSelection]);
 
   useEffect(() => {
     fetchNpcs()

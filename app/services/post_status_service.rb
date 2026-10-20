@@ -68,6 +68,8 @@ class PostStatusService < BaseService
       @background = @options[:background_id].present? ? @account.backgrounds.find_by(id: @options[:background_id]) : nil
     end
 
+    @card_preset = resolve_card_preset
+
     preprocess_attributes!
 
     with_idempotency do
@@ -166,6 +168,19 @@ class PostStatusService < BaseService
 
     beats = { 'scissors' => 'paper', 'rock' => 'scissors', 'paper' => 'rock' }
     beats[mine] == opponent ? 1 : 2
+  end
+
+  # 카드 스타일은 story 역할(manage_npcs) 계정이 자기 프리셋만 쓸 수 있고, NPC와는 함께 쓸 수 없다
+  def resolve_card_preset
+    return if @options[:card_preset_id].blank?
+
+    raise Mastodon::ValidationError, '카드 스타일을 사용할 권한이 없습니다.' unless @account.user&.can?(:manage_npcs)
+
+    preset = CardPreset.find_by(id: @options[:card_preset_id], account_id: @account.id)
+    raise Mastodon::ValidationError, '카드 스타일을 찾을 수 없습니다.' unless preset
+    raise Mastodon::ValidationError, 'NPC와 카드 스타일은 함께 사용할 수 없습니다.' if @npc
+
+    preset
   end
 
     def preprocess_attributes!
@@ -384,6 +399,7 @@ class PostStatusService < BaseService
       npc_id: @npc&.id,
       npc_emotion: @npc ? (@options[:npc_emotion].presence || 'default') : nil,
       background_id: @background&.id,
+      card_preset_id: @card_preset&.id,
     }.compact
   end
 

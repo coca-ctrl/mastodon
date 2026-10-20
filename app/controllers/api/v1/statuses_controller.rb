@@ -49,6 +49,7 @@ class Api::V1::StatusesController < Api::BaseController
       npc_emotion: status_params[:npc_emotion],
       preset_id: status_params[:preset_id],
       background_id: status_params[:background_id],
+      card_preset_id: status_params[:card_preset_id],
       story_action: status_params[:story_action]
     )
 
@@ -150,6 +151,7 @@ class Api::V1::StatusesController < Api::BaseController
       :npc_emotion,
       :preset_id,
       :background_id,
+      :card_preset_id,
       :story_action,
       allowed_mentions: [],
       media_ids: [],

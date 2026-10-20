@@ -257,6 +257,7 @@ export function submitCompose(successCallback) {
         npc_emotion: getState().getIn(['compose', 'npc_emotion'], null),
         preset_id: getState().getIn(['compose', 'preset_id'], null),
         background_id: getState().getIn(['compose', 'background_id'], null),
+        card_preset_id: getState().getIn(['compose', 'card_preset_id'], null),
         story_action: getState().getIn(['compose', 'story_action'], null),
       },
       headers: {
@@ -761,6 +762,15 @@ export function changeComposePreset(presetId) {
   return {
     type: COMPOSE_PRESET_CHANGE,
     preset_id: presetId,
+  };
+}
+
+export const COMPOSE_CARD_PRESET_CHANGE = 'COMPOSE_CARD_PRESET_CHANGE';
+
+export function changeComposeCardPreset(cardPresetId) {
+  return {
+    type: COMPOSE_CARD_PRESET_CHANGE,
+    card_preset_id: cardPresetId,
   };
 }
 

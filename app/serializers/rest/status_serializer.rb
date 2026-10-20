@@ -21,6 +21,7 @@ class REST::StatusSerializer < ActiveModel::Serializer
   attribute :text, if: :source_requested?
   attribute :npc, if: :npc_present?
   attribute :background_url, if: :npc_present?
+  attribute :card_style, if: :card_style_present?
   belongs_to :reblog, serializer: REST::StatusSerializer
   belongs_to :application, if: :show_application?
   belongs_to :account, serializer: REST::AccountSerializer
@@ -91,6 +92,14 @@ class REST::StatusSerializer < ActiveModel::Serializer
 
   def url
     ActivityPub::TagManager.instance.url_for(object)
+  end
+
+  def card_style_present?
+    object.card_preset_id.present? && object.card_preset.present?
+  end
+
+  def card_style
+    object.card_preset&.as_style_json
   end
   
   def npc_present?

@@ -18,6 +18,7 @@ import { Button } from 'mastodon/components/button';
 import { injectIntl } from '@/mastodon/components/intl';
 import EmojiPickerDropdown from '../containers/emoji_picker_dropdown_container';
 import { NpcSelector } from './npc_selector';
+import { CardPresetSelector } from './card_preset_selector';
 import PollButtonContainer from '../containers/poll_button_container';
 import SpoilerButtonContainer from '../containers/spoiler_button_container';
 import UploadButtonContainer from '../containers/upload_button_container';
@@ -328,6 +329,7 @@ class ComposeForm extends ImmutablePureComponent {
                 <UploadButtonContainer />
                 <PollButtonContainer />
                 <NpcSelector />
+                <CardPresetSelector />
                 <StoryActionToggle />
                 <SpoilerButtonContainer />
                 <EmojiPickerDropdown onPickEmoji={this.handleEmojiPick} />

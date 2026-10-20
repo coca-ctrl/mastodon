@@ -40,6 +40,7 @@ import {
   COMPOSE_SUGGESTION_TAGS_UPDATE,
   COMPOSE_TAG_HISTORY_UPDATE,
   COMPOSE_NPC_CHANGE,
+  COMPOSE_CARD_PRESET_CHANGE,
   COMPOSE_PRESET_CHANGE,
   COMPOSE_STORY_ACTION_CHANGE,
   COMPOSE_SENSITIVITY_CHANGE,
@@ -91,6 +92,7 @@ const initialState = ImmutableMap({
   npc_emotion: null,
   preset_id: null,
   background_id: null,
+  card_preset_id: null,
   story_action: null,
   suggestion_token: null,
   suggestions: ImmutableList(),
@@ -147,6 +149,7 @@ function clearAll(state) {
     map.set('npc_emotion', null);
     map.set('preset_id', null);
     map.set('background_id', null);
+    map.set('card_preset_id', null);
     map.set('story_action', null);
   });
 }
@@ -404,9 +407,24 @@ export const composeReducer = (state = initialState, action) => {
           state.get('media_attachments').size > 0)
         )
       );
+  
+  case COMPOSE_CARD_PRESET_CHANGE:
+    return state.withMutations(map => {
+      map.set('card_preset_id', action.card_preset_id);
+      if (action.card_preset_id) {
+        map.set('npc_id', null);
+        map.set('npc_emotion', null);
+        map.set('preset_id', null);
+        map.set('background_id', null);
+      }
+    });
+
   case COMPOSE_NPC_CHANGE:
   return state.withMutations(map => {
     map.set('npc_id', action.npc_id);
+    if (action.npc_id) {
+      map.set('card_preset_id', null);
+    }
     map.set('npc_emotion', action.npc_emotion);
     map.set('background_id', action.background_id);
     map.set('preset_id', null);
@@ -414,6 +432,9 @@ export const composeReducer = (state = initialState, action) => {
   case COMPOSE_PRESET_CHANGE:
     return state.withMutations(map => {
       map.set('preset_id', action.preset_id);
+      if (action.preset_id) {
+        map.set('card_preset_id', null);
+      }
       map.set('npc_id', null);
       map.set('npc_emotion', null);
       map.set('background_id', null);
