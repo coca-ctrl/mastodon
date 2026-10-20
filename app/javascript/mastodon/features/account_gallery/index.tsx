@@ -69,15 +69,17 @@ const selectGalleryTimeline = createAppSelector(
       `account:${accountId}:media${withReplies ? ':with_replies' : ''}`,
     );
     const statusIds = timeline?.get('items');
-
     if (isList(statusIds)) {
       for (const statusId of statusIds) {
         const status = statuses.get(statusId);
-        items = items.concat(
-          (
-            status?.get('media_attachments') as ImmutableList<MediaAttachment>
-          ).map((media) => media.set('status', status)),
-        );
+        const media = status?.get(
+          'media_attachments',
+        ) as ImmutableList<MediaAttachment>;
+        // 같은 게시물의 여러 첨부 이미지는 대표(첫 번째) 1장만 그리드에 노출
+        const representative = media?.first() as MediaAttachment | undefined;
+        if (representative) {
+          items = items.push(representative.set('status', status));
+        }
       }
     }
 
@@ -228,13 +230,21 @@ export const AccountGallery: React.FC<{
         emptyMessage={emptyMessage}
         bindToDocument={!multiColumn}
       >
-        {attachments.map((attachment) => (
-          <MediaItem
-            key={attachment.get('id') as string}
-            attachment={attachment}
-            onOpenMedia={handleOpenMedia}
-          />
-        ))}
+        {attachments.map((attachment) => {
+          const statusMedia = attachment.getIn([
+            'status',
+            'media_attachments',
+          ]) as ImmutableList<MediaAttachment> | undefined;
+
+          return (
+            <MediaItem
+              key={attachment.get('id') as string}
+              attachment={attachment}
+              onOpenMedia={handleOpenMedia}
+              mediaCount={statusMedia?.size}
+            />
+          );
+        })}
       </ScrollableList>
     </Column>
   );

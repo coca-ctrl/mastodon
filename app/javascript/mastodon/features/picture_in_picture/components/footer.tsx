@@ -4,11 +4,11 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import { useHistory } from 'react-router-dom';
 
-import OpenInNewIcon from '@/material-icons/400-24px/open_in_new.svg?react';
-import ReplyIcon from '@/material-icons/400-24px/reply.svg?react';
-import ReplyAllIcon from '@/material-icons/400-24px/reply_all.svg?react';
-import StarIcon from '@/material-icons/400-24px/star-fill.svg?react';
-import StarBorderIcon from '@/material-icons/400-24px/star.svg?react';
+import OpenInNewIcon from '@/tabler-icons/external-link.svg?react';
+import ReplyIcon from '@/tabler-icons/message-circle.svg?react';
+import ReplyAllIcon from '@/tabler-icons/message-circle-user.svg?react';
+import StarIcon from '@/tabler-icons/heart-filled.svg?react';
+import StarBorderIcon from '@/tabler-icons/heart.svg?react';
 import { replyCompose } from 'mastodon/actions/compose';
 import { toggleFavourite } from 'mastodon/actions/interactions';
 import { openModal } from 'mastodon/actions/modal';

@@ -27,7 +27,7 @@ import { SensitiveMediaContext } from '../features/ui/util/sensitive_media_conte
 import { displayMedia, me } from '../initial_state';
 
 import { injectIntl } from './intl';
-import { StatusHeader } from './status/header'
+import { StatusHeader, StatusAvatarColumn } from './status/header'
 import { LinkedDisplayName } from './display_name';
 import { getHashtagBarForStatus } from './hashtag_bar';
 import StatusActionBar from './status_action_bar';
@@ -617,7 +617,15 @@ class Status extends ImmutablePureComponent {
             data-id={status.get('id')}
           >
             {(connectReply || connectUp || connectToRoot) && <div className={classNames('status__line', { 'status__line--full': connectReply, 'status__line--first': !status.get('in_reply_to_id') && !connectToRoot })} />}
-
+            <div className='status__row'>
+              {!npc && (
+                <StatusAvatarColumn
+                  statusAccount={status.get('account')}
+                  friendAccount={account}
+                  avatarSize={avatarSize}
+                />
+              )}
+              <div className='status__row-main'>
             {header}
             {matchedFilters && <FilterWarning title={matchedFilters.join(', ')} expanded={this.state.showDespiteFilter} onClick={this.handleFilterToggle} />}
             {(!matchedFilters || this.state.showDespiteFilter) && <ContentWarning status={status} expanded={expanded} onClick={this.handleExpandedToggle} />}
@@ -647,6 +655,8 @@ class Status extends ImmutablePureComponent {
             {(showActions && !isQuotedPost) &&
               <StatusActionBar scrollKey={scrollKey} status={status} account={account}  {...other} />
             }
+              </div>
+            </div>
           </div>
         </div>
       </Hotkeys>

@@ -11,11 +11,11 @@ import { animated, useSpring } from '@react-spring/web';
 import { useDrag } from '@use-gesture/react';
 
 import type { MediaAttachment } from '@/mastodon/models/status';
-import ChevronLeftIcon from '@/material-icons/400-24px/chevron_left.svg?react';
-import ChevronRightIcon from '@/material-icons/400-24px/chevron_right.svg?react';
-import CloseIcon from '@/material-icons/400-24px/close.svg?react';
-import FitScreenIcon from '@/material-icons/400-24px/fit_screen.svg?react';
-import ActualSizeIcon from '@/svg-icons/actual_size.svg?react';
+import ChevronLeftIcon from '@/tabler-icons/chevron-left.svg?react';
+import ChevronRightIcon from '@/tabler-icons/chevron-right.svg?react';
+import CloseIcon from '@/tabler-icons/x.svg?react';
+import FitScreenIcon from '@/tabler-icons/arrows-minimize.svg?react';
+import ActualSizeIcon from '@/tabler-icons/arrows-maximize.svg?react';
 import type { RGB } from 'mastodon/blurhash';
 import { getAverageFromBlurhash } from 'mastodon/blurhash';
 import { GIFV } from 'mastodon/components/gifv';
@@ -329,7 +329,7 @@ export const MediaModal = forwardRef<HTMLDivElement, MediaModalProps>(
                 title={intl.formatMessage(
                   zoomedIn ? messages.zoomOut : messages.zoomIn,
                 )}
-                icon=''
+                icon='zoom'
                 iconComponent={zoomedIn ? FitScreenIcon : ActualSizeIcon}
                 onClick={handleZoomClick}
               />

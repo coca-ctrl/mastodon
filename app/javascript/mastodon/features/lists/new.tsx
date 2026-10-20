@@ -61,7 +61,7 @@ const MembersLink: React.FC<{
       <div className='app-form__link__text'>
         <strong>
           {intl.formatMessage(membersMessages.manageMembers)}
-          <Icon id='chevron_right' icon={ChevronRightIcon} />
+          <Icon id='chevron-right' icon={ChevronRightIcon} />
         </strong>
         <FormattedMessage
           id='lists.list_members_count'

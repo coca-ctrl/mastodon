@@ -53,14 +53,8 @@ export const StatusHeader: FC<StatusHeaderProps> = ({
       className={classNames('status__info', className)}
       /* eslint-enable jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events */
     >
-      <StatusDisplayName
-        statusAccount={statusAccount}
-        friendAccount={account}
-        avatarSize={avatarSize}
-      />
-
+      <StatusDisplayName statusAccount={statusAccount} />
       {contentBeforeDate}
-
       <Link
         to={`/@${statusAccount?.acct}/${status.get('id') as string}`}
         className='status__relative-time'
@@ -69,7 +63,6 @@ export const StatusHeader: FC<StatusHeaderProps> = ({
         <RelativeTimestamp timestamp={status.get('created_at') as string} />
         {editedAt && <StatusEditedAt editedAt={editedAt} />}
       </Link>
-
       {contentAfterDate}
     </div>
   );
@@ -115,22 +108,32 @@ export const StatusEditedAt: FC<{ editedAt: string }> = ({ editedAt }) => {
 
 export const StatusDisplayName: FC<{
   statusAccount?: Account;
+}> = ({ statusAccount }) => {
+  return (
+    <LinkedDisplayName
+      displayProps={{ account: statusAccount }}
+      className='status__display-name'
+    />
+  );
+};
+
+export const StatusAvatarColumn: FC<{
+  statusAccount?: Account;
   friendAccount?: Account;
   avatarSize: number;
 }> = ({ statusAccount, friendAccount, avatarSize }) => {
   const AccountComponent = friendAccount ? AvatarOverlay : Avatar;
   return (
-    <LinkedDisplayName
-      displayProps={{ account: statusAccount }}
-      className='status__display-name'
+    <Link
+      to={`/@${statusAccount?.acct}`}
+      className='status__avatar-column'
+      title={statusAccount ? `@${statusAccount.acct}` : undefined}
     >
-      <div className='status__avatar'>
-        <AccountComponent
-          account={statusAccount}
-          friend={friendAccount}
-          size={avatarSize}
-        />
-      </div>
-    </LinkedDisplayName>
+      <AccountComponent
+        account={statusAccount}
+        friend={friendAccount}
+        size={avatarSize}
+      />
+    </Link>
   );
 };

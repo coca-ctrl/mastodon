@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import HeadphonesIcon from '@/material-icons/400-24px/headphones-fill.svg?react';
 import MovieIcon from '@/material-icons/400-24px/movie-fill.svg?react';
 import VisibilityOffIcon from '@/material-icons/400-24px/visibility_off.svg?react';
+import MultipleImagesIcon from '@/tabler-icons/box-multiple-filled.svg?react';
 import { AltTextBadge } from 'mastodon/components/alt_text_badge';
 import { Blurhash } from 'mastodon/components/blurhash';
 import { Icon } from 'mastodon/components/icon';
@@ -16,7 +17,8 @@ import { useAppSelector } from 'mastodon/store';
 export const MediaItem: React.FC<{
   attachment: MediaAttachment;
   onOpenMedia: (arg0: MediaAttachment) => void;
-}> = ({ attachment, onOpenMedia }) => {
+  mediaCount?: number;
+}> = ({ attachment, onOpenMedia, mediaCount }) => {
   const account = useAppSelector((state) =>
     state.accounts.get(attachment.getIn(['status', 'account']) as string),
   );
@@ -87,6 +89,14 @@ export const MediaItem: React.FC<{
 
   if (description && description.length > 0) {
     badges.push(<AltTextBadge key='alt' description={description} />);
+  }
+
+  if (mediaCount && mediaCount > 1) {
+    badges.push(
+      <span key='multiple' className='media-gallery__alt__label media-gallery__alt__label--non-interactive'>
+        <Icon id='box-multiple' icon={MultipleImagesIcon} />
+      </span>,
+    );
   }
 
   if (!visible) {

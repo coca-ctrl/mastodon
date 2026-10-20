@@ -85,7 +85,7 @@
 .button {
   background-color: var(--color-bg-brand-base);
   border: 1px solid transparent;
-  border-radius: 4px;
+  border-radius: 20px;
   box-sizing: border-box;
   color: var(--color-text-on-brand-base);
   cursor: pointer;
@@ -123,7 +123,7 @@
     line-height: normal;
     font-weight: 700;
     padding: 5px 12px;
-    border-radius: 4px;
+    border-radius: 20px;
   }
 
   &--dangerous {
@@ -528,10 +528,15 @@ body > [data-popper-placement] {
 .compose-form {
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 10px;
 
-  .layout-multiple-columns &,
-  .column & {
+  .display-name {
+    bdi {
+      padding-right: 4px;
+    }
+  }
+
+  .layout-multiple-columns & {
     padding: 15px;
   }
 
@@ -539,10 +544,9 @@ body > [data-popper-placement] {
     display: flex;
     flex-direction: column;
     flex: 0 1 auto;
-    border-radius: 4px;
-    border: 1px solid var(--color-border-primary);
+    border-bottom: 1px solid var(--color-border-primary);
     position: relative;
-    background: var(--color-bg-secondary);
+    background: var(--color-bg-primary);
     outline: var(--outline-focus-default);
     outline-color: transparent;
     outline-offset: -1px;
@@ -639,7 +643,7 @@ body > [data-popper-placement] {
   &__dropdowns {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     margin: 8px;
     flex-wrap: wrap;
   }
@@ -780,7 +784,7 @@ body > [data-popper-placement] {
     display: flex;
     align-items: center;
     flex: 1 1 auto;
-    max-width: 100%;
+    max-width: 100px;
   }
 
   &__buttons {
@@ -931,8 +935,8 @@ body > [data-popper-placement] {
   color: var(--color-text-brand);
   background: transparent;
   border: 1px solid var(--color-border-brand);
-  border-radius: 6px;
-  padding: 4px 8px;
+  border-radius: 20px;
+  padding: 4px 10px;
   font-size: 13px;
   line-height: normal;
   font-weight: 400;
@@ -1669,16 +1673,21 @@ body > [data-popper-placement] {
   margin-inline-end: auto;
 
   .display-name {
+    display: flex;
+    align-items: center;
+
     bdi {
       overflow: hidden;
       text-overflow: ellipsis;
+      padding-right: 4px;
     }
 
     &__account {
       white-space: nowrap;
-      display: block;
+      display: flex;
       overflow: hidden;
       text-overflow: ellipsis;
+      align-items: center;
     }
   }
 }
@@ -1689,9 +1698,9 @@ body > [data-popper-placement] {
 
 .status__info {
   font-size: 15px;
-  padding-bottom: 10px;
+  height: 22px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 10px;
   cursor: pointer;
@@ -1979,10 +1988,6 @@ body > [data-popper-placement] {
 .status--is-quote {
   border: none;
   padding: 12px;
-
-  .status__info {
-    padding-bottom: 8px;
-  }
 
   .display-name,
   .status__relative-time {
@@ -2297,7 +2302,6 @@ body > [data-popper-placement] {
   display: block;
   position: relative;
   border-radius: var(--avatar-border-radius);
-  background: var(--color-bg-tertiary);
   flex-shrink: 0;
 
   img {
@@ -2663,7 +2667,7 @@ a.account__display-name {
 }
 
 .display-name {
-  display: block;
+  display: flex;
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -2703,9 +2707,6 @@ a.account__display-name {
     max-height: $media-modal-media-max-height;
     width: auto;
     height: auto;
-    outline: 1px solid var(--color-border-media);
-    outline-offset: -1px;
-    border-radius: 8px;
     touch-action: none;
     user-select: none;
   }
@@ -2759,6 +2760,8 @@ a.account__display-name {
   flex-shrink: 0;
   cursor: default;
   gap: 10px;
+  padding: 15px;
+  padding-bottom: 0;
 
   .column > & {
     padding: 15px;
@@ -3137,10 +3140,6 @@ a.account__display-name {
   top: 0;
   z-index: 2;
   border-top: 0;
-
-  @media screen and (min-width: $no-gap-breakpoint) {
-    border-top: 10px solid var(--color-bg-primary);
-  }
 }
 
 .react-swipeable-view-container {
@@ -3169,7 +3168,7 @@ a.account__display-name {
   > .scrollable {
     border: 1px solid var(--color-border-primary);
     border-top: 0;
-    border-radius: 0 0 4px 4px;
+    border-bottom: 0;
 
     &.about,
     &.privacy-policy {
@@ -3334,10 +3333,6 @@ a.account__display-name {
 }
 
 @media screen and (min-width: $no-gap-breakpoint) {
-  .react-swipeable-view-container .columns-area--mobile {
-    height: calc(100% - 10px) !important;
-  }
-
   .getting-started__wrapper {
     margin-bottom: 10px;
   }
@@ -3758,16 +3753,17 @@ a.account__display-name {
   &__compose-button {
     display: flex;
     justify-content: flex-start;
-    padding-top: 8px;
-    padding-bottom: 8px;
-    padding-inline-start: 12px - 7px;
-    padding-inline-end: 12px;
+    padding: 10px 17px;
     gap: 8px;
     margin: 12px;
-    border-radius: 6px;
+    border-radius: 30px;
     font-size: 16px;
     font-weight: 600;
     line-height: 18px;
+
+    &:focus {
+      border-radius: 30px;
+    }
 
     .icon {
       width: 24px;
@@ -4649,7 +4645,7 @@ a.status-card {
   display: flex;
   font-size: 16px;
   border: 1px solid var(--color-border-primary);
-  border-radius: 4px 4px 0 0;
+  border-top: 0;
   flex: 0 0 auto;
   position: relative;
   z-index: 2;
@@ -6632,7 +6628,7 @@ a.status-card {
       display: flex;
       flex-direction: column;
       gap: 16px;
-      padding: 24px;
+      padding: 0 0 24px 0;
     }
 
     &__preview {
@@ -7113,8 +7109,6 @@ a.status-card {
   display: block;
   text-align: center;
   color: var(--color-text-on-media);
-  background: var(--color-bg-media);
-  backdrop-filter: $backdrop-blur-filter;
   border: 0;
   padding: 3px 8px;
   border-radius: 4px;
@@ -7124,12 +7118,10 @@ a.status-card {
   line-height: 20px;
   cursor: pointer;
   pointer-events: auto;
+  filter: drop-shadow(0 0 1px black);
 
   &:focus-visible {
     outline: none;
-    box-shadow:
-      inset 0 0 0 2px var(--color-text-on-media),
-      0 0 0 2px var(--color-bg-media);
   }
 
   &--non-interactive {
@@ -10212,7 +10204,6 @@ noscript {
           flex-shrink: 0;
           align-self: flex-end;
           border: 1px solid var(--color-border-primary);
-          background-color: var(--color-bg-tertiary);
         }
 
         &__text-stack {
@@ -10347,8 +10338,7 @@ noscript {
     text-overflow: ellipsis;
 
     &__display-name {
-      display: flex;
-      align-items: center;
+      display: block;
       gap: 6px;
       font-size: 16px;
       letter-spacing: 0.5px;
@@ -10672,11 +10662,6 @@ noscript {
     background: transparent;
   }
 
-  .status {
-    // 40px avatar + 8px gap
-    --status-gutter-width: 48px;
-  }
-
   .status--is-quote {
     --status-gutter-width: 0;
   }
@@ -10694,7 +10679,7 @@ noscript {
   .hashtag-bar,
   .content-warning,
   .filter-warning {
-    margin-inline-start: var(--status-gutter-width);
+    /*margin-inline-start: var(--status-gutter-width);*/
     width: calc(100% - var(--status-gutter-width));
   }
 
@@ -10836,6 +10821,7 @@ noscript {
   .display-name {
     font-size: 15px;
     line-height: 22px;
+    display: block;
 
     bdi {
       font-weight: 500;
@@ -11340,6 +11326,7 @@ noscript {
   font-size: 16px;
   font-weight: 600;
   line-height: 18px;
+  border-radius: 30px;
 
   &:hover {
     background: var(--color-bg-brand-base-hover);
@@ -12857,6 +12844,10 @@ body.chat-conversation-active {
     }
   }
 
+  &:active {
+    border-radius: 12px;
+  }
+
   img {
     width: 100%;
     object-fit: cover;
@@ -12914,7 +12905,10 @@ body.chat-conversation-active {
   gap: 10px;
   padding: 12px;
   background: var(--color-bg-primary);
-  border-bottom: 1px solid var(--color-border-primary);
+  border: 1px solid var(--color-border-primary);
+  border-top: 0;
+  height: 50px;
+  box-sizing: border-box;
 
   h1 {
     font-size: 16px;
@@ -12925,6 +12919,8 @@ body.chat-conversation-active {
 .story-session__statuses {
   display: flex;
   flex-direction: column;
+  border-left: 1px solid var(--color-border-primary);
+  border-right: 1px solid var(--color-border-primary);
 }
 
 .tabler-icon-filled-marker path {
@@ -13004,7 +13000,10 @@ svg.icon-ban[fill="none"] path,
 svg.icon-flag-exclamation[fill="none"] path,
 svg.icon-ellipsis-v[fill="none"] path,
 svg.icon-bell-o[fill="none"] path,
-svg.icon-message-chatbot[fill="none"] path {
+svg.icon-message-chatbot[fill="none"] path,
+svg.icon-down[fill="none"] path,
+svg.icon-zoom[fill="none"] path,
+svg.icon-external-link[fill="none"] path {
   fill: none !important;
 }
 
@@ -13029,9 +13028,10 @@ svg.icon-bookmarks[fill="currentColor"] path:first-child,
 svg.icon-notifications-active[fill="currentColor"] path:first-child,
 svg.icon-flag[fill="currentColor"] path:first-child,
 svg.icon-celebration[fill="currentColor"] path:first-child,
-svg.icon-reply[fill="currentColor"] path:first-chil,
+svg.icon-reply[fill="currentColor"] path:first-child,
 svg.icon-times-circle[fill="currentColor"] path:first-child,
-svg.icon-bell[fill="currentColor"] path:first-child {
+svg.icon-bell[fill="currentColor"] path:first-child,
+svg.icon-box-multiple[fill="currentColor"] path:first-child {
   fill: none !important;
 }
 
@@ -13085,4 +13085,19 @@ svg.icon-repeat-active path {
 
 svg.icon-repeat-private path {
   fill: none !important;
+}
+
+.status__row {
+  display: flex;
+  gap: 12px;
+}
+
+.status__avatar-column {
+  flex-shrink: 0;
+  display: block;
+}
+
+.status__row-main {
+  flex: 1;
+  min-width: 0;
 }
