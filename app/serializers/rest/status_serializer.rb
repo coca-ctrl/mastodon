@@ -107,7 +107,7 @@ class REST::StatusSerializer < ActiveModel::Serializer
       name: object.npc.name,
       emotion: object.npc_emotion,
       image_url: image&.image&.url(:original),
-      body: html_aware_format(object.text, object.local?, preloaded_accounts: [object.account]),
+            body: render_roll_markers(html_aware_format(object.text, object.local?, preloaded_accounts: [object.account])),
     }
   end
 

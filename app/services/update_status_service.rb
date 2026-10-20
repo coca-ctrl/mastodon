@@ -112,8 +112,10 @@ class UpdateStatusService < BaseService
 
   def update_immediate_attributes!
     if @options.key?(:text)
+      original_markers = RollMarker.extract(@status.text)
       @status.text = @options[:text].presence || ''
       @status.text = @options.delete(:spoiler_text) || '' if @status.text.blank? && @status.quote.blank?
+      @status.text = RollMarker.neutralize(@status.text, allowed: original_markers)
     end
     @status.spoiler_text = @options[:spoiler_text] || '' if @options.key?(:spoiler_text)
     @status.sensitive    = @options[:sensitive] || @options[:spoiler_text].present? if @options.key?(:sensitive) || @options.key?(:spoiler_text)

@@ -9,6 +9,10 @@ module FormattingHelper
     width: 1.1em;
   CSS
 
+  ROLL_MARKER_PATTERN = RollMarker::PATTERN
+  DICE_ROLL_PATTERN = /\A\d{1,3}D\d{1,4}\z/
+  RPS_EMOJI = { 'scissors' => '✌️', 'rock' => '✊', 'paper' => '🖐️' }.freeze
+
   def html_aware_format(text, local, options = {})
     HtmlAwareFormatter.new(text, local, options).to_s
   end
@@ -29,7 +33,35 @@ module FormattingHelper
   def status_content_format(status)
     quoted_status = status.quote&.quoted_status if status.local?
     formatted = html_aware_format(status.text, status.local?, preloaded_accounts: [status.account] + (status.respond_to?(:active_mentions) ? status.active_mentions.map(&:account) : []), quoted_status: quoted_status)
+    formatted = render_roll_markers(formatted) if status.local?
     npc_content_prefix(status) + formatted
+  end
+
+  def render_roll_markers(html)
+    html.to_str.gsub(ROLL_MARKER_PATTERN) do
+      whole = Regexp.last_match(0)
+      kind = Regexp.last_match(1)
+      args = Regexp.last_match(2).split(':', -1)
+      (kind == 'dice' ? render_dice_marker(args) : render_rps_marker(args)) || whole
+    end.html_safe # rubocop:disable Rails/OutputSafety
+  end
+
+  def render_dice_marker(args)
+    roll, result = args
+    return unless args.size == 2 && roll.match?(DICE_ROLL_PATTERN) && result.match?(/\A\d+\z/)
+
+    %(<span class="dice_roll">#{roll}</span><span class="dice_result">#{result}</span>)
+  end
+
+  def render_rps_marker(args)
+    name1, hand1, name2, hand2, winner = args
+    return unless args.size == 5 && RPS_EMOJI.key?(hand1) && RPS_EMOJI.key?(hand2) && %w(0 1 2).include?(winner)
+
+    name1 = ERB::Util.html_escape(CGI.unescape(name1).scrub)
+    name2 = ERB::Util.html_escape(CGI.unescape(name2).scrub)
+    result = { '0' => '무승부', '1' => "#{name1} 승", '2' => "#{name2} 승" }[winner]
+
+    %(<span class="rps_roll1">#{name1} : #{RPS_EMOJI[hand1]}</span><span class="rps_roll2">#{name2} : #{RPS_EMOJI[hand2]}</span><span class="rps_result">#{result}</span>)
   end
 
   def npc_content_prefix(status)

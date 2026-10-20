@@ -13105,3 +13105,24 @@ svg.icon-repeat-private path {
   flex: 1;
   min-width: 0;
 }
+
+.dice_roll,
+.dice_result,
+.rps_roll1,
+.rps_roll2,
+.rps_result {
+  display: inline-block;
+  padding: 1px 10px;
+  margin: 0 2px;
+  border-radius: 999px;
+  font-size: 0.9em;
+  font-weight: 700;
+  line-height: 1.6;
+  color: #fff;
+}
+
+.dice_roll { background: #6364ff; }
+.dice_result { background: #e0762a; }
+.rps_roll1 { background: #2f9e6e; }
+.rps_roll2 { background: #3b82c4; }
+.rps_result { background: #c0467d; }

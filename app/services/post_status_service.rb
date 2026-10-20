@@ -55,6 +55,7 @@ class PostStatusService < BaseService
     @in_reply_to = @options[:thread]
     @quoted_status = @options[:quoted_status]
     @story_action = @options[:story_action] # 'start' 또는 'end'
+    @text = apply_dice_and_rps(@text) if @text.present?
     if @options[:preset_id].present?
       preset = @account.presets.find_by(id: @options[:preset_id])
       if preset
@@ -63,7 +64,6 @@ class PostStatusService < BaseService
         @background = preset.background
       end
     else
-      @text = apply_dice_and_rps(@text) if @text.present?
       @npc = @options[:npc_id].present? ? @account.npcs.find_by(id: @options[:npc_id]) : nil
       @background = @options[:background_id].present? ? @account.backgrounds.find_by(id: @options[:background_id]) : nil
     end
@@ -117,49 +117,56 @@ class PostStatusService < BaseService
   private
     DICE_PATTERN = /\[(\d{1,3})[dD](\d{1,4})\]/
     RPS_PATTERN = /\[가위바위보\]/
-    RPS_HANDS = %w(가위 바위 보).freeze
-    RPS_EMOJI = { '가위' => '✌️', '바위' => '✊', '보' => '🖐️' }.freeze
+    RPS_HANDS = %w(scissors rock paper).freeze
 
     def apply_dice_and_rps(text)
+      text = RollMarker.neutralize(text)
       text = replace_dice(text)
       text = replace_rps(text)
       text
     end
 
-    def replace_dice(text)
-      text.gsub(DICE_PATTERN) do
-        count = Regexp.last_match(1).to_i.clamp(1, 100)
-        sides = Regexp.last_match(2).to_i.clamp(2, 1000)
-        total = Array.new(count) { rand(1..sides) }.sum
-        "[#{count}D#{sides}: #{total}]"
-      end
+  def replace_dice(text)
+    text.gsub(DICE_PATTERN) do
+      count = Regexp.last_match(1).to_i.clamp(1, 100)
+      sides = Regexp.last_match(2).to_i.clamp(2, 1000)
+      total = Array.new(count) { rand(1..sides) }.sum
+      "[dice:#{count}D#{sides}:#{total}]"
     end
+  end
 
-    def replace_rps(text)
-      return text unless text.match?(RPS_PATTERN)
+  def replace_rps(text)
+    return text unless text.match?(RPS_PATTERN)
 
-      mentioned_username = text[/@([a-zA-Z0-9_]+)/, 1]
-      return text if mentioned_username.blank?
+    mentioned_username = text[/@([a-zA-Z0-9_]+)/, 1]
+    return text if mentioned_username.blank?
 
-      opponent_account = Account.find_local(mentioned_username)
-      return text unless opponent_account
+    opponent_account = Account.find_local(mentioned_username)
+    return text unless opponent_account
 
-      my_name = @account.display_name.presence || @account.username
-      opponent_name = opponent_account.display_name.presence || opponent_account.username
+    my_name = @account.display_name.presence || @account.username
+    opponent_name = opponent_account.display_name.presence || opponent_account.username
 
-      my_hand = RPS_HANDS.sample
-      opponent_hand = RPS_HANDS.sample
-      result = rps_result(my_hand, opponent_hand, my_name, opponent_name)
+    my_hand = RPS_HANDS.sample
+    opponent_hand = RPS_HANDS.sample
 
-          text.sub(RPS_PATTERN, "[가위바위보: #{my_name}=#{RPS_EMOJI[my_hand]}, #{opponent_name}=#{RPS_EMOJI[opponent_hand]} → #{result}]")
-    end
+    marker = [
+      'rps',
+      ERB::Util.url_encode(my_name), my_hand,
+      ERB::Util.url_encode(opponent_name), opponent_hand,
+      rps_winner(my_hand, opponent_hand)
+    ].join(':')
 
-    def rps_result(mine, opponent, my_name, opponent_name)
-      return '무승부' if mine == opponent
+    text.sub(RPS_PATTERN) { "[#{marker}]" }
+  end
 
-      wins_against = { '가위' => '보', '바위' => '가위', '보' => '바위' }
-      wins_against[mine] == opponent ? "#{my_name} 승" : "#{opponent_name} 승"
-    end
+  # 0 = 무승부, 1 = 나, 2 = 상대
+  def rps_winner(mine, opponent)
+    return 0 if mine == opponent
+
+    beats = { 'scissors' => 'paper', 'rock' => 'scissors', 'paper' => 'rock' }
+    beats[mine] == opponent ? 1 : 2
+  end
 
     def preprocess_attributes!
     validate_story_action!
