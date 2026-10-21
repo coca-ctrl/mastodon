@@ -451,7 +451,7 @@ export const DetailedStatus: React.FC<{
           </div>
 
           {overrideDisplayName ?? (
-            <DisplayName account={status.get('account')} localDomain={domain} />
+            <DisplayName account={status.get('account')} />
           )}
 
           {withLogo && (
