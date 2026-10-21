@@ -35,6 +35,9 @@ import { ComposeQuotedStatus } from './quoted_post';
 import { VisibilityDropdown } from './visibility_dropdown';
 import { QuotePolicyDropdown } from './quote_policy_dropdown';
 import { StoryActionToggle } from './story_action_toggle';
+import { MarkdownToolbar } from './markdown_toolbar';
+import { applyMarkdown } from '../util/markdown_edit';
+import { PinnedStyleController } from './pinned_style';
 
 const allowedAroundShortCode = '><\u0085\u0020\u00a0\u1680\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u202f\u205f\u3000\u2028\u2029\u0009\u000a\u000b\u000c\u000d';
 
@@ -249,6 +252,19 @@ class ComposeForm extends ImmutablePureComponent {
     this.props.onPickEmoji(position, data, needsSpace);
   };
 
+  handleMarkdown = (action) => {
+    const textarea = this.textareaRef.current;
+    if (!textarea) return;
+
+    const result = applyMarkdown(action, textarea.value, textarea.selectionStart, textarea.selectionEnd);
+    this.props.onChange(result.text);
+
+    setTimeout(() => {
+      textarea.focus();
+      textarea.setSelectionRange(result.start, result.end);
+    }, 0);
+  };
+
   render () {
     const { intl, onPaste, onDrop, autoFocus, withoutNavigation, maxChars, isSubmitting } = this.props;
 
@@ -300,6 +316,8 @@ class ComposeForm extends ImmutablePureComponent {
             </div>
           )}
 
+          <MarkdownToolbar disabled={isSubmitting} onApply={this.handleMarkdown} />
+
           <AutosuggestTextarea
             ref={this.textareaRef}
             placeholder={intl.formatMessage(messages.placeholder)}
@@ -330,6 +348,7 @@ class ComposeForm extends ImmutablePureComponent {
                 <PollButtonContainer />
                 <NpcSelector />
                 <CardPresetSelector />
+                <PinnedStyleController disabled={this.props.isEditing} />
                 <StoryActionToggle />
                 <SpoilerButtonContainer />
                 <EmojiPickerDropdown onPickEmoji={this.handleEmojiPick} />

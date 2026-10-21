@@ -32,6 +32,7 @@ class TextFormatter
 
   def to_s
     return add_quote_fallback('').html_safe if text.blank? # rubocop:disable Rails/OutputSafety
+    return markdown_to_s if options[:markdown].present?
 
     html = rewrite do |entity|
       if entity[:url]
@@ -89,6 +90,50 @@ class TextFormatter
 
   private
 
+  PLACEHOLDER_PATTERN = /\uE000(\d+)\uE001/
+
+  def markdown_to_s
+    stash = []
+    raw = +''
+
+    entities.sort_by! { |entity| entity[:indices].first }
+
+    last_index = entities.reduce(0) do |index, entity|
+      indices = entity[:indices]
+      raw << markdown_clean(text[index...indices.first])
+      stash << render_entity(entity).to_s
+      raw << "\uE000#{stash.size - 1}\uE001"
+      indices.last
+    end
+
+    raw << markdown_clean(text[last_index..])
+
+    raw = raw.gsub(RollMarker::PATTERN) do |marker|
+      stash << h(marker).to_s
+      "\uE000#{stash.size - 1}\uE001"
+    end
+
+    html = MarkdownRenderer.new(options[:markdown]).render(raw)
+    html = html.gsub(PLACEHOLDER_PATTERN) { stash[Regexp.last_match(1).to_i] }
+    html = add_quote_fallback(html) if options[:quoted_status].present?
+
+    html.html_safe # rubocop:disable Rails/OutputSafety
+  end
+
+  def markdown_clean(segment)
+    segment.to_s.delete("\uE000\uE001")
+  end
+
+  def render_entity(entity)
+    if entity[:url]
+      link_to_url(entity)
+    elsif entity[:hashtag]
+      link_to_hashtag(entity)
+    elsif entity[:screen_name]
+      link_to_mention(entity)
+    end
+  end
+  
   def rewrite
     entities.sort_by! do |entity|
       entity[:indices].first

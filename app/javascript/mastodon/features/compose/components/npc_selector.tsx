@@ -7,23 +7,28 @@ import { fetchPresets } from 'mastodon/features/npcs/preset_api';
 import type { Preset } from 'mastodon/features/npcs/preset_api';
 import { useAppSelector } from 'mastodon/store';
 
+import { PinFooter, PinIcon, useCurrentChoice, usePinnedStyle } from './pinned_style';
+import { choiceKey, recordChoice } from '../util/pinned_style';
+
 export const NpcSelector: React.FC = () => {
   const dispatch = useDispatch();
   const [npcs, setNpcs] = useState<Npc[]>([]);
   const [presets, setPresets] = useState<Preset[]>([]);
   const [showMenu, setShowMenu] = useState(false);
   const [showCustom, setShowCustom] = useState(false);
-  const [selectedLabel, setSelectedLabel] = useState<string | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
-  const hasNpcSelection = useAppSelector(
-    (state) => !!state.compose.get('npc_id') || !!state.compose.get('preset_id'),
-  );
 
-  useEffect(() => {
-    if (!hasNpcSelection) {
-      setSelectedLabel(null);
-    }
-  }, [hasNpcSelection]);
+  const npcId = useAppSelector(
+    (state) => state.compose.get('npc_id') as number | null,
+  );
+  const npcEmotion = useAppSelector(
+    (state) => state.compose.get('npc_emotion') as string | null,
+  );
+  const presetId = useAppSelector(
+    (state) => state.compose.get('preset_id') as number | null,
+  );
+  const current = useCurrentChoice();
+  const { pinned } = usePinnedStyle();
 
   useEffect(() => {
     fetchNpcs()
@@ -51,8 +56,8 @@ export const NpcSelector: React.FC = () => {
 
   const handleSelectPreset = useCallback(
     (preset: Preset) => {
+      recordChoice({ kind: 'preset', id: preset.id });
       dispatch(changeComposePreset(preset.id));
-      setSelectedLabel(preset.name);
       setShowMenu(false);
     },
     [dispatch],
@@ -60,20 +65,35 @@ export const NpcSelector: React.FC = () => {
 
   const handleSelectCustom = useCallback(
     (npc: Npc, emotion: string) => {
+      recordChoice({ kind: 'npc', id: npc.id, emotion });
       dispatch(changeComposeNpc(npc.id, emotion, null));
-      setSelectedLabel(`${npc.name} (${emotion})`);
       setShowMenu(false);
     },
     [dispatch],
   );
 
   const handleClear = useCallback(() => {
+    // 카드 스타일이 선택되어 있으면 그대로 남으므로, 남는 선택을 기준으로 기억한다
+    recordChoice(current?.kind === 'card' ? current : { kind: 'none' });
     dispatch(changeComposePreset(null));
-    setSelectedLabel(null);
     setShowMenu(false);
-  }, [dispatch]);
+  }, [dispatch, current]);
 
   if (npcs.length === 0) return null;
+
+  const selectedPreset = presetId
+    ? presets.find((preset) => preset.id === presetId)
+    : undefined;
+  const selectedNpc = npcId ? npcs.find((npc) => npc.id === npcId) : undefined;
+  const selectedLabel = selectedPreset
+    ? selectedPreset.name
+    : selectedNpc
+      ? `${selectedNpc.name} (${npcEmotion ?? 'default'})`
+      : null;
+  const isPinned =
+    !!current &&
+    current.kind !== 'card' &&
+    choiceKey(current) === choiceKey(pinned);
 
   return (
     <div className='npc-selector' ref={menuRef}>
@@ -84,7 +104,8 @@ export const NpcSelector: React.FC = () => {
           setShowMenu((prev) => !prev);
         }}
       >
-        {selectedLabel ? `NPC: ${selectedLabel}` : 'NPC 선택'}
+        {isPinned && <PinIcon />}
+        {selectedLabel ? ` NPC: ${selectedLabel}` : 'NPC 선택'}
       </button>
 
       {showMenu && (
@@ -146,6 +167,13 @@ export const NpcSelector: React.FC = () => {
                 </div>
               </div>
             ))}
+
+          <PinFooter
+            kinds={['preset', 'npc']}
+            onDone={() => {
+              setShowMenu(false);
+            }}
+          />
         </div>
       )}
     </div>

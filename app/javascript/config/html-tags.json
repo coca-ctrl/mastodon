@@ -56,6 +56,10 @@
     },
     "ruby": {},
     "rt": {},
-    "rp": {}
+    "rp": {},
+    "mark": {},
+    "hr": {
+      "children": false
+    }
   }
 }

@@ -8,6 +8,9 @@ import { fetchCardPresets } from 'mastodon/features/npcs/card_preset_api';
 import type { CardPreset } from 'mastodon/features/npcs/card_preset_api';
 import { useAppSelector } from 'mastodon/store';
 
+import { PinFooter, PinIcon, useCurrentChoice, usePinnedStyle } from './pinned_style';
+import { choiceKey, recordChoice } from '../util/pinned_style';
+
 export const CardPresetSelector: React.FC = () => {
   const dispatch = useDispatch();
   const [presets, setPresets] = useState<CardPreset[]>([]);
@@ -17,6 +20,8 @@ export const CardPresetSelector: React.FC = () => {
   const selectedId = useAppSelector(
     (state) => state.compose.get('card_preset_id') as number | null,
   );
+  const current = useCurrentChoice();
+  const { pinned } = usePinnedStyle();
 
   useEffect(() => {
     fetchCardPresets()
@@ -45,10 +50,19 @@ export const CardPresetSelector: React.FC = () => {
 
   const handleSelect = useCallback(
     (id: number | null) => {
+      if (id) {
+        recordChoice({ kind: 'card', id });
+      } else {
+        // NPC·프리셋이 선택되어 있으면 그대로 남으므로, 남는 선택을 기준으로 기억한다
+        recordChoice(
+          current && current.kind !== 'card' ? current : { kind: 'none' },
+        );
+      }
+
       dispatch(changeComposeCardPreset(id));
       setShowMenu(false);
     },
-    [dispatch],
+    [dispatch, current],
   );
 
   if (presets.length === 0) {
@@ -56,6 +70,10 @@ export const CardPresetSelector: React.FC = () => {
   }
 
   const selected = presets.find((preset) => preset.id === selectedId);
+  const isPinned =
+    !!current &&
+    current.kind === 'card' &&
+    choiceKey(current) === choiceKey(pinned);
 
   return (
     <div className='npc-selector card-preset-selector' ref={menuRef}>
@@ -66,7 +84,8 @@ export const CardPresetSelector: React.FC = () => {
           setShowMenu((prev) => !prev);
         }}
       >
-        {selected ? `카드: ${selected.name}` : '카드 스타일'}
+        {isPinned && <PinIcon />}
+        {selected ? ` 카드: ${selected.name}` : '카드 스타일'}
       </button>
 
       {showMenu && (
@@ -100,6 +119,13 @@ export const CardPresetSelector: React.FC = () => {
               </div>
             </div>
           ))}
+
+          <PinFooter
+            kinds={['card']}
+            onDone={() => {
+              setShowMenu(false);
+            }}
+          />
         </div>
       )}
     </div>

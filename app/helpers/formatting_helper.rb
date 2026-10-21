@@ -32,7 +32,7 @@ module FormattingHelper
 
   def status_content_format(status)
     quoted_status = status.quote&.quoted_status if status.local?
-    formatted = html_aware_format(status.text, status.local?, preloaded_accounts: [status.account] + (status.respond_to?(:active_mentions) ? status.active_mentions.map(&:account) : []), quoted_status: quoted_status)
+    formatted = html_aware_format(status.text, status.local?, preloaded_accounts: [status.account] + (status.respond_to?(:active_mentions) ? status.active_mentions.map(&:account) : []), quoted_status: quoted_status, markdown: MarkdownRenderer.features_for(status))
     formatted = render_roll_markers(formatted) if status.local?
     npc_content_prefix(status) + formatted
   end
