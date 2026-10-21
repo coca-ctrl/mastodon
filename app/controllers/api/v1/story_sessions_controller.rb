@@ -7,7 +7,7 @@ class Api::V1::StorySessionsController < Api::BaseController
 
   # GET /api/v1/story_sessions
   def index
-    sessions = StorySession.order(started_at: :desc)
+    sessions = StorySession.includes(:start_status).order(started_at: :desc)
     render json: sessions.map { |s| serialize_session(s) }
   end
 
@@ -45,7 +45,7 @@ class Api::V1::StorySessionsController < Api::BaseController
   def serialize_session(session)
     {
       id: session.id,
-      title: session.title,
+      title: session.display_title,
       thumbnail_url: session.thumbnail.url(:original),
       started_at: session.started_at,
       ended_at: session.ended_at,

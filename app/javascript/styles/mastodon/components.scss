@@ -13613,6 +13613,10 @@ svg.icon-repeat-private path {
   border-bottom: 1px solid var(--color-border-primary, rgba(128, 128, 128, 0.45));
 }
 
+.status-card-style .status__content p.md-h1 { font-size: 1.5em; }
+.status-card-style .status__content p.md-h2 { font-size: 1.25em; }
+.status-card-style .status__content p.md-h3 { font-size: 1.1em; }
+
 /* 인용: 박스형 */
 .md-quote {
   margin: 0.6em 0;
