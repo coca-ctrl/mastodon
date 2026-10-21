@@ -26,10 +26,17 @@ class Bookmark < ApplicationRecord
   end
 
   after_destroy :invalidate_cleanup_info
+  after_create_commit :dismiss_mention
 
   def invalidate_cleanup_info
     return unless status&.account_id == account_id && account.local?
 
     account.statuses_cleanup_policy&.invalidate_last_inspected(status, :unbookmark)
+  end
+
+  def dismiss_mention
+    return unless account&.local?
+
+    MentionDismissal.record_if_mentioned!(account_id, status_id)
   end
 end

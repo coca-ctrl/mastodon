@@ -370,6 +370,10 @@ namespace :api, format: false do
     end
     resources :presets, only: [:index, :show, :create, :update, :destroy]
     resources :story_sessions, only: [:index, :show]
+    resources :unanswered_mentions, only: [:index] do
+      collection { get :count }
+      member { post :dismiss }
+    end
     get 'settlement/post_counts', to: 'settlement#post_counts'
     get 'settlement/accounts', to: 'settlement#accounts'
   end

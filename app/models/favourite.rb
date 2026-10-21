@@ -31,8 +31,15 @@ class Favourite < ApplicationRecord
   after_create :increment_cache_counters
   after_destroy :decrement_cache_counters
   after_destroy :invalidate_cleanup_info
+  after_create_commit :dismiss_mention
 
   private
+
+  def dismiss_mention
+    return unless account&.local?
+
+    MentionDismissal.record_if_mentioned!(account_id, status_id)
+  end
 
   def increment_cache_counters
     status&.increment_count!(:favourites_count)

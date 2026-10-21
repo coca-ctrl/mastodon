@@ -69,6 +69,7 @@ import { useState } from 'react';
 import { playChatNotificationSound } from '../chat/play_notification_sound';
 import { fetchUnreadChatCount } from '../chat/api';
 import { canManageNpcs, isAdministrator } from 'mastodon/permissions';
+import { UnansweredMentionsNavIcon } from '../unanswered_mentions/nav_icon';
 import ChatAdminIcon from '@/tabler-icons/chat-admin.svg?react';
 import NpcIcon from '@/tabler-icons/user-screen.svg?react';
 import StoryIcon from '@/tabler-icons/book.svg?react';
@@ -401,6 +402,17 @@ export const NavigationPanel: React.FC<{ multiColumn?: boolean }> = ({
 
             <li>
               <AnnualReportNavItem />
+            </li>
+
+            <li>
+              <ColumnLink
+                transparent
+                to='/unanswered'
+                isActive={(match, location) => location.pathname.startsWith('/unanswered')}
+                icon={<UnansweredMentionsNavIcon />}
+                activeIcon={<UnansweredMentionsNavIcon />}
+                text='답장할 멘션'
+              />
             </li>
 
             <li>

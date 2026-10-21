@@ -1153,6 +1153,7 @@ body > [data-popper-placement] {
   grid-template-columns: 46px minmax(0, 1fr);
   grid-template-rows: 46px max-content;
   gap: 0 10px;
+  margin: 10px;
 
   .detailed-status__display-name {
     margin-bottom: 4px;
@@ -2514,7 +2515,7 @@ a.account__display-name {
 
   strong,
   span:not(.emojione) {
-    display: block;
+    display: flex;
     text-overflow: ellipsis;
     overflow: hidden;
   }
@@ -8505,7 +8506,7 @@ noscript {
 }
 
 .announcements {
-  width: calc(100% - 124px);
+  width: 100%;
   flex: 0 0 auto;
   position: relative;
   overflow: hidden;
@@ -8528,6 +8529,7 @@ noscript {
   &__mastodon {
     width: 124px;
     flex: 0 0 auto;
+    display: none;
 
     @media screen and (max-width: (124px + 300px)) {
       display: none;
@@ -13682,4 +13684,42 @@ mark {
   display: inline-flex;
   align-items: center;
   gap: 4px;
+}
+
+/* ===== 답장할 멘션 ===== */
+.unanswered__item {
+  margin: 10px 12px;
+  border: 1px solid var(--color-border-primary, rgba(128, 128, 128, 0.45));
+  border-radius: 10px;
+  overflow: hidden;
+
+  // 박스 안에서는 게시글 자체의 아래 구분선을 없앤다
+  .status__wrapper,
+  .status,
+  article {
+    border-bottom: 0;
+  }
+}
+
+.unanswered__actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px 12px;
+  border-top: 1px dashed var(--color-border-primary, rgba(128, 128, 128, 0.45));
+  background: var(--color-bg-secondary, rgba(128, 128, 128, 0.08));
+}
+
+.unanswered__dismiss {
+  padding: 4px 14px;
+  border: 1px solid var(--color-border-primary, rgba(128, 128, 128, 0.45));
+  border-radius: 999px;
+  background: var(--color-bg-primary, transparent);
+  color: var(--color-text-secondary, inherit);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--color-bg-secondary, rgba(128, 128, 128, 0.18));
+  }
 }

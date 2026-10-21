@@ -31,6 +31,7 @@
   /pinned
   /story
   /story/(*any)
+  /unanswered
   /chat-admin
   /profile/(*any)
   /public
