@@ -10,7 +10,8 @@ class UserSettings
   setting :always_send_emails, default: false
   setting :aggregate_reblogs, default: true
   setting :theme, default: -> { ::Setting.theme }
-  setting :noindex, default: -> { ::Setting.noindex }
+  # 검색엔진 색인 거부: 기본값을 켬 (색인 허용이 아니라 거부가 기본)
+  setting :noindex, default: true
   setting :show_application, default: true
   setting :default_language, default: nil
   setting :default_sensitive, default: false
@@ -22,7 +23,7 @@ class UserSettings
 
   namespace :web do
     setting :advanced_layout, default: false
-    setting :trends, default: true
+    setting :trends, default: false
     setting :use_blurhash, default: true
     setting :use_pending_items, default: false
     setting :use_system_font, default: false
@@ -30,9 +31,9 @@ class UserSettings
     setting :disable_swiping, default: false
     setting :disable_hover_cards, default: false
     setting :delete_modal, default: true
-    setting :reblog_modal, default: false
+    setting :reblog_modal, default: true
     setting :quick_boosting, default: false
-    setting :missing_alt_text_modal, default: true
+    setting :missing_alt_text_modal, default: false
     setting :reduce_motion, default: false
     setting :expand_content_warnings, default: false
     setting :display_media, default: 'default', in: %w(hide_all default show_all)
@@ -43,17 +44,17 @@ class UserSettings
   end
 
   namespace :notification_emails do
-    setting :follow, default: true
+    setting :follow, default: false
     setting :reblog, default: false
     setting :favourite, default: false
-    setting :mention, default: true
-    setting :quote, default: true
-    setting :follow_request, default: true
-    setting :report, default: true
-    setting :pending_account, default: true
-    setting :trends, default: true
-    setting :appeal, default: true
-    setting :software_updates, default: 'critical', in: %w(none critical patch all)
+    setting :mention, default: false
+    setting :quote, default: false
+    setting :follow_request, default: false
+    setting :report, default: false
+    setting :pending_account, default: false
+    setting :trends, default: false
+    setting :appeal, default: false
+    setting :software_updates, default: 'none', in: %w(none critical patch all)
   end
 
   namespace :interactions do
