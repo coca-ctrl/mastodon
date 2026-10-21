@@ -1178,6 +1178,10 @@ body > [data-popper-placement] {
     &__account {
       display: none;
     }
+
+    bdi {
+      padding-right: 0;
+    }
   }
 
   &__line {
@@ -2516,6 +2520,7 @@ a.account__display-name {
   strong,
   span:not(.emojione) {
     display: flex;
+    gap: 4px;
     text-overflow: ellipsis;
     overflow: hidden;
   }
