@@ -70,6 +70,8 @@ class PostStatusService < BaseService
 
     @card_preset = resolve_card_preset
 
+    @entrance_effect = (@npc || @card_preset) ? EntranceEffect.sanitize(@options[:entrance_effect]) : nil
+
     preprocess_attributes!
 
     with_idempotency do
@@ -400,6 +402,7 @@ class PostStatusService < BaseService
       npc_emotion: @npc ? (@options[:npc_emotion].presence || 'default') : nil,
       background_id: @background&.id,
       card_preset_id: @card_preset&.id,
+      entrance_effect: @entrance_effect,
     }.compact
   end
 

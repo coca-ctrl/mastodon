@@ -39,6 +39,7 @@ import { FOCUS_TARGET } from './navigation_focus_target';
 import { NpcStatusCard } from './npc_status_card';
 import { CardStatusFooter } from './status/card_footer';
 import { cardStyleToCss } from 'mastodon/features/card_style/style';
+import { Entrance } from 'mastodon/components/entrance';
 
 const domParser = new DOMParser();
 
@@ -636,16 +637,18 @@ class Status extends ImmutablePureComponent {
             {!cardStyle && (!matchedFilters || this.state.showDespiteFilter) && <ContentWarning status={status} expanded={expanded} onClick={this.handleExpandedToggle} />}
             {expanded && npc && (
               <>
+              <Entrance id={status.get('id')} effect={isQuotedPost ? null : status.get('entrance_effect')}>
                 <NpcStatusCard
                   npc={npc.toJS ? npc.toJS() : npc}
                   backgroundUrl={status.get('background_url')}
                   onClick={this.handleClick}
                 />
+              </Entrance>
                 <CardStatusFooter status={status} />
               </>
             )}
             {cardStyle && (
-              <div className='status-card-style' style={cardStyleToCss(cardStyle)}>
+              <Entrance id={status.get('id')} effect={status.get('entrance_effect')} className='status-card-style' style={cardStyleToCss(cardStyle)}>
                 {matchedFilters && <FilterWarning title={matchedFilters.join(', ')} expanded={this.state.showDespiteFilter} onClick={this.handleFilterToggle} />}
                 {(!matchedFilters || this.state.showDespiteFilter) && <ContentWarning status={status} expanded={expanded} onClick={this.handleExpandedToggle} />}
                 {expanded && (
@@ -663,7 +666,7 @@ class Status extends ImmutablePureComponent {
                     {children}
                   </>
                 )}
-                </div>
+                </Entrance>
               )}
             {cardStyle && <CardStatusFooter status={status} />}
             {expanded && !npc && !cardStyle && (

@@ -22,6 +22,7 @@ class REST::StatusSerializer < ActiveModel::Serializer
   attribute :npc, if: :npc_present?
   attribute :background_url, if: :npc_present?
   attribute :card_style, if: :card_style_present?
+  attribute :entrance_effect, if: :entrance_effect_present?
   belongs_to :reblog, serializer: REST::StatusSerializer
   belongs_to :application, if: :show_application?
   belongs_to :account, serializer: REST::AccountSerializer
@@ -96,6 +97,10 @@ class REST::StatusSerializer < ActiveModel::Serializer
 
   def card_style_present?
     object.card_preset_id.present? && object.card_preset.present?
+  end
+
+  def entrance_effect_present?
+    object.entrance_effect.present?
   end
 
   def card_style

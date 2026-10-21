@@ -57,6 +57,7 @@ import {
   COMPOSE_CHANGE_MEDIA_ORDER,
   COMPOSE_SET_STATUS,
   COMPOSE_FOCUS,
+  COMPOSE_ENTRANCE_CHANGE,
 } from '../actions/compose';
 import { REDRAFT } from '../actions/statuses';
 import { STORE_HYDRATE } from '../actions/store';
@@ -93,6 +94,7 @@ const initialState = ImmutableMap({
   preset_id: null,
   background_id: null,
   card_preset_id: null,
+  entrance_effect: '',
   story_action: null,
   suggestion_token: null,
   suggestions: ImmutableList(),
@@ -150,6 +152,7 @@ function clearAll(state) {
     map.set('preset_id', null);
     map.set('background_id', null);
     map.set('card_preset_id', null);
+    map.set('entrance_effect', '');
     map.set('story_action', null);
   });
 }
@@ -441,6 +444,9 @@ export const composeReducer = (state = initialState, action) => {
     });
   case COMPOSE_STORY_ACTION_CHANGE:
     return state.set('story_action', action.story_action);
+
+  case COMPOSE_ENTRANCE_CHANGE:
+    return state.set('entrance_effect', action.entrance_effect);
 
   case COMPOSE_SENSITIVITY_CHANGE:
     return state.withMutations(map => {

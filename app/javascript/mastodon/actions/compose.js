@@ -258,6 +258,7 @@ export function submitCompose(successCallback) {
         preset_id: getState().getIn(['compose', 'preset_id'], null),
         background_id: getState().getIn(['compose', 'background_id'], null),
         card_preset_id: getState().getIn(['compose', 'card_preset_id'], null),
+        entrance_effect: getState().getIn(['compose', 'entrance_effect'], ''),
         story_action: getState().getIn(['compose', 'story_action'], null),
       },
       headers: {
@@ -772,6 +773,12 @@ export function changeComposeCardPreset(cardPresetId) {
     type: COMPOSE_CARD_PRESET_CHANGE,
     card_preset_id: cardPresetId,
   };
+}
+
+export const COMPOSE_ENTRANCE_CHANGE = 'COMPOSE_ENTRANCE_CHANGE';
+
+export function changeComposeEntrance(effect) {
+  return { type: COMPOSE_ENTRANCE_CHANGE, entrance_effect: effect };
 }
 
 export function changeComposeStoryAction(action) {
