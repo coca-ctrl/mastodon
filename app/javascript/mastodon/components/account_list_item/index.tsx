@@ -40,7 +40,7 @@ interface Props {
   renderButton?: (options: RenderButtonOptions) => React.ReactNode;
 }
 
-const DEFAULT_STATS: Stat[] = ['followers', 'posts', 'last-active'];
+const DEFAULT_STATS: Stat[] = ['followers', 'posts'];
 
 /**
  * Extended account list item with bio, verified link badge,
