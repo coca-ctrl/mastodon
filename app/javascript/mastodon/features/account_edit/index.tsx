@@ -293,16 +293,6 @@ export const AccountEdit: FC = () => {
               ))}
             </ol>
           )}
-          <Button
-            onClick={handleCustomFieldsVerifiedHelp}
-            className={classes.verifiedLinkHelpButton}
-            plain
-          >
-            <FormattedMessage
-              id='account_edit.custom_fields.verified_hint'
-              defaultMessage='How do I add a verified link?'
-            />
-          </Button>
           {!hasFields && (
             <DismissibleCallout
               id='profile_edit_fields_tip'
@@ -314,21 +304,6 @@ export const AccountEdit: FC = () => {
               />
             </DismissibleCallout>
           )}
-        </AccountEditSection>
-
-        <AccountEditSection
-          title={messages.featuredHashtagsTitle}
-          description={messages.featuredHashtagsPlaceholder}
-          showDescription={!hasTags}
-          buttons={
-            <EditButton
-              onClick={handleFeaturedTagsEdit}
-              icon={hasTags}
-              label={intl.formatMessage(messages.featuredHashtagsEditLabel)}
-            />
-          }
-        >
-          {profile.featuredTags.map((tag) => `#${tag.name}`).join(', ')}
         </AccountEditSection>
 
         <AccountEditSection
