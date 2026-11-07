@@ -14,11 +14,12 @@
   bottom: 16px;
   z-index: 10;
   display: flex;
-  align-items: center;
-  gap: 8px;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
   padding: 6px 12px;
   border: 1px solid var(--color-border-primary);
-  border-radius: 999px;
+  border-radius: 18px;
   background: var(--color-bg-secondary);
   color: var(--color-text-primary);
   font-size: 13px;
@@ -41,4 +42,13 @@
 
 .bgm-player__volume {
   width: 80px;
+
+  // 사이트 테마의 포인트 색(라이트/다크 자동 반영)
+  accent-color: var(--color-bg-brand-base, var(--color-text-brand, #6364ff));
+}
+
+.bgm-player__row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }

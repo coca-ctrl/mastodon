@@ -4,14 +4,16 @@ import { NpcPanel } from './components/npc_panel';
 import { BackgroundPanel } from './components/background_panel';
 import { PresetPanel } from './components/preset_panel';
 import { CardPresetPanel } from './components/card_preset_panel';
+import { SoundPanel } from './components/sound_panel';
 
-type TabKey = 'npc' | 'background' | 'preset' | 'card';
+type TabKey = 'npc' | 'background' | 'preset' | 'card' | 'sound';
 
 const TABS: { key: TabKey; label: string }[] = [
   { key: 'npc', label: 'NPC' },
   { key: 'background', label: '배경' },
   { key: 'preset', label: '프리셋' },
   { key: 'card', label: '카드 스타일' },
+  { key: 'sound', label: '효과음' },
 ];
 
 const NpcManager: React.FC = () => {
@@ -38,6 +40,7 @@ const NpcManager: React.FC = () => {
       {activeTab === 'background' && <BackgroundPanel />}
       {activeTab === 'preset' && <PresetPanel />}
       {activeTab === 'card' && <CardPresetPanel />}
+      {activeTab === 'sound' && <SoundPanel />}
     </Column>
   );
 };

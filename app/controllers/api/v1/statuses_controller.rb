@@ -51,6 +51,7 @@ class Api::V1::StatusesController < Api::BaseController
       background_id: status_params[:background_id],
       card_preset_id: status_params[:card_preset_id],
       entrance_effect: status_params[:entrance_effect],
+      story_sound_id: status_params[:story_sound_id],
       story_action: status_params[:story_action]
     )
 
@@ -154,6 +155,7 @@ class Api::V1::StatusesController < Api::BaseController
       :background_id,
       :card_preset_id,
       :entrance_effect,
+      :story_sound_id,
       :story_action,
       allowed_mentions: [],
       media_ids: [],

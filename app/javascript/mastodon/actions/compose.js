@@ -259,6 +259,7 @@ export function submitCompose(successCallback) {
         background_id: getState().getIn(['compose', 'background_id'], null),
         card_preset_id: getState().getIn(['compose', 'card_preset_id'], null),
         entrance_effect: getState().getIn(['compose', 'entrance_effect'], ''),
+        story_sound_id: getState().getIn(['compose', 'story_sound_id'], null),
         story_action: getState().getIn(['compose', 'story_action'], null),
       },
       headers: {
@@ -779,6 +780,12 @@ export const COMPOSE_ENTRANCE_CHANGE = 'COMPOSE_ENTRANCE_CHANGE';
 
 export function changeComposeEntrance(effect) {
   return { type: COMPOSE_ENTRANCE_CHANGE, entrance_effect: effect };
+}
+
+export const COMPOSE_STORY_SOUND_CHANGE = 'COMPOSE_STORY_SOUND_CHANGE';
+
+export function changeComposeStorySound(soundId) {
+  return { type: COMPOSE_STORY_SOUND_CHANGE, story_sound_id: soundId };
 }
 
 export function changeComposeStoryAction(action) {

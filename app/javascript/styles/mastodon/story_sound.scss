@@ -1,0 +1,111 @@
+.sound-icon {
+  flex-shrink: 0;
+  width: 1.1em;
+  height: 1.1em;
+}
+
+.bgm-player__toggle,
+.status-card-style__sound,
+.entrance-selector__preview,
+.sound-panel__play {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.status-card-style__sound {
+  margin-left: 8px;
+  padding: 0 6px;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  opacity: 0.7;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    opacity: 1;
+  }
+
+  &:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+}
+
+.entrance-selector__preview {
+  padding: 0 8px;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.sound-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  color: var(--color-text-primary);
+}
+
+.sound-panel__hint {
+  margin: 0;
+  color: var(--color-text-secondary, inherit);
+  font-size: 13px;
+}
+
+.sound-panel__form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+
+  input[type='text'] {
+    flex: 1 1 140px;
+    min-width: 0;
+  }
+}
+
+.sound-panel__error {
+  color: var(--color-text-error, #c0392b);
+  font-size: 13px;
+}
+
+.sound-panel__empty {
+  color: var(--color-text-secondary, inherit);
+}
+
+.sound-panel__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--color-border-primary);
+}
+
+.sound-panel__name {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sound-panel__meta {
+  color: var(--color-text-secondary, inherit);
+  font-size: 12px;
+}
+
+.sound-panel__play,
+.sound-panel__action {
+  padding: 4px 6px;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+}

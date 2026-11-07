@@ -23,6 +23,7 @@ class REST::StatusSerializer < ActiveModel::Serializer
   attribute :background_url, if: :npc_present?
   attribute :card_style, if: :card_style_present?
   attribute :entrance_effect, if: :entrance_effect_present?
+  attribute :story_sound, if: :story_sound_present?
   belongs_to :reblog, serializer: REST::StatusSerializer
   belongs_to :application, if: :show_application?
   belongs_to :account, serializer: REST::AccountSerializer
@@ -101,6 +102,16 @@ class REST::StatusSerializer < ActiveModel::Serializer
 
   def entrance_effect_present?
     object.entrance_effect.present?
+  end
+
+  def story_sound_present?
+    object.story_sound_id.present? && object.story_sound.present?
+  end
+
+  def story_sound
+    sound = object.story_sound
+
+    { id: sound.id.to_s, name: sound.name, url: sound.file.url, duration_ms: sound.duration_ms }
   end
 
   def card_style

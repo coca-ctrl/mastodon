@@ -71,6 +71,7 @@ class PostStatusService < BaseService
     @card_preset = resolve_card_preset
 
     @entrance_effect = (@npc || @card_preset) ? EntranceEffect.sanitize(@options[:entrance_effect]) : nil
+    @story_sound = (@npc || @card_preset) ? resolve_story_sound : nil
 
     preprocess_attributes!
 
@@ -170,6 +171,18 @@ class PostStatusService < BaseService
 
     beats = { 'scissors' => 'paper', 'rock' => 'scissors', 'paper' => 'rock' }
     beats[mine] == opponent ? 1 : 2
+  end
+
+  # 효과음은 story 역할(manage_npcs) 계정이 자기 것만 쓸 수 있다
+  def resolve_story_sound
+    return if @options[:story_sound_id].blank?
+
+    raise Mastodon::ValidationError, '효과음을 사용할 권한이 없습니다.' unless @account.user&.can?(:manage_npcs)
+
+    sound = StorySound.find_by(id: @options[:story_sound_id], account_id: @account.id)
+    raise Mastodon::ValidationError, '효과음을 찾을 수 없습니다.' unless sound
+
+    sound
   end
 
   # 카드 스타일은 story 역할(manage_npcs) 계정이 자기 프리셋만 쓸 수 있고, NPC와는 함께 쓸 수 없다
@@ -403,6 +416,7 @@ class PostStatusService < BaseService
       background_id: @background&.id,
       card_preset_id: @card_preset&.id,
       entrance_effect: @entrance_effect,
+      story_sound_id: @story_sound&.id,
     }.compact
   end
 

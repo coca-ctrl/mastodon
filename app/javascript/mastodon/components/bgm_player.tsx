@@ -2,6 +2,18 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { getAccessToken, me } from 'mastodon/initial_state';
 
+import {
+  MusicIcon,
+  MusicOffIcon,
+  VolumeIcon,
+  VolumeOffIcon,
+} from './sound_icons';
+import {
+  SFX_SEEN_EVENT,
+  isSfxSeen,
+  useStorySfxSettings,
+} from 'mastodon/utils/story_sound';
+
 interface BgmState {
   enabled: boolean;
   video_id: string;
@@ -115,6 +127,8 @@ export const BgmPlayer: React.FC = () => {
   const [volume, setVolume] = useState(readVolume);
   const [unlocked, setUnlocked] = useState(false);
   const [playing, setPlaying] = useState(false);
+  const [sfxSeen, setSfxSeen] = useState(isSfxSeen);
+  const sfx = useStorySfxSettings();
 
   const frameRef = useRef<HTMLDivElement>(null);
   const playerRef = useRef<YouTubePlayer | null>(null);
@@ -375,6 +389,19 @@ export const BgmPlayer: React.FC = () => {
     [],
   );
 
+  // 효과음이 있는 게시물을 처음 보면 효과음 설정을 보이게 한다.
+  useEffect(() => {
+    const onSeen = () => {
+      setSfxSeen(true);
+    };
+
+    window.addEventListener(SFX_SEEN_EVENT, onSeen);
+
+    return () => {
+      window.removeEventListener(SFX_SEEN_EVENT, onSeen);
+    };
+  }, []);
+
   if (!me) return null;
 
   let label = 'BGM 꺼짐';
@@ -388,26 +415,59 @@ export const BgmPlayer: React.FC = () => {
   return (
     <>
       <div className='bgm-player__frame' ref={frameRef} aria-hidden='true' />
-      {enabled && (
-        <div className='bgm-player' role='group' aria-label='배경음악'>
-          <button
-            type='button'
-            className='bgm-player__toggle'
-            onClick={handleToggle}
-            aria-pressed={userOn}
-          >
-            <span aria-hidden='true'>♪</span> {label}
-          </button>
-          {userOn && (
-            <input
-              type='range'
-              className='bgm-player__volume'
-              min={0}
-              max={100}
-              value={volume}
-              onChange={handleVolume}
-              aria-label='BGM 음량'
-            />
+      {(enabled || sfxSeen) && (
+        <div className='bgm-player' role='group' aria-label='사운드'>
+          {enabled && (
+            <div className='bgm-player__row'>
+              <button
+                type='button'
+                className='bgm-player__toggle'
+                onClick={handleToggle}
+                aria-pressed={userOn}
+              >
+                {userOn ? <MusicIcon /> : <MusicOffIcon />}
+                {label}
+              </button>
+              {userOn && (
+                <input
+                  type='range'
+                  className='bgm-player__volume'
+                  min={0}
+                  max={100}
+                  value={volume}
+                  onChange={handleVolume}
+                  aria-label='BGM 음량'
+                />
+              )}
+            </div>
+          )}
+          {sfxSeen && (
+            <div className='bgm-player__row'>
+              <button
+                type='button'
+                className='bgm-player__toggle'
+                onClick={() => {
+                  sfx.setOn(!sfx.on);
+                }}
+                aria-pressed={sfx.on}
+              >
+                {sfx.on ? <VolumeIcon /> : <VolumeOffIcon />}
+                {sfx.on ? '효과음 켜짐' : '효과음 꺼짐'}
+              </button>
+              {sfx.on && (
+                <input
+                  type='range'
+                  className='bgm-player__volume'
+                  min={0}
+                  max={100}
+                  value={sfx.volume}
+                  onChange={(event) => {
+                    sfx.setVolume(Number(event.target.value));
+                  }}
+                  aria-label='효과음 음량'
+                />
+              )}
+            </div>
           )}
         </div>
       )}

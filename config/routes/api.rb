@@ -370,6 +370,7 @@ namespace :api, format: false do
         get :options
       end
     end
+    resources :story_sounds, only: [:index, :create, :update, :destroy]
     resources :presets, only: [:index, :show, :create, :update, :destroy]
     resources :story_sessions, only: [:index, :show]
     resources :unanswered_mentions, only: [:index] do
