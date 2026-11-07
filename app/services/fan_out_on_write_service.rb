@@ -153,12 +153,15 @@ class FanOutOnWriteService < BaseService
   def broadcast_to_public_streams!
     return if @status.reply? && @status.in_reply_to_account_id != @account.id
 
+    # 본문에 멘션이 있는 로컬 글은 로컬 실시간 피드에서 숨긴다.
+    hide_from_local = @status.local? && @status.mentions.exists?
+
     redis.publish('timeline:public', anonymous_payload)
-    redis.publish(@status.local? ? 'timeline:public:local' : 'timeline:public:remote', anonymous_payload)
+    redis.publish(@status.local? ? 'timeline:public:local' : 'timeline:public:remote', anonymous_payload) unless hide_from_local
 
     if @status.with_media?
       redis.publish('timeline:public:media', anonymous_payload)
-      redis.publish(@status.local? ? 'timeline:public:local:media' : 'timeline:public:remote:media', anonymous_payload)
+      redis.publish(@status.local? ? 'timeline:public:local:media' : 'timeline:public:remote:media', anonymous_payload) unless hide_from_local
     end
   end
 

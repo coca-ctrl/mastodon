@@ -26,6 +26,7 @@ class PublicFeed
     scope.merge!(without_replies_scope) unless with_replies?
     scope.merge!(without_reblogs_scope) unless with_reblogs?
     scope.merge!(local_only_scope) if local_only?
+    scope.merge!(without_mentions_scope) if local_only?
     scope.merge!(remote_only_scope) if remote_only?
     scope.merge!(account_filters_scope) if account?
     scope.merge!(media_only_scope) if media_only?
@@ -91,6 +92,10 @@ class PublicFeed
 
   def local_only_scope
     Status.local
+  end
+
+  def without_mentions_scope
+    Status.where('NOT EXISTS (SELECT 1 FROM mentions WHERE mentions.status_id = statuses.id)')
   end
 
   def remote_only_scope
