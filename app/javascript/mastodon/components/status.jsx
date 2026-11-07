@@ -40,6 +40,7 @@ import { NpcStatusCard } from './npc_status_card';
 import { CardStatusFooter } from './status/card_footer';
 import { cardStyleToCss } from 'mastodon/features/card_style/style';
 import { Entrance } from 'mastodon/components/entrance';
+import IconPinned from '@/images/icons/icon_pinned.svg?react';
 
 const domParser = new DOMParser();
 
@@ -430,7 +431,14 @@ class Status extends ImmutablePureComponent {
     const connectReply = nextInReplyToId && nextInReplyToId === status.get('id');
     const matchedFilters = status.get('matched_filters');
 
-    if (status.get('reblog', null) !== null && typeof status.get('reblog') === 'object') {
+    if (featured) {
+      prepend = (
+        <div className='status__prepend'>
+          <div className='status__prepend__icon'><Icon id='pinned' icon={IconPinned} /></div>
+          <FormattedMessage id='account.timeline.pinned' defaultMessage='Pinned' tagName='span' />
+        </div>
+      );
+    } else if (status.get('reblog', null) !== null && typeof status.get('reblog') === 'object') {
       const name = (
         <LinkedDisplayName
           displayProps={{

@@ -80,7 +80,7 @@
 }
 
 .statusWrapper {
-  &:has(.pinnedViewAllButton) :global(.status):has(.pinnedStatusHeader) {
+  &:has(.pinnedViewAllButton) :global(.status__wrapper[data-featured='true'] .status) {
     border-bottom: none;
   }
 
@@ -106,27 +106,4 @@
     background-color: inherit;
     border-color: var(--color-bg-brand-base-hover);
   }
-}
-
-.pinnedStatusHeader {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  grid-template-rows: 1fr 1fr;
-  gap: 4px;
-
-  > :global(.status__relative-time) {
-    grid-column: 2;
-    height: auto;
-  }
-
-  > :global(.status__display-name) {
-    grid-row: span 2;
-  }
-}
-
-.pinnedBadge {
-  justify-self: end;
-
-  // Allow "click to open post" event to pass through
-  pointer-events: none;
 }
