@@ -182,24 +182,6 @@ export const PolicyControls: React.FC = () => {
         />
 
         <SelectWithLabel
-          value={notificationPolicy.for_private_mentions}
-          onChange={handleFilterPrivateMentions}
-          options={options}
-          label={
-            <FormattedMessage
-              id='notifications.policy.filter_private_mentions_title'
-              defaultMessage='Unsolicited private mentions'
-            />
-          }
-          hint={
-            <FormattedMessage
-              id='notifications.policy.filter_private_mentions_hint'
-              defaultMessage="Filtered unless it's in reply to your own mention or if you follow the sender"
-            />
-          }
-        />
-
-        <SelectWithLabel
           value={notificationPolicy.for_limited_accounts}
           onChange={handleFilterLimitedAccounts}
           options={options}
