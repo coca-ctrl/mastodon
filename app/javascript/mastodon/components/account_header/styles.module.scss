@@ -572,3 +572,7 @@ $button-fallback-breakpoint: $button-breakpoint + 55px;
 .bioButtonsWrapper {
   margin-top: 16px;
 }
+
+.tabs {
+  justify-content: space-around;
+}

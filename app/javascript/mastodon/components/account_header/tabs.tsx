@@ -29,7 +29,7 @@ export const AccountTabs: FC = () => {
   }
 
   return (
-    <TabList>
+    <TabList className={classes.tabs}>
       <TabLink isActive={isActive} to={`/@${acct}`}>
         <FormattedMessage id='account.activity' defaultMessage='Activity' />
       </TabLink>
