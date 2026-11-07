@@ -96,6 +96,7 @@ import { ColumnsContextProvider } from './util/columns_context';
 import { focusColumn, getFocusedItemIndex, focusItemSibling, focusFirstItem, getFocusedColumnIndex } from './util/focusUtils';
 import { WrappedSwitch, WrappedRoute } from './util/react_router_helpers';
 import { CustomHomepage } from 'mastodon/features/custom_homepage';
+import { PwaInstallBanner } from 'mastodon/components/pwa_install_banner';
 
 // Dummy import, to make sure that <Status /> ends up in the application bundle.
 // Without this it ends up in ~8 very commonly used bundles.
@@ -658,6 +659,8 @@ class UI extends PureComponent {
               onFocusGettingStartedColumn={this.handleHotkeyGoToStart}
             />
           )}
+
+          <PwaInstallBanner />
 
           <SwitchingColumnsArea
             identity={this.props.identity}

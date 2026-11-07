@@ -1,0 +1,46 @@
+.pwa-install-banner {
+  flex-shrink: 0;
+  padding: 10px 16px;
+  background: var(--color-bg-secondary);
+  border-bottom: 1px solid var(--color-border-primary);
+  color: var(--color-text-primary);
+  font-size: 14px;
+  line-height: 1.4;
+
+  &__main {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__text {
+    flex: 1;
+    margin: 0;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  &__close {
+    padding: 4px 8px;
+    background: none;
+    border: 0;
+    color: inherit;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  &__guide {
+    margin: 10px 0 0;
+    padding-inline-start: 20px;
+
+    li + li {
+      margin-top: 4px;
+    }
+  }
+}
