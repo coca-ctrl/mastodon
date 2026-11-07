@@ -3705,6 +3705,7 @@ a.account__display-name {
   height: calc(100% - 10px);
   overflow-y: auto;
   scrollbar-width: thin;
+  justify-content: space-between;
 
   .compose-form {
     flex: 1 1 auto;
