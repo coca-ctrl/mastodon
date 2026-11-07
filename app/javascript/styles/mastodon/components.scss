@@ -13731,3 +13731,11 @@ mark {
     background: var(--color-bg-secondary, rgba(128, 128, 128, 0.18));
   }
 }
+// 모바일 패널: 하단에 별도 버튼이 있으므로 검색창과 새 게시물 버튼은 숨김
+@media screen and (width <= 759px) {
+  .navigation-panel .search,
+  .navigation-panel .navigation-bar,
+  .navigation-panel__compose-button {
+    display: none !important;
+  }
+}
