@@ -177,6 +177,7 @@
       color: var(--color-text-brand);
       background-color: transparent;
       text-decoration: none;
+      border-radius: 20px;
     }
 
     &.button--destructive {
@@ -3949,7 +3950,7 @@ a.account__display-name {
   width: 100%;
   background: transparent;
   border: 1px solid var(--color-border-primary);
-  border-radius: 4px 4px 0 0;
+  border-top: none;
   color: var(--color-text-brand);
   cursor: pointer;
   flex: 0 0 auto;
@@ -6930,6 +6931,7 @@ a.status-card {
       color: var(--color-text-on-error-base);
       background: var(--color-bg-error-base);
       border-color: var(--color-bg-error-base);
+      border-radius: 20px;
     }
   }
 
