@@ -12,6 +12,11 @@ defaults: &defaults
   registrations_mode: 'none'
   profile_directory: true
   closed_registrations_message: ''
+  bgm_url: ''
+  bgm_video_id: ''
+  bgm_offset: 0
+  bgm_started_at: 0
+  bgm_enabled: false
   local_live_feed_access: 'public'
   remote_live_feed_access: 'public'
   local_topic_feed_access: 'public'

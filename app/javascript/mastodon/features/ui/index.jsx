@@ -97,6 +97,7 @@ import { focusColumn, getFocusedItemIndex, focusItemSibling, focusFirstItem, get
 import { WrappedSwitch, WrappedRoute } from './util/react_router_helpers';
 import { CustomHomepage } from 'mastodon/features/custom_homepage';
 import { PwaInstallBanner } from 'mastodon/components/pwa_install_banner';
+import { BgmPlayer } from 'mastodon/components/bgm_player';
 
 // Dummy import, to make sure that <Status /> ends up in the application bundle.
 // Without this it ends up in ~8 very commonly used bundles.
@@ -661,6 +662,7 @@ class UI extends PureComponent {
           )}
 
           <PwaInstallBanner />
+          <BgmPlayer />
 
           <SwitchingColumnsArea
             identity={this.props.identity}

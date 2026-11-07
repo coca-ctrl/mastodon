@@ -76,6 +76,8 @@ namespace :admin do
     get '/settings/edit'
   end
 
+  resource :bgm, only: :update, controller: :bgm
+
   namespace :settings do
     resource :branding, only: [:show, :update], controller: 'branding'
     resource :registrations, only: [:show, :update], controller: 'registrations'

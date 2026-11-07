@@ -38,3 +38,25 @@
 
   .actions
     = f.button :button, t('generic.save_changes'), type: :submit
+
+%hr.spacer
+
+%h3 사이트 BGM
+
+%p.lead 접속 중인 모든 사용자가 같은 곡의 같은 구간을 듣습니다. 곡을 바꾸거나 처음부터 다시 재생을 선택해 저장하면 접속 중인 사용자에게 15초 안에 반영됩니다.
+
+= simple_form_for :bgm, url: admin_bgm_path, method: :put do |f|
+  .fields-group
+    = f.input :enabled, as: :boolean, label: 'BGM 사용', wrapper: :with_label, input_html: { checked: Setting.bgm_enabled == true }
+
+  .fields-group
+    = f.input :url, as: :string, label: '유튜브 영상 링크', hint: '영상 링크만 가능합니다. 재생목록 링크는 사용할 수 없습니다.', wrapper: :with_block_label, input_html: { value: Setting.bgm_url.to_s }
+
+  .fields-group
+    = f.input :offset, as: :integer, label: '시작 위치(초)', hint: '교체 시 이 위치부터 재생합니다.', wrapper: :with_block_label, input_html: { value: Setting.bgm_offset.to_i, min: 0 }
+
+  .fields-group
+    = f.input :restart, as: :boolean, label: '저장하면서 처음부터(시작 위치부터) 다시 재생', wrapper: :with_label, input_html: { checked: false }
+
+  .actions
+    = f.button :button, 'BGM 저장', type: :submit

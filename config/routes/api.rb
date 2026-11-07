@@ -62,6 +62,8 @@ namespace :api, format: false do
       end
     end
 
+    resource :bgm, only: :show, controller: :bgm
+
     namespace :timelines do
       resource :home, only: :show, controller: :home
       resource :public, only: :show, controller: :public
