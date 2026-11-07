@@ -32,6 +32,7 @@ class Announcement < ApplicationRecord
   validates :ends_at, presence: true, if: :starts_at?
 
   before_validation :set_published, on: :create
+  after_commit :enqueue_push_notification, if: -> { saved_change_to_published? && published? }
 
   class << self
     def coalesced_chronology_timestamps
@@ -45,6 +46,10 @@ class Announcement < ApplicationRecord
 
   def to_log_human_identifier
     text
+  end
+
+  def enqueue_push_notification
+    AnnouncementPushWorker.perform_async(id)
   end
 
   def publish!

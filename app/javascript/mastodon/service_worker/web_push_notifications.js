@@ -79,7 +79,24 @@ const htmlToPlainText = html =>
   unescape(html.replace(/<br\s*\/?>/g, '\n').replace(/<\/p><p>/g, '\n\n').replace(/<[^>]*>/g, ''));
 
 export const handlePush = (event) => {
-  const { access_token, notification_id, preferred_locale, title, body, icon } = event.data.json();
+  const { access_token, notification_id, notification_type, preferred_locale, title, body, icon, url } = event.data.json();
+
+  // 채팅/공지: 마스토돈 알림이 아니므로 서버에서 상세를 가져오지 않고 푸시 내용 그대로 표시한다.
+  if (notification_type === 'chat' || notification_type === 'announcement') {
+    event.waitUntil(
+      notify({
+        title,
+        body,
+        icon,
+        tag: notification_id,
+        timestamp: new Date(),
+        badge: '/badge.png',
+        data: { access_token, preferred_locale, url: url || '/notifications' },
+      }),
+    );
+
+    return;
+  }
 
   // Placeholder until more information can be loaded
   event.waitUntil(

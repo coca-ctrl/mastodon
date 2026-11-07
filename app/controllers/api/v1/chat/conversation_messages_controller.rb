@@ -40,6 +40,7 @@ class Api::V1::Chat::ConversationMessagesController < Api::BaseController
     @conversation.touch
 
     ChatMessageBroadcastWorker.perform_async(@conversation.id, message.id, 'chat.message')
+    ChatPushWorker.perform_async(message.id)
 
     render json: serialize_message(message), status: :created
   end
