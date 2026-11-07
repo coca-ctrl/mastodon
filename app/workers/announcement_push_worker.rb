@@ -37,7 +37,7 @@ class AnnouncementPushWorker
       notification_type: 'announcement',
       title: '공지',
       body: truncate(text, length: BODY_LENGTH, escape: false),
-      url: '/notifications',
+      url: '/home',
     }
   end
 end
