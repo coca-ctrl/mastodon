@@ -84,14 +84,6 @@ export const CardStatusFooter: React.FC<{ status: Status }> = ({ status }) => {
 
   return (
     <div className='status-card-style__footer' ref={footerRef}>
-      <Link
-        to={`/@${account?.acct}/${statusId}`}
-        className='status__relative-time'
-      >
-        <StatusVisibility visibility={status.get('visibility')} />
-        <RelativeTimestamp timestamp={status.get('created_at') as string} />
-        {editedAt && <StatusEditedAt editedAt={editedAt} />}
-      </Link>
       {sound && (
         <button
           type='button'
@@ -108,6 +100,14 @@ export const CardStatusFooter: React.FC<{ status: Status }> = ({ status }) => {
           효과음
         </button>
       )}
+      <Link
+        to={`/@${account?.acct}/${statusId}`}
+        className='status__relative-time'
+      >
+        <StatusVisibility visibility={status.get('visibility')} />
+        <RelativeTimestamp timestamp={status.get('created_at') as string} />
+        {editedAt && <StatusEditedAt editedAt={editedAt} />}
+      </Link>
     </div>
   );
 };

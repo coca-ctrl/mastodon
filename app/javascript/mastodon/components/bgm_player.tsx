@@ -3,6 +3,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { getAccessToken, me } from 'mastodon/initial_state';
 
 import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
   MusicIcon,
   MusicOffIcon,
   VolumeIcon,
@@ -118,6 +120,16 @@ const save = (key: string, value: string) => {
   }
 };
 
+const COLLAPSED_KEY = 'bgm_collapsed';
+
+const readCollapsed = (): boolean => {
+  try {
+    return localStorage.getItem(COLLAPSED_KEY) === '1';
+  } catch {
+    return false;
+  }
+};
+
 const stateKey = (bgm: BgmState) =>
   `${bgm.video_id}|${bgm.started_at}|${bgm.offset}`;
 
@@ -129,6 +141,7 @@ export const BgmPlayer: React.FC = () => {
   const [playing, setPlaying] = useState(false);
   const [sfxSeen, setSfxSeen] = useState(isSfxSeen);
   const sfx = useStorySfxSettings();
+  const [collapsed, setCollapsed] = useState(readCollapsed);
 
   const frameRef = useRef<HTMLDivElement>(null);
   const playerRef = useRef<YouTubePlayer | null>(null);
@@ -402,6 +415,14 @@ export const BgmPlayer: React.FC = () => {
     };
   }, []);
 
+  // 모바일에서 위젯을 화면 오른쪽 가장자리로 접거나 펼친다.
+  const handleFold = () => {
+    const next = !collapsed;
+
+    setCollapsed(next);
+    save(COLLAPSED_KEY, next ? '1' : '0');
+  };
+
   if (!me) return null;
 
   let label = 'BGM 꺼짐';
@@ -416,7 +437,21 @@ export const BgmPlayer: React.FC = () => {
     <>
       <div className='bgm-player__frame' ref={frameRef} aria-hidden='true' />
       {(enabled || sfxSeen) && (
-        <div className='bgm-player' role='group' aria-label='사운드'>
+        <div
+          className={`bgm-player${collapsed ? ' bgm-player--collapsed' : ''}`}
+          role='group'
+          aria-label='사운드'
+        >
+          <button
+            type='button'
+            className='bgm-player__fold'
+            onClick={handleFold}
+            aria-expanded={!collapsed}
+            aria-label={collapsed ? '사운드 위젯 펼치기' : '사운드 위젯 접기'}
+          >
+            {collapsed ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+          </button>
+          <div className='bgm-player__body'>
           {enabled && (
             <div className='bgm-player__row'>
               <button
@@ -469,6 +504,7 @@ export const BgmPlayer: React.FC = () => {
               )}
             </div>
           )}
+          </div>
         </div>
       )}
     </>

@@ -473,6 +473,7 @@ class Account < ApplicationRecord
 
   before_validation :prepare_contents, if: :local?
   before_create :generate_keys
+  before_create :disable_featured_tab_by_default, if: :local?
   before_destroy :clean_feed_manager
 
   def ensure_keys!
@@ -493,6 +494,11 @@ class Account < ApplicationRecord
   def prepare_contents
     display_name&.strip!
     note&.strip!
+  end
+
+  # 이 서버에서 새로 만드는 계정은 '추천' 탭을 기본으로 끈다 (연합 계정에는 영향 없음)
+  def disable_featured_tab_by_default
+    self.show_featured = false
   end
 
   def generate_keys

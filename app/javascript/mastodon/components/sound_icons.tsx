@@ -58,3 +58,15 @@ export const VolumeOffIcon: React.FC = () => (
     <path d='M3 3l18 18' />
   </svg>
 );
+
+export const ChevronRightIcon: React.FC = () => (
+  <svg {...outline}>
+    <path d='M9 6l6 6l-6 6' />
+  </svg>
+);
+
+export const ChevronLeftIcon: React.FC = () => (
+  <svg {...outline}>
+    <path d='M15 6l-6 6l6 6' />
+  </svg>
+);
